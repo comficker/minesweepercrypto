@@ -225,7 +225,7 @@ const handlePlayLocal = (cord: string, clicked: string[] = []) => {
   }
   if (typeof maps.value[cord] === "undefined") {
     clicked.push(cord)
-    results.value[cord] = null
+    results.value[cord] = 0
     const nbCord = cord.split("_")
     const neighbors = getNeighbors(Number.parseInt(nbCord[0]), Number.parseInt(nbCord[1]))
     neighbors.forEach((nb: number[]) => {
