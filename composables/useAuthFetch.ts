@@ -19,9 +19,9 @@ export function useAuthFetch<T>(
   const headers :any = opts.headers || {}
   if (token) {
     headers["Authorization"] = `Bearer ${token}`
-    headers["Content-Type"] = 'application/json'
-    headers["Accept"] = 'application/json; indent=4'
   }
+  headers["Content-Type"] = 'application/json'
+  headers["Accept"] = 'application/json; indent=4'
   opts.headers = headers
   return useFetch(request, {baseURL: config.public.apiBase, ...opts})
 }

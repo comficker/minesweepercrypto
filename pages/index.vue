@@ -16,17 +16,17 @@
           <div>{{ item }}</div>
         </div>
       </div>
-      <div class="rounded overflow-hidden w-full bg-white px-3 pb-3">
+      <div class="rounded overflow-hidden w-full bg-white px-3 pb-2">
         <div class="flow-root text-xs">
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
               <table class="min-w-full table-fixed overflow-auto">
                 <thead>
                 <tr class="font-semibold text-right">
-                  <th scope="col" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
-                  <th scope="col" class="w-32 px-2 py-1.5">Time</th>
-                  <th scope="col" class="w-32 px-2 py-1.5">Level</th>
-                  <th scope="col" class="w-32 px-2 py-1.5">Date</th>
+                  <th class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
+                  <th class="w-32 px-2 py-1.5">Time</th>
+                  <th class="w-32 px-2 py-1.5">Level</th>
+                  <th class="w-32 px-2 py-1.5">Date</th>
                 </tr>
                 </thead>
                 <tbody class="whitespace-nowrap font-bold">
@@ -116,16 +116,19 @@ const items = computed(() => {
 
 const fetch = async function () {
   const params: any = {}
-  if (mode.value === 'History' && logged.value.id) {
+  if (mode.value === 'History' && logged.value && logged.value.id) {
     params['user__id'] = logged.value.id
   }
   if (mode.value === 'Leaderboard') {
     params['ordering'] = '-score'
     params['status'] = 'win'
   }
-  const {data: res} = await useAuthFetch<ResponseGames>('/minesweeper/games', {
+  const {data: res, pending, execute} = await useAuthFetch<ResponseGames>('/minesweeper/games/', {
     params: params
   })
+  if (pending.value) {
+    await execute()
+  }
   if (res.value) response.value = res.value;
 }
 
