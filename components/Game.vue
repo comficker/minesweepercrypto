@@ -42,7 +42,7 @@
           'p-1 -inset-1': size.width < 16,
           'p-0.5 -inset-0.5': size.width >= 16 && size.width < 24,
           'p-0.25 -inset-0.25': size.width >= 16,
-          'grayscale blur-sm': isPending
+          'grayscale blur-sm': isPending || isWon
         }"
       >
         <div class="flex flex-col h-full font-bold">
@@ -124,6 +124,19 @@
           </div>
         </div>
       </Transition>
+      <div v-show="isWon" class="absolute inset-0 flex flex-col items-center justify-center space-y-4">
+        <div class="-space-y-16 text-center">
+          <div class="w-64 h-64" id="confetti"></div>
+          <div class="text-3xl font-bold text-shine">You won!</div>
+        </div>
+        <div
+          class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
+          @click="handleNewGame"
+        >
+          <div class="i-icons-smile w-4 h-4"/>
+          <span class="uppercase text-xs font-bold">Continue</span>
+        </div>
+      </div>
     </div>
     <p v-if="false" class="text-xs text-gray-400 hover:text-neutral-800 duration-200 italic">Hint: Use the numbers
       revealed in step 1
@@ -139,16 +152,19 @@ import {useAuthFetch} from "~/composables/useAuthFetch";
 import {onMounted} from "@vue/runtime-core";
 import {countDownTimer} from "~/helpers";
 import {ILottery} from "~/interface";
+import lottie from 'lottie-web';
+import confetti from "~/constants/confetti.json"
 
 const userStore = useUserStore()
 
 const size = ref({width: 6, height: 6})
-
+const confettiAni = ref<any>(null)
 const maps: any = ref({})
 const results: any = ref({})
 const isDead = ref(false)
 const isFlagging = ref(false)
 const isPending = ref<any>(null)
+const isWon = ref(false)
 const startAt = ref<number>((new Date()).getTime())
 const countDown = ref("00:00")
 const lottery = ref<ILottery>({} as ILottery)
@@ -203,6 +219,8 @@ const drawMapLocal = (ignoreCord: string) => {
 }
 
 const handleNewGame = () => {
+  isPending.value = false
+  isWon.value = false
   if (isLogged.value) {
     handlePlayServer(-1, -1, false)
   } else {
@@ -216,6 +234,16 @@ const handlePlayLocal = (cord: string, clicked: string[] = []) => {
   if (Object.keys(maps.value).length === 0) {
     drawMapLocal(cord)
     startAt.value = (new Date()).getTime()
+  }
+  if (isFlagging.value) {
+    if (typeof results.value[cord] === 'undefined') {
+      results.value[cord] = null
+    } else {
+      delete results.value[cord]
+    }
+    return;
+  } else if (results.value[cord] === null) {
+    return;
   }
   const checked = maps.value[cord]
   results.value[cord] = checked
@@ -237,6 +265,10 @@ const handlePlayLocal = (cord: string, clicked: string[] = []) => {
         handlePlayLocal(key, clicked)
       }
     })
+  }
+  const opened = Object.values(results.value).filter(x => x !== null).length
+  if (size.value.width * size.value.height - opened === totalBomb.value) {
+    isWon.value = true
   }
 }
 
@@ -267,6 +299,7 @@ const handlePlayServer = async (x: number | undefined, y: number | undefined, is
     }
     results.value = value.results || {}
     isDead.value = value.status === "dead"
+    isWon.value = value.status === "won"
     startAt.value = (new Date(value.start_at)).getTime()
     return value.status
   }
@@ -311,15 +344,40 @@ onMounted(() => {
   handlePlayServer(undefined, undefined, false)
 
   setInterval(() => {
-    if (!isDead.value) {
+    if (!isDead.value && !isWon.value) {
       countDown.value = countDownTimer(startAt.value, (new Date()).getTime())
     }
   }, 1000)
+  if (document.getElementById('confetti')) {
+    confettiAni.value = lottie.loadAnimation({
+      container: document.getElementById('confetti'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: false,
+      animationData: confetti,
+      rendererSettings: {}
+    })
+    confettiAni.value.play()
+  }
 })
 </script>
 
 <style>
-.cell {
-  box-shadow: 2px 2px 6px #bebebe, -2px -2px 6px #ffffff
+@keyframes rainbow_animation {
+  0%, 100% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 0;
+  }
+}
+
+.text-shine {
+  background: linear-gradient(270deg, #ff7356, #ff59e2 25.52%, #52ddf6 50%, #eadf4e 76.04%, #ff7356);
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
 }
 </style>

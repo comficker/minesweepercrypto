@@ -20,27 +20,29 @@
         <div class="flow-root text-xs">
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
-              <table class="min-w-full table-fixed overflow-auto">
-                <thead>
-                <tr class="font-semibold text-right">
-                  <th class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
-                  <th class="w-32 px-2 py-1.5">Time</th>
-                  <th class="w-32 px-2 py-1.5">Level</th>
-                  <th class="w-32 px-2 py-1.5">Date</th>
-                </tr>
-                </thead>
-                <tbody class="whitespace-nowrap font-bold">
-                <tr v-for="(item, i) in items" :key="i" class="rounded text-right">
-                  <td class="px-2 py-2 text-left">{{ item.user.username }}</td>
-                  <td class="px-2 py-2" :class="{
+              <client-only>
+                <table class="min-w-full table-fixed overflow-auto">
+                  <thead>
+                  <tr class="font-semibold text-right">
+                    <th class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
+                    <th class="w-32 px-2 py-1.5">Time</th>
+                    <th class="w-32 px-2 py-1.5">Level</th>
+                    <th class="w-32 px-2 py-1.5">Date</th>
+                  </tr>
+                  </thead>
+                  <tbody class="whitespace-nowrap font-bold">
+                  <tr v-for="(item, i) in items" :key="i" class="rounded text-right">
+                    <td class="px-2 py-2 text-left">{{ item.user.username }}</td>
+                    <td class="px-2 py-2" :class="{
                     'text-blue-500': item.status === 'win',
                     'text-red-500': item.status === 'dead'
                   }">{{ item.time }}</td>
-                  <td class="px-2 py-2">{{ item.level }}</td>
-                  <td class="px-2 py-2">{{ item.since }}</td>
-                </tr>
-                </tbody>
-              </table>
+                    <td class="px-2 py-2">{{ item.level }}</td>
+                    <td class="px-2 py-2">{{ item.since }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </client-only>
             </div>
           </div>
         </div>
@@ -83,7 +85,6 @@ import {countDownTimer, timeSince} from "~/helpers";
 import Game from "~/components/Game.vue";
 import {computed, ref, watch} from "vue";
 
-const route = useRoute()
 const title = "Minesweeper Crypto | minesweepercrypto.com"
 const desc = 'Minesweeper is a classic strategy game where players must uncover hidden mines on a grid without detonating them.'
 useSeoMeta({

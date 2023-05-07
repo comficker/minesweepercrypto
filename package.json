@@ -32,6 +32,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@feedback-fish/vue": "^1.0.1"
+    "@feedback-fish/vue": "^1.0.1",
+    "lottie-web": "^5.11.0"
   }
 }
