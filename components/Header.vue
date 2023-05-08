@@ -2,6 +2,7 @@
 import {computed} from "vue"
 import {useUserStore} from "~/composables/user";
 import Login from "~/components/Login.vue";
+import Setting from "~/components/Setting.vue";
 
 const userStore = useUserStore()
 
@@ -45,9 +46,12 @@ const user = computed(() => {
       enter-active-class="animated animated-faster animated-fade-in-down"
       leave-active-class="animated animated-faster animated-fade-out-up"
     >
-      <div v-if="modalOpening" class="absolute top-0 left-0 right-0 p-4 md:p-8 bg-white shadow rounded-bl-lg rounded-br-lg">
-        <div class="mx-auto md:w-2/3">
-          <Login/>
+      <div v-if="modalOpening" class="absolute top-0 left-0 right-0">
+        <div class="p-4 md:p-8 bg-white shadow rounded-bl-lg rounded-br-lg relative z-10">
+          <div class="mx-auto md:w-2/3 ">
+            <Login v-if="modalOpening === 'login'"/>
+            <Setting v-if="modalOpening === 'setting'"/>
+          </div>
         </div>
         <div class="absolute cursor-pointer -bottom-5 right-0 left-0" @click="userStore.setModal(null)">
           <div class="shadow mx-auto h-6 w-10 rounded-bl-full rounded-br-full bg-white">

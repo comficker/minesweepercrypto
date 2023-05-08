@@ -2,7 +2,7 @@
   <div class="w-full max-w-xl mx-auto space-y-6">
     <Game/>
     <div class="space-y-2">
-      <div class="flex items-center gap-3 text-xs font-bold">
+      <div class="flex items-center gap-3 text-sm font-bold">
         <div
           v-for="item in ['Activity', 'History', 'Leaderboard']"
           class="cursor-pointer p-2 rounded flex gap-2 items-center"
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="rounded overflow-hidden w-full bg-white px-3 pb-2">
-        <div class="flow-root text-xs">
+        <div class="flow-root text-sm">
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
               <client-only>

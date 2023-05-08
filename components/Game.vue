@@ -30,18 +30,18 @@
           <div class="i-icons-bomb w-5 h-5"/>
           <div>{{ totalBomb - bombFlagged }}</div>
         </div>
-        <div class="rounded-xl p-2 shadow cursor-pointer">
+        <div class="rounded-xl p-2 shadow cursor-pointer" @click="openSetting">
           <div class="i-icons-cog w-4 h-4"/>
         </div>
       </div>
     </div>
-    <div class="relative pt-full">
+    <div class="relative">
       <div
-        class="absolute overflow-auto md:overflow-visible"
+        class="overflow-auto md:overflow-visible"
         :class="{
-          'p-1 -inset-1': size.width < 16,
-          'p-0.5 -inset-0.5': size.width >= 16 && size.width < 24,
-          'p-0.25 -inset-0.25': size.width >= 16,
+          'p-1 -m-1': size.width < 16,
+          'p-0.5 -m-0.5': size.width >= 16 && size.width < 24,
+          'p-0.25 -m-0.25': size.width >= 16,
           'grayscale blur-sm': isPending || isWon
         }"
       >
@@ -62,7 +62,7 @@
                   :class="{
                     'inset-0.5': size.width < 16,
                     'inset-0.25 text-xs': size.width >= 16 && size.width < 24,
-                    'inset-0.25 text-xs': size.width >= 24,
+                    'inset-0.25 text-2xs': size.width >= 24,
                     'bg-gradient-to-br from-orange-500 via-orange-550 to-orange-500': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && !isDead
                   }"
                 >
@@ -148,6 +148,7 @@
 <script lang="ts" setup>
 import {computed, ref, watch} from "vue"
 import {useUserStore} from "~/composables/user";
+import {useGlobalStore} from "~/composables/global";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {onMounted} from "@vue/runtime-core";
 import {countDownTimer} from "~/helpers";
@@ -156,8 +157,9 @@ import lottie from 'lottie-web';
 import confetti from "~/constants/confetti.json"
 
 const userStore = useUserStore()
+const globalStore = useGlobalStore()
 
-const size = ref({width: 6, height: 6})
+const size = computed(() => globalStore.setting.size)
 const confettiAni = ref<any>(null)
 const maps: any = ref({})
 const results: any = ref({})
@@ -301,6 +303,14 @@ const handlePlayServer = async (x: number | undefined, y: number | undefined, is
     isDead.value = value.status === "dead"
     isWon.value = value.status === "won"
     startAt.value = (new Date(value.start_at)).getTime()
+    if (value.height !== size.value.height || value.width !== size.value.width) {
+      globalStore.setSetting({
+        size: {
+          width: value.width,
+          height: value.height
+        }
+      })
+    }
     return value.status
   }
   return null
@@ -330,6 +340,10 @@ const fetchLottery = async () => {
   if (res.value) lottery.value = res.value
 }
 
+const openSetting = () => {
+  userStore.setModal('setting')
+}
+
 watch(isLogged, () => {
   handlePlayServer(undefined, undefined, false)
 })
@@ -340,11 +354,15 @@ watch(isPending, (n, o) => {
   }
 })
 
+watch(size, (n) => {
+  handlePlayServer(-1, -1, false)
+})
+
 onMounted(() => {
   handlePlayServer(undefined, undefined, false)
 
   setInterval(() => {
-    if (!isDead.value && !isWon.value) {
+    if (!isDead.value && !isWon.value && startAt.value) {
       countDown.value = countDownTimer(startAt.value, (new Date()).getTime())
     }
   }, 1000)

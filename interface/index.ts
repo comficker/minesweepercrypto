@@ -57,3 +57,12 @@ export interface ILottery {
   "number": number
   "open_at": string
 }
+
+export interface GameSize {
+  width: number
+  height: number
+}
+
+export interface Setting {
+  size: GameSize
+}

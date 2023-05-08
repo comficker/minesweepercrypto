@@ -14,12 +14,14 @@ export const countDownTimer = (start: number, end: number) => {
     if (num >= 10) return num;
     return `0${num}`
   }
-  const {days, hours, minutes, seconds} = calculateDistance(start, end)
+  let {days, hours, minutes, seconds} = calculateDistance(start, end)
+  if (minutes < 0) minutes = 0;
+  if (seconds < 0) seconds = 0;
   let cd = `${fm(minutes)}:${fm(seconds)}`
-  if (hours) {
+  if (hours > 0) {
     cd = `${fm(hours)}:${cd}`
   }
-  if (days) {
+  if (days > 0) {
     cd = `${fm(days)}:${cd}`
   }
   return cd
