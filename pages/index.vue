@@ -16,7 +16,7 @@
           <div>{{ item }}</div>
         </div>
       </div>
-      <div class="rounded overflow-hidden w-full bg-white px-3 pb-2">
+      <div class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2">
         <div class="flow-root text-sm">
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">

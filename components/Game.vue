@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="relative">
+    <div class="relative p-2 bg-white shadow rounded">
       <div
         class="overflow-auto md:overflow-visible"
         :class="{
@@ -50,20 +50,28 @@
             v-for="x in size.width"
             class="flex flex-auto"
             :class="{
-              '-mx-0.5 -mt-0.5': size.width < 16,
-              '-mx-0.5 -mt-0.5': size.width >= 16 && size.width < 24,
-              '-mx-0.25 -mt-0.25': size.width >= 16
+              'p-1 -m-1': size.width < 16,
+              'p-0.5 -m-0.5': size.width >= 16 && size.width < 24,
+              'p-0.25 -m-0.25': size.width >= 16
             }"
           >
             <div v-for="y in size.height" class="flex-auto md:min-w-auto md:min-h-auto min-w-1/12 min-h-1/12">
               <div class="pt-full relative" @click="onClick(x - 1, y - 1)">
                 <div
-                  class="rounded-sm bg-white absolute flex items-center justify-center text-black"
+                  class="rounded-sm absolute flex items-center justify-center text-black"
                   :class="{
                     'inset-0.5': size.width < 16,
                     'inset-0.25 text-xs': size.width >= 16 && size.width < 24,
                     'inset-0.25 text-2xs': size.width >= 24,
-                    'bg-gradient-to-br from-orange-500 via-orange-550 to-orange-500': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && !isDead
+                    'bg-green-600': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && !isDead,
+                    'bg-[#faf8ef]': results[`${x - 1}_${y - 1}`] === 0 || typeof results[`${x - 1}_${y - 1}`] === 'undefined',
+                    'bg-green-100': results[`${x - 1}_${y - 1}`] === 1,
+                    'bg-green-200': results[`${x - 1}_${y - 1}`] === 2,
+                    'bg-green-300': results[`${x - 1}_${y - 1}`] === 3,
+                    'bg-green-400': results[`${x - 1}_${y - 1}`] === 4,
+                    'bg-green-500': results[`${x - 1}_${y - 1}`] === 5,
+                    'bg-gray-100':  results[`${x - 1}_${y - 1}`] === null,
+                    'bg-red-300':  results[`${x - 1}_${y - 1}`] === -1
                   }"
                 >
                   <div
