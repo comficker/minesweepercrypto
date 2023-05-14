@@ -1,6 +1,48 @@
 <template>
-  <div class="w-full max-w-xl mx-auto space-y-6">
+  <div class="w-full max-w-xl mx-auto space-y-4">
     <Game/>
+    <div class="rounded shadow overflow-hidden w-full bg-white divide-y">
+      <div v-if="!logged" class="flex p-4">
+        <div class="flex-1 flex flex-col justify-center space-y-3">
+          <h2 class="text-2xl font-semibold uppercase font-proto-mono">Join to play and earn crypto</h2>
+          <div>
+            <div
+              class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer inline-flex gap-2"
+              @click="userStore.setModal('login')"
+            >
+              <div class="i-icons-account w-4 h-4"/>
+              <span class="hidden md:block text-xs uppercase font-bold">Signup</span>
+            </div>
+          </div>
+        </div>
+        <div class="w-1/3">
+          <img src="/jumbotron-bomb.png" alt="">
+        </div>
+      </div>
+      <div class="p-3 flex justify-center md:justify-start gap-2 md:gap-3 text-white flex-wrap grayscale">
+        <div id="market-apple" class="flex gap-2 items-center bg-gray-900 rounded p-1 px-2">
+          <img class="w-6" src="/market/apple-logo.png" alt="">
+          <div class="text-xs">
+            <div class="text-gray-400">Available on</div>
+            <div class="uppercase font-bold">IOS</div>
+          </div>
+        </div>
+        <div id="market-google" class="flex gap-2 items-center bg-gray-900 rounded p-1 px-2">
+          <img class="w-6" src="/market/google-play-logo.png" alt="">
+          <div class="text-xs">
+            <div class="text-gray-400">Available on</div>
+            <div class="uppercase font-bold">Android</div>
+          </div>
+        </div>
+        <div  id="market-telegram" class="flex gap-2 items-center bg-gray-900 rounded p-1 px-2">
+          <img class="w-6" src="/market/telegram.png" alt="">
+          <div class="text-xs">
+            <div class="text-gray-400">Play on</div>
+            <div class="uppercase font-bold">Telegram</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="space-y-2">
       <div class="flex items-center gap-3 text-sm font-bold">
         <div
@@ -16,6 +58,7 @@
           <div>{{ item }}</div>
         </div>
       </div>
+
       <div class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2">
         <div class="flow-root text-sm">
           <div class="overflow-x-auto">

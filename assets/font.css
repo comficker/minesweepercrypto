@@ -30,3 +30,7 @@ body {
   @apply md:overflow-overlay;
   font-family: 'Inter', Helvetica, Arial, sans-serif;
 }
+
+.font-proto-mono {
+  font-family: 'Proto Mono', monospace;
+}
