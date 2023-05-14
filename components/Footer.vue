@@ -11,8 +11,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="w-full mt-4 font-bold text-sm mb-6 max-w-xl mx-auto">
-    <p>Copyright © 2023 minesweepercrypto.com.</p>
+  <div class="border-t bg-gray-50">
+    <div class="w-full mt-4 font-bold text-sm mb-4 max-w-xl mx-auto">
+      <p>Copyright © 2023 <a href="https://minesweepercrypto.com">minesweepercrypto.com</a>.</p>
+    </div>
   </div>
   <button class="fixed right-0 top-0 rounded-bl bg-yellow-300 px-4 p-1 font-bold text-xs uppercase cursor-pointer" data-feedback-fish>
     Send Feedback
