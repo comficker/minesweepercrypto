@@ -55,7 +55,7 @@
               'p-0.25 -m-0.25': size.width >= 16
             }"
           >
-            <div v-for="y in size.height" class="flex-auto md:min-w-auto md:min-h-auto min-w-1/12 min-h-1/12">
+            <div v-for="y in size.height" class="flex-auto md:min-w-auto md:min-h-auto min-w-1/12">
               <div
                 class="pt-full relative"
                 @click="onClick(null,x - 1, y - 1)"
