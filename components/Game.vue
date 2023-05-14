@@ -45,10 +45,10 @@
           'grayscale blur-sm': isPending || isWon
         }"
       >
-        <div class="flex flex-col h-full font-bold">
+        <div class="flex h-full font-bold">
           <div
             v-for="x in size.width"
-            class="flex flex-auto"
+            class="flex flex-col flex-auto"
             :class="{
               'p-1 -m-1': size.width < 16,
               'p-0.5 -m-0.5': size.width >= 16 && size.width < 24,
@@ -56,7 +56,11 @@
             }"
           >
             <div v-for="y in size.height" class="flex-auto md:min-w-auto md:min-h-auto min-w-1/12 min-h-1/12">
-              <div class="pt-full relative" @click="onClick(x - 1, y - 1)">
+              <div
+                class="pt-full relative"
+                @click="onClick(null,x - 1, y - 1)"
+                @contextmenu="onClick($event,x - 1, y - 1)"
+              >
                 <div
                   class="rounded-sm absolute flex items-center justify-center text-black"
                   :class="{
@@ -76,7 +80,8 @@
                 >
                   <div
                     v-if="results[`${x - 1}_${y - 1}`] === -1"
-                    class="i-icons-bomb w-4 h-4"
+                    class="i-icons-bomb"
+                    :class="{'w-2 h-2': size.width >= 16, 'w-4 h-4': size.width < 16}"
                   ></div>
                   <div
                     v-else-if="results[`${x - 1}_${y - 1}`] === null"
@@ -94,7 +99,7 @@
         leave-active-class="animated animated-faster animated-fade-out-down"
       >
         <div v-if="isPending" class="absolute inset-0 p-6">
-          <div class="md:max-w-2/3 mx-auto w-full bg-white p-4 rounded shadow h-full flex flex-col space-y-3">
+          <div class="md:max-w-2/3 mx-auto w-full bg-white p-4 rounded shadow h-full max-h-[512px] flex flex-col space-y-3">
             <div class="flex items-center gap-3">
               <div class="w-5 h-5 i-icons-bomb"/>
               <div class="font-bold uppercase">Boom</div>
@@ -184,7 +189,7 @@ const isLogged = computed(() => {
 })
 
 const totalBomb = computed(() => {
-  return Math.floor(Math.sqrt(Math.pow(size.value.width, 2) + Math.pow(size.value.height, 2)))
+  return Math.floor(size.value.width * size.value.height * 0.2)
 })
 
 const bombFlagged = computed(() => {
@@ -232,7 +237,7 @@ const handleNewGame = () => {
   isPending.value = false
   isWon.value = false
   if (isLogged.value) {
-    handlePlayServer(-1, -1, false)
+    handlePlayServer(null, -1, -1, false)
   } else {
     results.value = {}
     maps.value = {}
@@ -240,12 +245,13 @@ const handleNewGame = () => {
   }
 }
 
-const handlePlayLocal = (cord: string, clicked: string[] = []) => {
+const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = []) => {
+  if (e) e.preventDefault()
   if (Object.keys(maps.value).length === 0) {
     drawMapLocal(cord)
     startAt.value = (new Date()).getTime()
   }
-  if (isFlagging.value) {
+  if (isFlagging.value || e) {
     if (typeof results.value[cord] === 'undefined') {
       results.value[cord] = null
     } else {
@@ -272,7 +278,7 @@ const handlePlayLocal = (cord: string, clicked: string[] = []) => {
         nb[0] >= 0 && nb[1] >= 0 &&
         nb[0] < size.value.width && nb[1] < size.value.height &&
         !clicked.includes(key)) {
-        handlePlayLocal(key, clicked)
+        handlePlayLocal(null, key, clicked)
       }
     })
   }
@@ -282,14 +288,17 @@ const handlePlayLocal = (cord: string, clicked: string[] = []) => {
   }
 }
 
-const handlePlayServer = async (x: number | undefined, y: number | undefined, isPurchased = false): Promise<string | null> => {
+const handlePlayServer = async (
+  e: Event | null, x: number | undefined, y: number | undefined, isPurchased = false
+): Promise<string | null> => {
+  if (e) e.preventDefault()
   if (!isLogged.value) return null
   const {data: res, pending, execute} = await useAuthFetch(`/minesweeper/play`, {
     method: 'POST',
     body: {
       x, y,
       is_purchased: isPurchased,
-      is_flag: isFlagging.value,
+      is_flag: isFlagging.value || !!e,
       width: size.value.width,
       height: size.value.height
     },
@@ -309,7 +318,7 @@ const handlePlayServer = async (x: number | undefined, y: number | undefined, is
     }
     results.value = value.results || {}
     isDead.value = value.status === "dead"
-    isWon.value = value.status === "won"
+    isWon.value = value.status === "win"
     startAt.value = (new Date(value.start_at)).getTime()
     if (value.height !== size.value.height || value.width !== size.value.width) {
       globalStore.setSetting({
@@ -326,7 +335,7 @@ const handlePlayServer = async (x: number | undefined, y: number | undefined, is
 
 const purchase = async (isPurchased = false) => {
   if (isPending.value) {
-    const status = await handlePlayServer(isPending.value.x, isPending.value.y, isPurchased)
+    const status = await handlePlayServer(null, isPending.value.x, isPending.value.y, isPurchased)
     if (status && status?.startsWith("hold_")) {
 
     } else {
@@ -335,11 +344,11 @@ const purchase = async (isPurchased = false) => {
   }
 }
 
-const onClick = (x: number, y: number) => {
+const onClick = (e: Event | null, x: number, y: number) => {
   if (isLogged.value) {
-    handlePlayServer(x, y)
+    handlePlayServer(e, x, y)
   } else {
-    handlePlayLocal(`${x}_${y}`, [])
+    handlePlayLocal(e, `${x}_${y}`, [])
   }
 }
 
@@ -353,7 +362,7 @@ const openSetting = () => {
 }
 
 watch(isLogged, () => {
-  handlePlayServer(undefined, undefined, false)
+  handlePlayServer(null, undefined, undefined, false)
 })
 
 watch(isPending, (n, o) => {
@@ -363,11 +372,11 @@ watch(isPending, (n, o) => {
 })
 
 watch(size, (n) => {
-  handlePlayServer(-1, -1, false)
+  handlePlayServer(null, -1, -1, false)
 })
 
 onMounted(() => {
-  handlePlayServer(undefined, undefined, false)
+  handlePlayServer(null, undefined, undefined, false)
 
   setInterval(() => {
     if (!isDead.value && !isWon.value && startAt.value) {
