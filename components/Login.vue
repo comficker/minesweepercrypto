@@ -64,6 +64,9 @@ const submit = () => {
       userStore.setToken(data.access)
       userStore.setModal(null)
     }
+    if (mode.value !== 'login' && window.gtag) {
+      window.gtag('event', 'conversion', {'send_to': 'AW-987081603/rGqwCMby2Z8YEIPX1tYD'});
+    }
   })
 }
 
