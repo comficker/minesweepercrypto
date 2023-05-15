@@ -7,7 +7,7 @@
             class="p-2 rounded flex gap-2 items-center cursor-pointer duration-300"
             :class="{
               'shadow hover:shadow-lg duration-200 bg-white text-neutral-800': !isFlagging,
-              'shadow-inner bg-gray-100': isFlagging
+              'shadow-inner bg-green-100': isFlagging
             }"
             @click="isFlagging = !isFlagging"
           >
@@ -21,7 +21,7 @@
           @click="handleNewGame"
         >
           <div class="i-icons-dead w-5 h-5"/>
-          <span class="uppercase hidden md:block">Reset</span>
+          <span class="uppercase hidden md:block">New Game</span>
         </div>
       </div>
       <div class="w-1/3 flex items-center gap-3 justify-end">
@@ -48,7 +48,7 @@
           'grayscale blur-sm': isPending || isWon
         }"
       >
-        <div class="flex h-full font-bold">
+        <div class="flex h-full font-bold font-proto-mono">
           <div
             v-for="x in size.width"
             class="flex flex-col flex-auto"
@@ -65,11 +65,11 @@
                 @contextmenu="onClick($event,x - 1, y - 1)"
               >
                 <div
-                  class="rounded-sm absolute flex items-center justify-center text-black"
+                  class="cell"
                   :class="{
                     'inset-0.5': size.width < 16,
-                    'inset-0.25 text-xs': size.width >= 16 && size.width < 24,
-                    'inset-0.25 text-2xs': size.width >= 24,
+                    'md:inset-0.5 inset-0.25 text-xs': size.width >= 16 && size.width < 24,
+                    'md:inset-0.5 inset-0.25 text-2xs': size.width >= 24,
                     'bg-green-600': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && !isDead,
                     'bg-[#faf8ef]': results[`${x - 1}_${y - 1}`] === 0 || typeof results[`${x - 1}_${y - 1}`] === 'undefined',
                     'bg-green-100': results[`${x - 1}_${y - 1}`] === 1,
@@ -401,6 +401,12 @@ onMounted(() => {
 </script>
 
 <style>
+.cell {
+  @apply rounded-sm absolute flex items-center justify-center text-black;
+
+  box-shadow: rgba(0, 0, 0, 0.16) 0 1px 1px;
+}
+
 @keyframes rainbow_animation {
   0%, 100% {
     background-position: 0 0;
