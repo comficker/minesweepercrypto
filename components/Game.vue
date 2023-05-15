@@ -5,7 +5,10 @@
         <div class="flex items-center">
           <div
             class="p-2 rounded flex gap-2 items-center cursor-pointer duration-300"
-            :class="{'shadow hover:shadow-lg duration-200 bg-white text-neutral-800': !isFlagging}"
+            :class="{
+              'shadow hover:shadow-lg duration-200 bg-white text-neutral-800': !isFlagging,
+              'shadow-inner bg-gray-100': isFlagging
+            }"
             @click="isFlagging = !isFlagging"
           >
             <div class="i-icons-flag w-5 h-5"/>

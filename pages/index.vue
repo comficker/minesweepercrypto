@@ -2,7 +2,7 @@
   <div class="w-full max-w-xl mx-auto space-y-4">
     <Game/>
     <div class="rounded shadow overflow-hidden w-full bg-white divide-y">
-      <div v-if="!logged" class="flex p-4">
+      <div v-if="!logged || !logged.id" class="flex p-4">
         <div class="flex-1 flex flex-col justify-center space-y-3">
           <h2 class="text-2xl font-semibold uppercase font-proto-mono">Join to play and earn crypto</h2>
           <div>
