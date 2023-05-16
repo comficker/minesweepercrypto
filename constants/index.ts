@@ -1,2 +1,2 @@
-export const appName = 'Vitesse for Nuxt 3'
-export const appDescription = 'Vitesse for Nuxt 3'
+export const appName = 'Minesweeper Battle'
+export const appDescription = 'Join minesweeper battle on minesweeperbattle.com'

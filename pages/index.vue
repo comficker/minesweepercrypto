@@ -128,10 +128,10 @@ import {countDownTimer, timeSince} from "~/helpers";
 import Game from "~/components/Game.vue";
 import {computed, ref, watch} from "vue";
 
-const title = "Minesweeper Crypto | minesweepercrypto.com"
+const title = "Minesweeper Battle | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com"
 const desc = 'Minesweeper is a classic strategy game where players must uncover hidden mines on a grid without detonating them.'
 useSeoMeta({
-  applicationName: 'Minesweeper Crypto',
+  applicationName: 'Minesweeper Battle',
   title: title,
   description: desc,
   ogDescription: desc,
