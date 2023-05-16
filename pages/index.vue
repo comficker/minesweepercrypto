@@ -1,8 +1,8 @@
 <template>
   <div class="w-full max-w-xl mx-auto space-y-4">
     <Game/>
-    <div class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged || !logged.id}">
-      <div v-if="!logged || !logged.id" class="flex p-4">
+    <div class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
+      <div v-if="!logged.id" class="flex p-4">
         <div class="flex-1 flex flex-col space-y-3">
           <h2 class="text-xl font-semibold uppercase font-proto-mono">Join to play and earn crypto</h2>
           <div>
@@ -19,7 +19,7 @@
           <img src="/jumbotron-bomb.png" alt="">
         </div>
       </div>
-      <div class="flex justify-center gap-2 md:gap-3 text-white flex-wrap grayscale">
+      <div class="flex justify-center gap-2 md:gap-3 text-white flex-wrap grayscale" :class="{'p-3': !logged.id}">
         <div id="market-apple" class="flex gap-2 items-center bg-gray-900 rounded p-2">
           <img class="w-6" src="/market/apple-logo.png" alt="">
           <div class="text-xs">

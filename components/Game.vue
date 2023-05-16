@@ -124,7 +124,7 @@
             </div>
             <div class="text-center space-y-2 font-bold">
               <div
-                class="text-center p-4 py-2 shadow-lg rounded justify-center flex gap-2 items-center bg-neutral-800 text-orange-500 cursor-pointer"
+                class="mx-auto text-center p-4 py-2 shadow-lg rounded justify-center inline-flex gap-2 items-center bg-neutral-800 text-orange-500 cursor-pointer"
                 @click="purchase(true)"
               >
                 <span>Continue</span>
