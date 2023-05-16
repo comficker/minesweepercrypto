@@ -42,7 +42,7 @@ const user = computed(() => {
         </div>
       </div>
     </div>
-    <div class="flex font-semibold gap-4">
+    <div v-if="false" class="flex font-semibold gap-4">
       <nuxt-link to="/battle" class="underline">Battle</nuxt-link>
       <nuxt-link to="/how-to-play" class="underline">How to play?</nuxt-link>
     </div>
