@@ -16,8 +16,12 @@ export const useGlobalStore = defineStore('global', () => {
     }
   })
 
-  const setSetting = (stt: Setting) => {
-    setting.value = stt
+  const setSetting = (stt: Setting, ignoreForced = true) => {
+    if (ignoreForced) {
+      setting.value = stt
+    } else {
+      cookieFormSize.value = `${stt.size.width}_${stt.size.height}`
+    }
   }
 
   return {

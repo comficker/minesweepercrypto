@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div class="relative p-2 bg-white shadow rounded">
+    <div class="relative p-2 bg-white shadow rounded md:-mx-8">
       <div
         class="overflow-auto md:overflow-visible"
         :class="{
@@ -328,8 +328,8 @@ const handlePlayServer = async (
         size: {
           width: value.width,
           height: value.height
-        }
-      })
+        },
+      }, false)
     }
     return value.status
   }
@@ -374,7 +374,7 @@ watch(isPending, (n, o) => {
   }
 })
 
-watch(size, (n) => {
+watch(size, (n, o) => {
   handlePlayServer(null, -1, -1, false)
 })
 
