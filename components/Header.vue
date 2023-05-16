@@ -18,7 +18,7 @@ const user = computed(() => {
 
 <template>
   <div class="w-full max-w-xl mx-auto relative z-10">
-    <div class="py-4 space-y-4 flex justify-between gap-4 items-center">
+    <div class="py-4 flex justify-between gap-4 items-center">
       <div class="flex flex-wrap gap-6 text-xs uppercase font-bold">
         <nuxt-link to="/" class="flex items-center gap-2 text-base">
           <img class="h-10 w-auto" src="/logo.png" alt="MinesweeperCrypto">
@@ -29,18 +29,22 @@ const user = computed(() => {
           <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
           <b>{{user.meta?.minesweeper?.balance || 0}}</b>
         </div>
-        <div v-if="user && user.id" class="flex gap-1 items-center rounded-xl p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer">
+        <div v-if="user && user.id" class="flex gap-1 items-center rounded p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer">
           <div class="i-icons-swap w-4 h-4"/>
           <span class="uppercase text-xs font-bold">Manage</span>
         </div>
         <div
-          v-else class="rounded-xl p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
+          v-else class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
           @click="userStore.setModal('login')"
         >
           <div class="i-icons-account w-4 h-4"/>
           <span class="hidden md:block text-xs uppercase font-bold">Signin</span>
         </div>
       </div>
+    </div>
+    <div class="flex font-semibold gap-4">
+      <nuxt-link to="/battle" class="underline">Battle</nuxt-link>
+      <nuxt-link to="/how-to-play" class="underline">How to play?</nuxt-link>
     </div>
     <Transition
       enter-active-class="animated animated-faster animated-fade-in-down"

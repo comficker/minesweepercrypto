@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div class="relative p-2 bg-white shadow rounded md:-mx-8">
+    <div class="relative p-2 bg-white shadow rounded">
       <div
         class="overflow-auto md:overflow-visible"
         :class="{
