@@ -4,14 +4,14 @@
     <div class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
       <div v-if="!logged.id" class="flex p-4">
         <div class="flex-1 flex flex-col space-y-3">
-          <h2 class="text-xl font-semibold uppercase font-proto-mono">Join to play and earn crypto</h2>
+          <h2 class="text-2xl font-semibold uppercase font-proto-mono">Join to play and earn</h2>
           <div>
             <div
               class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer inline-flex gap-2"
               @click="userStore.setModal('login')"
             >
               <div class="i-icons-account w-4 h-4"/>
-              <span class="hidden md:block text-xs uppercase font-bold">Signup</span>
+              <span class="text-xs uppercase font-bold">Become member</span>
             </div>
           </div>
         </div>
