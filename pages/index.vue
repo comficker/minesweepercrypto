@@ -2,7 +2,7 @@
   <div class="w-full max-w-xl mx-auto space-y-4">
     <Game/>
     <div class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
-      <div v-if="!logged.id" class="flex p-4">
+      <div v-if="!logged.id" class="flex p-4 pb-0">
         <div class="flex-1 flex flex-col space-y-3">
           <h2 class="text-2xl font-semibold uppercase font-proto-mono">Join to play and earn</h2>
           <div>
