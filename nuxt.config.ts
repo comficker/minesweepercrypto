@@ -49,7 +49,7 @@ export default defineNuxtConfig({
         {name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent'},
       ],
       script: [
-        {src: 'https://feedback.fish/ff.js?pid=8ef1a83add0137', defer: true},
+        {src: 'https://feedback.fish/ff.js?pid=8ef1a83add0137', body: true},
         {
           hid: 'gtmHead',
           innerHTML: `
@@ -58,6 +58,7 @@ export default defineNuxtConfig({
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-55P679J');`,
+          body: true
         },
       ]
     },

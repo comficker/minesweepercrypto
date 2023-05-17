@@ -176,9 +176,6 @@ const fetch = async function () {
   if (res.value) response.value = res.value;
 }
 
-
-fetch()
-
 watch(mode, () => {
   fetch()
 })
