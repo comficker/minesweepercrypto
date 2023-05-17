@@ -58,23 +58,22 @@
           <div>{{ item }}</div>
         </div>
       </div>
-
-      <div class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2">
+      <div id="activity" class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2">
         <div class="flow-root text-sm">
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
               <client-only>
                 <table class="min-w-full table-fixed overflow-auto">
                   <thead>
-                  <tr class="font-semibold text-right">
-                    <th class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
-                    <th class="w-32 px-2 py-1.5">Time</th>
-                    <th class="w-32 px-2 py-1.5">Level</th>
-                    <th class="w-32 px-2 py-1.5">Date</th>
+                  <tr role="rowheader" class="font-semibold text-right">
+                    <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
+                    <th role="columnheader" class="w-32 px-2 py-1.5">Time</th>
+                    <th role="columnheader" class="w-32 px-2 py-1.5">Level</th>
+                    <th role="columnheader" class="w-32 px-2 py-1.5">Date</th>
                   </tr>
                   </thead>
                   <tbody class="whitespace-nowrap font-bold">
-                  <tr v-for="(item, i) in items" :key="i" class="rounded text-right">
+                  <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right">
                     <td class="px-2 py-2 text-left">{{ item.user.username }}</td>
                     <td class="px-2 py-2" :class="{
                     'text-blue-500': item.status === 'win',
@@ -141,6 +140,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
+const isActivityAppear = ref(false)
 const userStore = useUserStore()
 const mode = ref('Activity')
 const response = ref<ResponseGames>({} as ResponseGames)
@@ -177,12 +177,38 @@ const fetch = async function () {
   if (res.value) response.value = res.value;
 }
 
+const checkActivityAppear = () => {
+  const elm = document.getElementById('activity')
+  if (elm) {
+    const rect = elm.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+  return false
+}
+
 watch(mode, () => {
   fetch()
 })
 
 onMounted(() => {
+  if (checkActivityAppear()) {
+    isActivityAppear.value = true
+    fetch()
+  }
 
+  window.onscroll = () => {
+    if (checkActivityAppear()) {
+      if (!isActivityAppear.value) {
+        isActivityAppear.value = true
+        fetch()
+      }
+    }
+  }
 })
 </script>
 

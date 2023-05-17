@@ -43,7 +43,7 @@ export default defineNuxtConfig({
         {rel: 'apple-touch-icon', href: '/apple-touch-icon.png'},
       ],
       meta: [
-        {name: 'viewport', content: 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=1'},
+        {name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes'},
         {name: 'description', content: appDescription},
         {name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent'},
       ],
@@ -59,7 +59,10 @@ export default defineNuxtConfig({
             })(window,document,'script','dataLayer','GTM-55P679J');`,
           body: true
         },
-      ]
+      ],
+      htmlAttrs: {
+        lang: 'en'
+      }
     },
   },
   pwa,
