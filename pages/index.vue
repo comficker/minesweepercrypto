@@ -15,27 +15,27 @@
             </div>
           </div>
         </div>
-        <div class="w-1/4">
-          <img src="/jumbotron-bomb.png" alt="">
+        <div>
+          <img class="w-32 h-32" width="128px" height="128px" src="/jumbotron-bomb.png" alt="">
         </div>
       </div>
       <div class="flex justify-center gap-2 md:gap-3 text-white flex-wrap grayscale" :class="{'p-3': !logged.id}">
         <div id="market-apple" class="flex gap-2 items-center bg-gray-900 rounded p-2">
-          <img class="w-6" src="/market/apple-logo.png" alt="">
+          <img class="w-6" width="24px" height="24px" src="/market/apple-logo.png" alt="">
           <div class="text-xs">
             <div class="hidden md:block text-gray-400">Available on</div>
             <div class="uppercase font-bold">IOS</div>
           </div>
         </div>
         <div id="market-google" class="flex gap-2 items-center bg-gray-900 rounded p-2">
-          <img class="w-6" src="/market/google-play-logo.png" alt="">
+          <img class="w-6" width="24px" height="24px" src="/market/google-play-logo.png" alt="">
           <div class="text-xs">
             <div class="hidden md:block text-gray-400">Available on</div>
             <div class="uppercase font-bold">Android</div>
           </div>
         </div>
         <div id="market-telegram" class="flex gap-2 items-center bg-gray-900 rounded p-2">
-          <img class="w-6" src="/market/telegram.png" alt="">
+          <img class="w-6" width="24px" height="24px" src="/market/telegram.png" alt="">
           <div class="text-xs">
             <div class="hidden md:block text-gray-400">Play on</div>
             <div class="uppercase font-bold">Telegram</div>
