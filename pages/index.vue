@@ -127,6 +127,7 @@ import {useUserStore} from "~/composables/user";
 import {countDownTimer, timeSince} from "~/helpers";
 import Game from "~/components/Game.vue";
 import {computed, ref, watch} from "vue";
+import {onMounted} from "@vue/runtime-core";
 
 const title = "Minesweeper Battle | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com"
 const desc = 'Minesweeper is a classic strategy game where players must uncover hidden mines on a grid without detonating them.'
@@ -178,6 +179,10 @@ const fetch = async function () {
 
 watch(mode, () => {
   fetch()
+})
+
+onMounted(() => {
+
 })
 </script>
 
