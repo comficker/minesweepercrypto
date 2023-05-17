@@ -3,8 +3,8 @@
     <Game/>
     <div class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
       <div v-if="!logged.id" class="flex p-4 pb-0">
-        <div class="flex-1 flex flex-col space-y-3">
-          <h2 class="text-2xl font-semibold uppercase font-proto-mono">Join to play and earn</h2>
+        <div class="flex-1 flex flex-col space-y-2">
+          <h2 class="text-lg leading-6 md:text-2xl font-semibold uppercase font-proto-mono">Join to play and earn</h2>
           <div>
             <div
               class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer inline-flex gap-2"
@@ -16,26 +16,26 @@
           </div>
         </div>
         <div>
-          <img class="w-32 h-32" width="128px" src="/flag.png" alt="Flag">
+          <img class="w-24 h-24" width="128px" src="/flag.png" alt="Flag">
         </div>
       </div>
-      <div class="flex justify-center gap-2 md:gap-3 text-white flex-wrap grayscale" :class="{'p-3': !logged.id}">
-        <div id="market-apple" class="flex gap-2 items-center bg-gray-900 rounded p-2">
-          <img class="w-6" width="24px" height="24px" src="/market/apple-logo.png" alt="">
+      <div class="flex justify-center gap-2 md:gap-3 text-white flex-wrap grayscale" :class="{'p-2 md:p-3': !logged.id}">
+        <div id="market-apple" class="flex gap-2 items-center bg-gray-900 rounded p-1 md:p-2">
+          <img class="w-4 md:w-6" width="24px" height="24px" src="/market/apple-logo.png" alt="">
           <div class="text-xs">
             <div class="hidden md:block text-gray-400">Available on</div>
             <div class="uppercase font-bold">IOS</div>
           </div>
         </div>
-        <div id="market-google" class="flex gap-2 items-center bg-gray-900 rounded p-2">
-          <img class="w-6" width="24px" height="24px" src="/market/google-play-logo.png" alt="">
+        <div id="market-google" class="flex gap-2 items-center bg-gray-900 rounded p-1 md:p-2">
+          <img class="w-4 md:w-6" width="24px" height="24px" src="/market/google-play-logo.png" alt="">
           <div class="text-xs">
             <div class="hidden md:block text-gray-400">Available on</div>
             <div class="uppercase font-bold">Android</div>
           </div>
         </div>
-        <div id="market-telegram" class="flex gap-2 items-center bg-gray-900 rounded p-2">
-          <img class="w-6" width="24px" height="24px" src="/market/telegram.png" alt="">
+        <div id="market-telegram" class="flex gap-2 items-center bg-gray-900 rounded p-1 md:p-2">
+          <img class="w-4 md:w-6" width="24px" height="24px" src="/market/telegram.png" alt="">
           <div class="text-xs">
             <div class="hidden md:block text-gray-400">Play on</div>
             <div class="uppercase font-bold">Telegram</div>
@@ -90,30 +90,11 @@
         </div>
       </div>
     </div>
-    <div class="space-y-3 text-sm">
-      <h2 class="text-2xl font-bold">How to play Minesweeper?</h2>
-      <p class="font-bold">Minesweeper is a classic strategy game where players must uncover hidden mines on a grid
-        without detonating them. Here are the basic steps to play minesweeper:</p>
-      <ul class="list-decimal pl-8 space-y-2">
-        <li>Start by clicking on any square on the board. This will reveal a number indicating how many mines are
-          touching that square.
-        </li>
-        <li>Use the numbers revealed in step 1 to deduce where the mines might be located. For example, if a square
-          shows the number 2, it means that two of the eight squares surrounding that square contain mines.
-        </li>
-        <li>Use right-click to place a flag on the squares you think contain mines. This can help you keep track of
-          which squares are safe to uncover.
-        </li>
-        <li>Continue uncovering squares, using the numbers as clues to find the mines. Try to avoid clicking on squares
-          you suspect contain mines, as doing so will detonate them and end the game.
-        </li>
-        <li>If you uncover all the squares that don't contain mines, you win the game. If you detonate a mine, you lose
-          the game.
-        </li>
-      </ul>
-      <p class="italic text-sm">Minesweeper can be played with various levels of difficulty, ranging from beginner to
-        expert. It's a great game for improving logic and strategic thinking skills, and can be a lot of fun once you
-        get the hang of it.</p>
+    <div class="rounded shadow overflow-hidden w-full bg-white px-3 py-2 space-y-2">
+      <h2 class="text-2xl font-bold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
+      <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without detonating any of the hidden explosives.</p>
+      <p>Minesweeper requires careful observation and logical deduction to succeed. With different levels of difficulty and endless possibilities, Minesweeper offers a fun and challenging experience for players of all levels. Whether you're an experienced player or a beginner, Minesweeper is a game that never gets old. <nuxt-link class="underline" to="/how-to-play">How to play Minesweeper?</nuxt-link></p>
+      <p>re you ready to put your wits to the test and see if you can uncover all the mines?</p>
     </div>
   </div>
 </template>

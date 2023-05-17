@@ -2,18 +2,22 @@
   <div class="space-y-3">
     <div class="flex gap-4 text-xs font-bold justify-between">
       <div class="md:w-1/3 flex items-center gap-3">
-        <div class="flex items-center">
-          <div
-            class="p-2 rounded flex gap-2 items-center cursor-pointer duration-300"
-            :class="{
+        <div
+          class="p-2 rounded flex gap-2 items-center cursor-pointer duration-300"
+          :class="{
               'shadow hover:shadow-lg duration-200 bg-white text-neutral-800': !isFlagging,
               'shadow-inner bg-green-100': isFlagging
             }"
-            @click="isFlagging = !isFlagging"
-          >
-            <div class="i-icons-flag w-5 h-5"/>
-          </div>
+          @click="isFlagging = !isFlagging"
+        >
+          <div class="i-icons-flag w-5 h-5"/>
         </div>
+        <nuxt-link
+          to="/how-to-play"
+          class="p-2 underline bg-white rounded shadow hover:shadow-lg flex gap-1 items-center">
+          <div class="i-icons-info w-5 h-5"/>
+          <span class="hidden md:block">How to play?</span>
+        </nuxt-link>
       </div>
       <div class="w-1/3 flex items-center gap-3 justify-center">
         <div
@@ -24,7 +28,7 @@
           <span class="uppercase hidden md:block">New Game</span>
         </div>
       </div>
-      <div class="w-1/3 flex items-center gap-3 justify-end">
+      <div class="w-1/2 md:w-1/3 flex items-center gap-3 justify-end">
         <div class="shadow-inner p-2 rounded flex gap-2 items-center">
           <div class="i-icons-alarm w-5 h-5"/>
           <div>{{ countDown }}</div>
@@ -38,7 +42,7 @@
         </div>
       </div>
     </div>
-    <div class="relative p-2 bg-white shadow rounded">
+    <div class="relative p-1.5 md:p-3 bg-[#bbada0] shadow rounded">
       <div
         class="overflow-auto md:overflow-visible"
         :class="{
@@ -69,16 +73,17 @@
                   :class="{
                     'inset-0.5': size.width < 16,
                     'md:inset-0.5 inset-0.25 text-xs': size.width >= 16 && size.width < 24,
-                    'md:inset-0.5 inset-0.25 text-2xs': size.width >= 24,
-                    'bg-green-600': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && !isDead,
-                    'bg-[#faf8ef]': results[`${x - 1}_${y - 1}`] === 0 || typeof results[`${x - 1}_${y - 1}`] === 'undefined',
-                    'bg-green-100': results[`${x - 1}_${y - 1}`] === 1,
-                    'bg-green-200': results[`${x - 1}_${y - 1}`] === 2,
-                    'bg-green-300': results[`${x - 1}_${y - 1}`] === 3,
-                    'bg-green-400': results[`${x - 1}_${y - 1}`] === 4,
-                    'bg-green-500': results[`${x - 1}_${y - 1}`] === 5,
-                    'bg-gray-100':  results[`${x - 1}_${y - 1}`] === null,
-                    'bg-red-300':  results[`${x - 1}_${y - 1}`] === -1
+                    'inset-0.25 text-2xs': size.width >= 24,
+                    '!bg-[#ccc1b4] shadow': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && !isDead,
+                    'bg-[#bbada0]': results[`${x - 1}_${y - 1}`] === 0 || (typeof results[`${x - 1}_${y - 1}`] === 'undefined' && isDead),
+                    'bg-[#eee4da] shadow-inner': results[`${x - 1}_${y - 1}`] === 1,
+                    'bg-[#eee1c9] shadow-inner': results[`${x - 1}_${y - 1}`] === 2,
+                    'bg-[#f3b27a] text-white shadow-inner': results[`${x - 1}_${y - 1}`] === 3,
+                    'bg-[#f69664] text-white shadow-inner': results[`${x - 1}_${y - 1}`] === 4,
+                    'bg-[#f77c5f] text-white shadow-inner': results[`${x - 1}_${y - 1}`] === 5,
+                    'bg-[#f75f3b] text-white shadow-inner': results[`${x - 1}_${y - 1}`] === 6,
+                    'bg-gray-100 shadow':  results[`${x - 1}_${y - 1}`] === null,
+                    'bg-[#f75f3b] text-white shadow':  results[`${x - 1}_${y - 1}`] === -1,
                   }"
                 >
                   <div
@@ -402,9 +407,15 @@ onMounted(() => {
 
 <style>
 .cell {
-  @apply rounded-sm absolute flex items-center justify-center text-black;
+  @apply rounded-sm absolute flex items-center justify-center;
+}
 
+.cell.shadow {
   box-shadow: rgba(0, 0, 0, 0.16) 0 1px 1px;
+}
+
+.cell.shadow-inner {
+  box-shadow: inset rgba(0, 0, 0, 0.16) 0 1px 1px;
 }
 
 @keyframes rainbow_animation {

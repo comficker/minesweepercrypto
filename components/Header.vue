@@ -19,9 +19,13 @@ const user = computed(() => {
 <template>
   <div class="w-full max-w-xl mx-auto relative z-10">
     <div class="py-4 flex justify-between gap-4 items-center">
-      <div class="flex flex-wrap gap-6 text-xs uppercase font-bold">
+      <div class="flex flex-wrap gap-6 text-xs uppercase items-center font-bold">
         <nuxt-link to="/" class="flex items-center gap-2 text-base">
-          <img class="h-10 w-auto" src="/logo.png" alt="MinesweeperCrypto">
+          <img class="h-8 md:h-10 w-auto" src="/logo.png" alt="MinesweeperCrypto">
+        </nuxt-link>
+        <nuxt-link to="/battle" class="font-semibold underline flex gap-1 items-center">
+          <div class="i-icons-multiple w-5 h-5"/>
+          <span>Battle</span>
         </nuxt-link>
       </div>
       <div class="flex gap-3 items-center">
@@ -41,10 +45,6 @@ const user = computed(() => {
           <span class="hidden md:block text-xs uppercase font-bold">Signin</span>
         </div>
       </div>
-    </div>
-    <div v-if="false" class="flex font-semibold gap-4">
-      <nuxt-link to="/battle" class="underline">Battle</nuxt-link>
-      <nuxt-link to="/how-to-play" class="underline">How to play?</nuxt-link>
     </div>
     <Transition
       enter-active-class="animated animated-faster animated-fade-in-down"

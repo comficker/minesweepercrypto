@@ -48,7 +48,6 @@ export default defineNuxtConfig({
         {name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent'},
       ],
       script: [
-        {src: 'https://feedback.fish/ff.js?pid=8ef1a83add0137', body: true},
         {
           hid: 'gtmHead',
           innerHTML: `
