@@ -28,10 +28,19 @@
 </div>
 </template>
 
-<script>
-export default {
-  name: "how-to-play"
-}
+<script lang="ts" setup>
+import {useSeoMeta} from "nuxt/app";
+
+const title = "How to play minesweeper online | minesweeperbattle.com"
+const desc = 'Minesweeper requires careful observation and logical deduction to succeed. Are you ready to put your wits to the test and see if you can uncover all the mines'
+useSeoMeta({
+  title: title,
+  description: desc,
+  ogDescription: desc,
+  ogTitle: title,
+  ogImage: '/screenshot/color-guessing-game.png',
+  twitterCard: 'summary_large_image',
+})
 </script>
 
 <style scoped>
