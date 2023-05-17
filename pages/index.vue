@@ -16,7 +16,7 @@
           </div>
         </div>
         <div>
-          <img class="w-32 h-32" width="128px" height="128px" src="/jumbotron-bomb.png" alt="">
+          <img class="w-32 h-32" width="128px" src="/flag.png" alt="Flag">
         </div>
       </div>
       <div class="flex justify-center gap-2 md:gap-3 text-white flex-wrap grayscale" :class="{'p-3': !logged.id}">
