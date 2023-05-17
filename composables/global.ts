@@ -8,7 +8,7 @@ import {useCookie} from "#app";
 
 export const useGlobalStore = defineStore('global', () => {
   const cookieFormSize = useCookie('form.size')
-  const arr = cookieFormSize.value ? cookieFormSize.value.split("_") : ['16', '16']
+  const arr = cookieFormSize.value ? cookieFormSize.value.split("_") : ['6', '6']
   const setting = ref<Setting>({
     size: {
       width: Number.parseInt(arr[0]),
