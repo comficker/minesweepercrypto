@@ -1,7 +1,7 @@
 <template>
   <div class="w-full max-w-xl mx-auto space-y-4">
     <Game/>
-    <div class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
+    <div v-if="!isTelegram" class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
       <div v-if="!logged.id" class="flex p-4 pb-0">
         <div class="flex-1 flex flex-col space-y-2">
           <h2 class="text-lg leading-6 md:text-2xl font-semibold uppercase font-proto-mono">Join to play and earn</h2>
@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <div class="rounded shadow overflow-hidden w-full bg-white px-3 py-2 space-y-2 text-sm">
+    <div v-if="!isTelegram" class="rounded shadow overflow-hidden w-full bg-white px-3 py-2 space-y-2 text-sm">
       <h2 class="text-2xl font-bold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
       <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without detonating any of the hidden explosives.</p>
       <p>Minesweeper requires careful observation and logical deduction to succeed. With different levels of difficulty and endless possibilities, Minesweeper offers a fun and challenging experience for players of all levels. Whether you're an experienced player or a beginner, Minesweeper is a game that never gets old. <nuxt-link class="underline" to="/how-to-play">How to play Minesweeper?</nuxt-link></p>
@@ -108,6 +108,7 @@ import {countDownTimer, timeSince} from "~/helpers";
 import Game from "~/components/Game.vue";
 import {computed, ref, watch} from "vue";
 import {onMounted} from "@vue/runtime-core";
+import {useGlobalStore} from "~/composables/global";
 
 const title = "Minesweeper Battle | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com"
 const desc = 'Minesweeper is a classic strategy game where players must uncover hidden mines on a grid without detonating them.'
@@ -123,9 +124,12 @@ useSeoMeta({
 
 const isActivityAppear = ref(false)
 const userStore = useUserStore()
+const globalStore = useGlobalStore()
+
 const mode = ref('Activity')
 const response = ref<ResponseGames>({} as ResponseGames)
 
+const isTelegram = computed(() => globalStore.isTelegram)
 const logged = computed(() => {
   return userStore.logged
 })

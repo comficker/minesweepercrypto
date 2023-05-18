@@ -3,12 +3,15 @@ import {defineStore} from 'pinia'
 
 import {Setting} from "~/interface";
 import {onMounted} from "@vue/runtime-core";
-import {useCookie} from "#app";
+import {useCookie, useRoute} from "#app";
 
 
 export const useGlobalStore = defineStore('global', () => {
   const cookieFormSize = useCookie('form.size')
+  const route = useRoute()
   const arr = cookieFormSize.value ? cookieFormSize.value.split("_") : ['6', '6']
+
+  const isTelegram = ref(!!route.query.token)
   const setting = ref<Setting>({
     size: {
       width: Number.parseInt(arr[0]),
@@ -26,7 +29,8 @@ export const useGlobalStore = defineStore('global', () => {
 
   return {
     setting,
-    setSetting
+    setSetting,
+    isTelegram
   }
 })
 

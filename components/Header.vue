@@ -35,7 +35,6 @@ const user = computed(() => {
         </div>
         <div v-if="user && user.id" class="flex gap-1 items-center rounded p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer">
           <div class="i-icons-swap w-4 h-4"/>
-          <span class="uppercase text-xs font-bold">Manage</span>
         </div>
         <div
           v-else class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
