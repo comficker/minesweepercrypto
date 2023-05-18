@@ -4,7 +4,7 @@
     <div v-if="!isTelegram" class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
       <div v-if="!logged.id" class="flex p-4 pb-0">
         <div class="flex-1 flex flex-col space-y-2">
-          <h2 class="text-lg leading-6 md:text-2xl font-semibold uppercase font-proto-mono">Join to play and earn</h2>
+          <h2 class="text-lg leading-6 sm:text-2xl font-bold uppercase font-proto-mono">Join to play and earn</h2>
           <div>
             <div
               class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer inline-flex gap-2"
@@ -17,29 +17,6 @@
         </div>
         <div>
           <img class="w-24 h-24" width="128px" src="/flag.png" alt="Flag">
-        </div>
-      </div>
-      <div class="flex justify-center gap-2 md:gap-3 text-white flex-wrap grayscale" :class="{'p-2 md:p-3': !logged.id}">
-        <div id="market-apple" class="flex gap-2 items-center bg-gray-900 rounded p-1 md:p-2">
-          <img class="w-4 md:w-6" width="24px" height="24px" src="/market/apple-logo.png" alt="">
-          <div class="text-xs">
-            <div class="hidden md:block text-gray-400">Available on</div>
-            <div class="uppercase font-bold">IOS</div>
-          </div>
-        </div>
-        <div id="market-google" class="flex gap-2 items-center bg-gray-900 rounded p-1 md:p-2">
-          <img class="w-4 md:w-6" width="24px" height="24px" src="/market/google-play-logo.png" alt="">
-          <div class="text-xs">
-            <div class="hidden md:block text-gray-400">Available on</div>
-            <div class="uppercase font-bold">Android</div>
-          </div>
-        </div>
-        <div id="market-telegram" class="flex gap-2 items-center bg-gray-900 rounded p-1 md:p-2">
-          <img class="w-4 md:w-6" width="24px" height="24px" src="/market/telegram.png" alt="">
-          <div class="text-xs">
-            <div class="hidden md:block text-gray-400">Play on</div>
-            <div class="uppercase font-bold">Telegram</div>
-          </div>
         </div>
       </div>
     </div>

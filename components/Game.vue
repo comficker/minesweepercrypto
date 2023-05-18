@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-3">
     <div class="flex gap-4 text-xs font-bold justify-between">
-      <div class="md:w-1/3 flex items-center gap-3">
+      <div class="flex items-center gap-3">
         <div
           class="p-2 rounded flex gap-2 items-center cursor-pointer duration-300"
           :class="{
@@ -12,14 +12,8 @@
         >
           <div class="i-icons-flag w-5 h-5"/>
         </div>
-        <nuxt-link
-          to="/how-to-play"
-          class="p-2 underline bg-white rounded shadow hover:shadow-lg flex gap-1 items-center">
-          <div class="i-icons-info w-5 h-5"/>
-          <span class="hidden md:block">How to play?</span>
-        </nuxt-link>
       </div>
-      <div class="w-1/3 flex items-center gap-3 justify-center">
+      <div class="flex items-center gap-3 justify-end">
         <div
           class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
           @click="handleNewGame"
@@ -27,8 +21,6 @@
           <div class="i-icons-dead w-5 h-5"/>
           <span class="uppercase hidden md:block">New Game</span>
         </div>
-      </div>
-      <div class="w-1/2 md:w-1/3 flex items-center gap-3 justify-end">
         <div class="shadow-inner p-2 rounded flex gap-2 items-center">
           <div class="i-icons-alarm w-5 h-5"/>
           <div>{{ countDown }}</div>
@@ -107,7 +99,8 @@
         leave-active-class="animated animated-faster animated-fade-out-down"
       >
         <div v-if="isPending" class="absolute inset-0 p-6">
-          <div class="md:max-w-2/3 mx-auto w-full bg-white p-4 rounded shadow h-full max-h-[512px] flex flex-col space-y-3">
+          <div
+            class="md:max-w-2/3 mx-auto w-full bg-white p-4 rounded shadow h-full max-h-[512px] flex flex-col space-y-3">
             <div class="flex items-center gap-3">
               <div class="w-5 h-5 i-icons-bomb"/>
               <div class="font-bold uppercase">Boom</div>
@@ -159,6 +152,32 @@
         </div>
       </div>
     </div>
+    <div class="flex justify-between">
+      <nuxt-link class="text-xs uppercase underline font-bold flex items-center gap-1" to="/how-to-play">
+        <div class="i-icons-info w-5 h-5"/>
+        <span>How to play minesweeper?</span>
+      </nuxt-link>
+      <div class="flex justify-end gap-4 flex-wrap grayscale">
+        <div id="market-apple" class="flex gap-1 items-center">
+          <img class="w-4" width="24px" height="24px" src="/market/apple-logo.png" alt="">
+          <div class="text-xs">
+            <div class="uppercase font-bold">IOS</div>
+          </div>
+        </div>
+        <div id="market-google" class="flex gap-1 items-center">
+          <img class="w-4" width="24px" height="24px" src="/market/google-play-logo.png" alt="">
+          <div class="text-xs">
+            <div class="uppercase font-bold">Android</div>
+          </div>
+        </div>
+        <div id="market-telegram" class="flex gap-1 items-center">
+          <img class="w-4" width="24px" height="24px" src="/market/telegram.png" alt="">
+          <div class="text-xs">
+            <div class="uppercase font-bold">Telegram</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <p v-if="false" class="text-xs text-gray-400 hover:text-neutral-800 duration-200 italic">Hint: Use the numbers
       revealed in step 1
       to deduce where the mines might be located. For example, if a square shows the number 2, it means that two of the
@@ -184,6 +203,7 @@ const size = computed(() => globalStore.setting.size)
 const confettiAni = ref<any>(null)
 const maps: any = ref({})
 const results: any = ref({})
+const steps: any = ref([])
 const isDead = ref(false)
 const isFlagging = ref(false)
 const isPending = ref<any>(null)
@@ -247,6 +267,7 @@ const handleNewGame = () => {
   if (isLogged.value) {
     handlePlayServer(null, -1, -1, false)
   } else {
+    steps.value = []
     results.value = {}
     maps.value = {}
     isDead.value = false
@@ -260,14 +281,29 @@ const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = []) 
     startAt.value = (new Date()).getTime()
   }
   if (isFlagging.value || e) {
+    let c = cord
     if (typeof results.value[cord] === 'undefined') {
       results.value[cord] = null
+      c = c + '_+'
     } else {
       delete results.value[cord]
+      c = c + '_-'
     }
+    steps.value.push({
+      time: new Date().getTime(),
+      cord: c,
+      user: null
+    })
     return;
   } else if (results.value[cord] === null) {
     return;
+  }
+  if (clicked.length === 0) {
+    steps.value.push({
+      time: new Date().getTime(),
+      cord: cord,
+      user: null
+    })
   }
   const checked = maps.value[cord]
   results.value[cord] = checked
@@ -353,6 +389,9 @@ const purchase = async (isPurchased = false) => {
 }
 
 const onClick = (e: Event | null, x: number, y: number) => {
+  if (typeof results.value[`${x}_${y}`] === "number" || (results.value[`${x}_${y}`] === null && !isFlagging.value && !e))
+    return;
+
   if (isLogged.value) {
     handlePlayServer(e, x, y)
   } else {
@@ -392,15 +431,18 @@ onMounted(() => {
     }
   }, 1000)
   if (document.getElementById('confetti')) {
-    confettiAni.value = lottie.loadAnimation({
-      container: document.getElementById('confetti'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: false,
-      animationData: confetti,
-      rendererSettings: {}
-    })
-    confettiAni.value.play()
+    const elm: HTMLElement | null = document.getElementById('confetti')
+    if (elm) {
+      confettiAni.value = lottie.loadAnimation({
+        container: elm,
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        animationData: confetti,
+        rendererSettings: {}
+      })
+      confettiAni.value.play()
+    }
   }
 })
 </script>
