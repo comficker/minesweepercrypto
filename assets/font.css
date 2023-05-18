@@ -1,36 +1,4 @@
-@font-face {
-  font-display: swap;
-  font-family: Proto Mono;
-  font-weight: 300;
-  src: local("Proto Mono"), url("https://blur.io/homepage/fonts/ProtoMono/ProtoMono-Light.otf")
-}
-
-@font-face {
-  font-display: swap;
-  font-family: Proto Mono;
-  font-weight: 400;
-  src: local("Proto Mono"), url("https://blur.io/homepage/fonts/ProtoMono/ProtoMono-Regular.otf")
-}
-
-@font-face {
-  font-display: swap;
-  font-family: Proto Mono;
-  font-weight: 600;
-  src: local("Proto Mono"), url("https://blur.io/homepage/fonts/ProtoMono/ProtoMono-Bold.otf")
-}
-
-@font-face {
-  font-display: swap;
-  font-family: Proto Mono;
-  font-weight: 700;
-  src: local("Proto Mono"), url("https://blur.io/homepage/fonts/ProtoMono/ProtoMono-Bold.otf")
-}
-
 body {
   @apply md:overflow-overlay;
   font-family: 'Inter', Helvetica, Arial, sans-serif;
-}
-
-.font-proto-mono {
-  font-family: 'Proto Mono', monospace;
 }
