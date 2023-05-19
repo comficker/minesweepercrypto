@@ -41,7 +41,7 @@
           'p-1 -m-1': size.width < 16,
           'p-0.5 -m-0.5': size.width >= 16 && size.width < 24,
           'p-0.25 -m-0.25': size.width >= 16,
-          'grayscale blur-sm': isPending || isWon
+          'grayscale blur-sm': isPending || isWon || isDead
         }"
       >
         <div class="flex h-full font-bold font-proto-mono">
@@ -138,17 +138,32 @@
           </div>
         </div>
       </Transition>
-      <div v-show="isWon" class="absolute inset-0 flex flex-col items-center justify-center space-y-4">
-        <div class="-space-y-16 text-center">
-          <div class="w-64 h-64" id="confetti"></div>
-          <div class="text-3xl font-bold text-shine">You won!</div>
+      <div v-show="isWon || isDead" class="bg-black/30 rounded absolute inset-0 flex flex-col items-center justify-center space-y-4">
+        <div class="text-center" :class="{'-space-y-16': isWon}">
+          <div v-if="isWon" class="w-64 h-64" id="confetti"></div>
+          <div v-else class="my-6">
+            <img class="mx-auto w-32 h-32" src="/nuclear.png" alt="">
+          </div>
+          <div class="text-3xl font-bold text-shine">
+            <span v-if="isWon">You won!</span>
+            <span v-else>You dead</span>
+          </div>
         </div>
-        <div
-          class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
-          @click="handleNewGame"
-        >
-          <div class="i-icons-smile w-4 h-4"/>
-          <span class="uppercase text-xs font-bold">Continue</span>
+        <div class="flex justify-center gap-3">
+          <div
+            class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
+            @click="handleNewGame"
+          >
+            <div class="i-icons-smile w-4 h-4"/>
+            <span class="uppercase text-xs font-bold">Continue</span>
+          </div>
+          <div
+            class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
+            @click="play"
+          >
+            <div class="i-icons-play w-4 h-4"/>
+            <span class="uppercase text-xs font-bold">Replay</span>
+          </div>
         </div>
       </div>
     </div>
@@ -192,18 +207,22 @@ import {useGlobalStore} from "~/composables/global";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {onMounted} from "@vue/runtime-core";
 import {countDownTimer} from "~/helpers";
-import {ILottery} from "~/interface";
+import {ILottery, IStep} from "~/interface";
 import lottie from 'lottie-web';
 import confetti from "~/constants/confetti.json"
 
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
 
+const enableSound = ref(true)
+let SOUND_TAP: HTMLAudioElement;
+let SOUND_OVER: HTMLAudioElement;
+
 const size = computed(() => globalStore.setting.size)
 const confettiAni = ref<any>(null)
 const maps: any = ref({})
 const results: any = ref({})
-const steps: any = ref([])
+const steps: any = ref<IStep[]>([])
 const isDead = ref(false)
 const isFlagging = ref(false)
 const isPending = ref<any>(null)
@@ -211,6 +230,8 @@ const isWon = ref(false)
 const startAt = ref<number>((new Date()).getTime())
 const countDown = ref("00:00")
 const lottery = ref<ILottery>({} as ILottery)
+const playing = ref<boolean>(false)
+const playQueue = ref<any[]>([])
 
 const isLogged = computed(() => {
   return userStore.isLogged
@@ -274,31 +295,30 @@ const handleNewGame = () => {
   }
 }
 
-const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = []) => {
+const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = [], isRecording = true) => {
   if (e) e.preventDefault()
   if (Object.keys(maps.value).length === 0) {
     drawMapLocal(cord)
     startAt.value = (new Date()).getTime()
   }
   if (isFlagging.value || e) {
-    let c = cord
     if (typeof results.value[cord] === 'undefined') {
       results.value[cord] = null
-      c = c + '_+'
     } else {
       delete results.value[cord]
-      c = c + '_-'
     }
-    steps.value.push({
-      time: new Date().getTime(),
-      cord: c,
-      user: null
-    })
+    if (isRecording) {
+      steps.value.push({
+        time: new Date().getTime(),
+        cord: cord + '_?',
+        user: null
+      })
+    }
     return;
   } else if (results.value[cord] === null) {
     return;
   }
-  if (clicked.length === 0) {
+  if (clicked.length === 0 && isRecording) {
     steps.value.push({
       time: new Date().getTime(),
       cord: cord,
@@ -391,7 +411,7 @@ const purchase = async (isPurchased = false) => {
 const onClick = (e: Event | null, x: number, y: number) => {
   if (typeof results.value[`${x}_${y}`] === "number" || (results.value[`${x}_${y}`] === null && !isFlagging.value && !e))
     return;
-
+  if (enableSound.value) SOUND_TAP?.play();
   if (isLogged.value) {
     handlePlayServer(e, x, y)
   } else {
@@ -408,6 +428,31 @@ const openSetting = () => {
   userStore.setModal('setting')
 }
 
+const play = () => {
+  isDead.value = false
+  isWon.value = false
+  results.value = {}
+  playQueue.value.forEach(to => {
+    clearTimeout(to)
+  })
+  playQueue.value = []
+  playing.value = true
+  steps.value.forEach((step: IStep, i: number) => {
+    playQueue.value.push(setTimeout(() => {
+      let cord = step.cord
+      isFlagging.value = false
+      if (step.cord.endsWith("_?")) {
+        isFlagging.value = true
+        cord = step.cord.replace("_?", "")
+      }
+      handlePlayLocal(null, cord, [], false)
+      if (i === steps.value.length - 1) {
+        playing.value = false
+      }
+    }, step.time - startAt.value))
+  })
+}
+
 watch(isLogged, () => {
   handlePlayServer(null, undefined, undefined, false)
 })
@@ -416,6 +461,10 @@ watch(isPending, (n, o) => {
   if (n) {
     fetchLottery()
   }
+})
+
+watch(isDead, (n) => {
+  if (n && enableSound.value) SOUND_OVER?.play();
 })
 
 watch(size, (n, o) => {
@@ -444,6 +493,9 @@ onMounted(() => {
       confettiAni.value.play()
     }
   }
+
+  SOUND_TAP = new window.Audio("/sound/tap.wav")
+  SOUND_OVER = new window.Audio("/sound/over.wav")
 })
 </script>
 

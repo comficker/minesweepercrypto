@@ -66,3 +66,9 @@ export interface GameSize {
 export interface Setting {
   size: GameSize
 }
+
+export interface IStep {
+  time: number
+  cord: string
+  user: number | null
+}

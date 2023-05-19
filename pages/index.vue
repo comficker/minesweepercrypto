@@ -32,7 +32,7 @@
           @click="mode = item"
         >
           <div class="i-icons-history w-4 h-4"/>
-          <div>{{ item }}</div>
+          <div class="xs:hidden">{{ item }}</div>
         </div>
       </div>
       <div id="activity" class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2">

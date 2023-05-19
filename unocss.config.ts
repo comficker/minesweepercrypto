@@ -60,6 +60,9 @@ export default defineConfig({
     },
     dropShadow: {
       't': '-1px -3px 3px 0px rgba(0,0,0,0.75)',
+    },
+    screens: {
+      'xs': {raw: '(max-width: 320px)'},
     }
   },
   safelist: [],
