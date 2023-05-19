@@ -34,14 +34,14 @@
         </div>
       </div>
     </div>
-    <div class="relative p-1.5 md:p-3 bg-[#bbada0] shadow rounded">
+    <div class="relative p-1.5 md:p-2 bg-[#bbada0] shadow rounded">
       <div
         class="overflow-auto md:overflow-visible"
         :class="{
           'p-1 -m-1': size.width < 16,
           'p-0.5 -m-0.5': size.width >= 16 && size.width < 24,
           'p-0.25 -m-0.25': size.width >= 16,
-          'grayscale blur-sm': isPending || isWon || isDead
+          'grayscale blur-sm': gameStatus.startsWith('hold_') || ending
         }"
       >
         <div class="flex h-full font-bold font-proto-mono">
@@ -66,8 +66,8 @@
                     'inset-0.5': size.width < 16,
                     'md:inset-0.5 inset-0.25 text-xs': size.width >= 16 && size.width < 24,
                     'inset-0.25 text-2xs': size.width >= 24,
-                    '!bg-[#ccc1b4] shadow': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && !isDead,
-                    'bg-[#bbada0]': results[`${x - 1}_${y - 1}`] === 0 || (typeof results[`${x - 1}_${y - 1}`] === 'undefined' && isDead),
+                    '!bg-[#ccc1b4] shadow': typeof results[`${x - 1}_${y - 1}`] === 'undefined' && gameStatus !== 'dead',
+                    'bg-[#bbada0]': results[`${x - 1}_${y - 1}`] === 0 || (typeof results[`${x - 1}_${y - 1}`] === 'undefined' && gameStatus === 'dead'),
                     'bg-[#eee4da] shadow-inner': results[`${x - 1}_${y - 1}`] === 1,
                     'bg-[#eee1c9] shadow-inner': results[`${x - 1}_${y - 1}`] === 2,
                     'bg-[#f3b27a] text-white shadow-inner': results[`${x - 1}_${y - 1}`] === 3,
@@ -98,7 +98,7 @@
         enter-active-class="animated animated-faster animated-fade-in"
         leave-active-class="animated animated-faster animated-fade-out-down"
       >
-        <div v-if="isPending" class="absolute inset-0 p-6">
+        <div v-if="gameStatus.startsWith('hold_')" class="absolute inset-0 p-6">
           <div
             class="md:max-w-2/3 mx-auto w-full bg-white p-4 rounded shadow h-full max-h-[512px] flex flex-col space-y-3">
             <div class="flex items-center gap-3">
@@ -138,34 +138,40 @@
           </div>
         </div>
       </Transition>
-      <div v-show="isWon || isDead" class="bg-black/30 rounded absolute inset-0 flex flex-col items-center justify-center space-y-4">
-        <div class="text-center" :class="{'-space-y-16': isWon}">
-          <div v-if="isWon" class="w-64 h-64" id="confetti"></div>
+      <Transition
+        enter-active-class="animated animated-faster animated-fade-in"
+        leave-active-class="animated animated-faster animated-fade-out-down"
+      >
+        <div v-show="ending" class="bg-black/30 rounded absolute inset-0 flex flex-col items-center justify-center space-y-4">
+        <div class="text-center" :class="{'-space-y-16': gameStatus === 'win'}">
+          <div v-if="gameStatus === 'win'" class="w-64 h-64" id="confetti"></div>
           <div v-else class="my-6">
             <img class="mx-auto w-32 h-32" src="/nuclear.png" alt="">
           </div>
           <div class="text-3xl font-bold text-shine">
-            <span v-if="isWon">You won!</span>
+            <span v-if="gameStatus === 'win'">You won!</span>
             <span v-else>You dead</span>
           </div>
         </div>
         <div class="flex justify-center gap-3">
           <div
             class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
-            @click="handleNewGame"
+            @click="ending = false"
           >
             <div class="i-icons-smile w-4 h-4"/>
-            <span class="uppercase text-xs font-bold">Continue</span>
+            <span class="uppercase text-xs font-bold">Endgame</span>
           </div>
           <div
+            v-if="steps.length > 5"
             class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
-            @click="play"
+            @click="replay"
           >
             <div class="i-icons-play w-4 h-4"/>
             <span class="uppercase text-xs font-bold">Replay</span>
           </div>
         </div>
       </div>
+      </Transition>
     </div>
     <div class="flex justify-between">
       <nuxt-link class="text-xs uppercase underline font-bold flex items-center gap-1" to="/how-to-play">
@@ -214,23 +220,23 @@ import confetti from "~/constants/confetti.json"
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
 
-const enableSound = ref(true)
 let SOUND_TAP: HTMLAudioElement;
 let SOUND_OVER: HTMLAudioElement;
 
+const enableSound = computed(() => globalStore.setting.soundOn)
 const size = computed(() => globalStore.setting.size)
 const confettiAni = ref<any>(null)
+
 const maps: any = ref({})
 const results: any = ref({})
 const steps: any = ref<IStep[]>([])
-const isDead = ref(false)
 const isFlagging = ref(false)
-const isPending = ref<any>(null)
-const isWon = ref(false)
+const gameStatus = ref('playing')
+const ending = ref(false)
+
 const startAt = ref<number>((new Date()).getTime())
 const countDown = ref("00:00")
 const lottery = ref<ILottery>({} as ILottery)
-const playing = ref<boolean>(false)
 const playQueue = ref<any[]>([])
 
 const isLogged = computed(() => {
@@ -283,15 +289,29 @@ const drawMapLocal = (ignoreCord: string) => {
 }
 
 const handleNewGame = () => {
-  isPending.value = false
-  isWon.value = false
+  gameStatus.value = 'playing'
+  steps.value = []
+  results.value = {}
+  maps.value = {}
+  ending.value = false
+
+  playQueue.value.forEach(to => {
+    clearTimeout(to)
+  })
   if (isLogged.value) {
     handlePlayServer(null, -1, -1, false)
+  }
+}
+
+const onClick = (e: Event | null, x: number, y: number) => {
+  if (gameStatus.value !== 'playing') return;
+  if (typeof results.value[`${x}_${y}`] === "number" || (results.value[`${x}_${y}`] === null && !isFlagging.value && !e))
+    return;
+  if (enableSound.value) SOUND_TAP?.play();
+  if (isLogged.value) {
+    handlePlayServer(e, x, y)
   } else {
-    steps.value = []
-    results.value = {}
-    maps.value = {}
-    isDead.value = false
+    handlePlayLocal(e, `${x}_${y}`, [])
   }
 }
 
@@ -328,7 +348,7 @@ const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = [], 
   const checked = maps.value[cord]
   results.value[cord] = checked
   if (checked === -1) {
-    isDead.value = true
+    gameStatus.value = 'dead'
     results.value = maps.value
   }
   if (typeof maps.value[cord] === "undefined") {
@@ -339,6 +359,7 @@ const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = [], 
     neighbors.forEach((nb: number[]) => {
       const key = `${nb[0]}_${nb[1]}`
       if (
+        size.value &&
         nb[0] >= 0 && nb[1] >= 0 &&
         nb[0] < size.value.width && nb[1] < size.value.height &&
         !clicked.includes(key)) {
@@ -347,14 +368,12 @@ const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = [], 
     })
   }
   const opened = Object.values(results.value).filter(x => x !== null).length
-  if (size.value.width * size.value.height - opened === totalBomb.value) {
-    isWon.value = true
+  if (size.value && size.value.width * size.value.height - opened === totalBomb.value) {
+    gameStatus.value = 'win'
   }
 }
 
-const handlePlayServer = async (
-  e: Event | null, x: number | undefined, y: number | undefined, isPurchased = false
-): Promise<string | null> => {
+const handlePlayServer = async (e: Event | null, x: number | undefined, y: number | undefined, isPurchased = false): Promise<string | null> => {
   if (e) e.preventDefault()
   if (!isLogged.value) return null
   const {data: res, pending, execute} = await useAuthFetch(`/minesweeper/play`, {
@@ -373,18 +392,10 @@ const handlePlayServer = async (
   }
   const value = res.value as any
   if (value) {
-    if (value.status.startsWith("hold_")) {
-      const temp = value.status.split("_")
-      isPending.value = {
-        x: Number.parseInt(temp[1]),
-        y: Number.parseInt(temp[2])
-      }
-    }
+    gameStatus.value = value.status
     results.value = value.results || {}
-    isDead.value = value.status === "dead"
-    isWon.value = value.status === "win"
     startAt.value = (new Date(value.start_at)).getTime()
-    if (value.height !== size.value.height || value.width !== size.value.width) {
+    if (value.height !== size.value?.height || value.width !== size.value?.width) {
       globalStore.setSetting({
         size: {
           width: value.width,
@@ -398,24 +409,14 @@ const handlePlayServer = async (
 }
 
 const purchase = async (isPurchased = false) => {
-  if (isPending.value) {
-    const status = await handlePlayServer(null, isPending.value.x, isPending.value.y, isPurchased)
+  if (gameStatus.value.startsWith("hold_")) {
+    const arr = gameStatus.value.split("_")
+    const status = await handlePlayServer(null, Number.parseInt(arr[1]), Number.parseInt(arr[2]), isPurchased)
     if (status && status?.startsWith("hold_")) {
-
+      //TODO
     } else {
-      isPending.value = false
+      gameStatus.value = 'playing'
     }
-  }
-}
-
-const onClick = (e: Event | null, x: number, y: number) => {
-  if (typeof results.value[`${x}_${y}`] === "number" || (results.value[`${x}_${y}`] === null && !isFlagging.value && !e))
-    return;
-  if (enableSound.value) SOUND_TAP?.play();
-  if (isLogged.value) {
-    handlePlayServer(e, x, y)
-  } else {
-    handlePlayLocal(e, `${x}_${y}`, [])
   }
 }
 
@@ -428,15 +429,14 @@ const openSetting = () => {
   userStore.setModal('setting')
 }
 
-const play = () => {
-  isDead.value = false
-  isWon.value = false
+const replay = () => {
+  ending.value = false
+  gameStatus.value = 'replaying'
   results.value = {}
   playQueue.value.forEach(to => {
     clearTimeout(to)
   })
   playQueue.value = []
-  playing.value = true
   steps.value.forEach((step: IStep, i: number) => {
     playQueue.value.push(setTimeout(() => {
       let cord = step.cord
@@ -447,9 +447,9 @@ const play = () => {
       }
       handlePlayLocal(null, cord, [], false)
       if (i === steps.value.length - 1) {
-        playing.value = false
+        ending.value = true
       }
-    }, step.time - startAt.value))
+    }, step.time - startAt.value + 1000))
   })
 }
 
@@ -457,14 +457,17 @@ watch(isLogged, () => {
   handlePlayServer(null, undefined, undefined, false)
 })
 
-watch(isPending, (n, o) => {
-  if (n) {
+watch(gameStatus, (n) => {
+  if (n.startsWith("hold_")) {
     fetchLottery()
+  } else if (n === 'dead') {
+    if (n && enableSound.value) SOUND_OVER?.play();
   }
-})
-
-watch(isDead, (n) => {
-  if (n && enableSound.value) SOUND_OVER?.play();
+  if (['dead', 'win'].includes(gameStatus.value)) {
+    setTimeout(() => {
+      ending.value = true
+    }, 1000)
+  }
 })
 
 watch(size, (n, o) => {
@@ -475,7 +478,7 @@ onMounted(() => {
   handlePlayServer(null, undefined, undefined, false)
 
   setInterval(() => {
-    if (!isDead.value && !isWon.value && startAt.value) {
+    if (gameStatus.value === 'playing' && startAt.value) {
       countDown.value = countDownTimer(startAt.value, (new Date()).getTime())
     }
   }, 1000)

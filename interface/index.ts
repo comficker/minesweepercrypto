@@ -64,6 +64,7 @@ export interface GameSize {
 }
 
 export interface Setting {
+  soundOn?: boolean
   size: GameSize
 }
 

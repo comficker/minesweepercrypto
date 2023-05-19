@@ -2,6 +2,13 @@
   <div class="uppercase font-bold">Game Settings</div>
   <p class="text-gray-400">Play on your way!</p>
   <div class="space-y-3 mt-3">
+    <div class="flex w-full gap-2 items-center">
+      <input
+        v-model="form.soundOn"
+        type="checkbox" class="bg-transparent autofill:bg-transparent outline-none p-2 w-4 h-4"
+      >
+      <span class="uppercase text-xs font-bold text-gray-400">Open sound</span>
+    </div>
     <div class="space-y-1">
       <div class="uppercase text-xs font-bold">Size</div>
       <div class="grid grid-cols-2 gap-4">

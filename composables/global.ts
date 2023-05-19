@@ -13,6 +13,7 @@ export const useGlobalStore = defineStore('global', () => {
 
   const isTelegram = ref(!!route.query.token)
   const setting = ref<Setting>({
+    soundOn: true,
     size: {
       width: Number.parseInt(arr[0]),
       height: Number.parseInt(arr[1])
