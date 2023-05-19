@@ -19,7 +19,7 @@
           @click="handleNewGame"
         >
           <div class="i-icons-dead w-5 h-5"/>
-          <span class="uppercase hidden md:block">New Game</span>
+          <span class="uppercase">New Game</span>
         </div>
         <div class="shadow-inner p-2 rounded flex gap-2 items-center">
           <div class="i-icons-alarm w-5 h-5"/>
@@ -160,19 +160,19 @@
       <div class="flex justify-end gap-4 flex-wrap grayscale">
         <div id="market-apple" class="flex gap-1 items-center">
           <img class="w-4" width="24px" height="24px" src="/market/apple-logo.png" alt="">
-          <div class="text-xs">
+          <div class="hidden md:block text-xs">
             <div class="uppercase font-bold">IOS</div>
           </div>
         </div>
         <div id="market-google" class="flex gap-1 items-center">
           <img class="w-4" width="24px" height="24px" src="/market/google-play-logo.png" alt="">
-          <div class="text-xs">
+          <div class="hidden md:block text-xs">
             <div class="uppercase font-bold">Android</div>
           </div>
         </div>
         <div id="market-telegram" class="flex gap-1 items-center">
           <img class="w-4" width="24px" height="24px" src="/market/telegram.png" alt="">
-          <div class="text-xs">
+          <div class="hidden md:block text-xs">
             <div class="uppercase font-bold">Telegram</div>
           </div>
         </div>
