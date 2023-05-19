@@ -18,7 +18,7 @@
           class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
           @click="handleNewGame"
         >
-          <div class="i-icons-dead w-5 h-5"/>
+          <div class="hidden md:block i-icons-dead w-5 h-5"/>
           <span class="uppercase">New Game</span>
         </div>
         <div class="shadow-inner p-2 rounded flex gap-2 items-center">
