@@ -471,7 +471,8 @@ watch(gameStatus, (n) => {
 })
 
 watch(size, (n, o) => {
-  handlePlayServer(null, -1, -1, false)
+  if (n.width !== o.width || n.height !== o.height)
+    handlePlayServer(null, -1, -1, false)
 })
 
 onMounted(() => {

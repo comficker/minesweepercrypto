@@ -17,7 +17,7 @@ const user = computed(() => {
 </script>
 
 <template>
-  <div class="w-full max-w-xl mx-auto relative z-10">
+  <div class="w-full max-w-xl mx-auto relative">
     <div class="pt-4 flex justify-between gap-4 items-center">
       <div class="flex flex-wrap gap-6 text-xs uppercase items-center font-bold">
         <nuxt-link to="/" class="flex items-center gap-2 text-base">
@@ -31,11 +31,15 @@ const user = computed(() => {
       <div class="flex gap-3 items-center">
         <div v-if="user && user.id" class="hidden md:flex gap-2 items-center text-sm">
           <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
-          <b>{{user.meta?.minesweeper?.balance || 0}}</b>
+          <b>{{ user.meta?.minesweeper?.balance || 0 }}</b>
         </div>
-        <div v-if="user && user.id" class="flex gap-1 items-center rounded p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer">
+        <nuxt-link
+          to="/manager"
+          v-if="user && user.id"
+          class="flex gap-1 items-center rounded p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer"
+        >
           <div class="i-icons-swap w-4 h-4"/>
-        </div>
+        </nuxt-link>
         <div
           v-else class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
           @click="userStore.setModal('login')"

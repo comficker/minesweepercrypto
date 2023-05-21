@@ -33,6 +33,10 @@
   },
   "dependencies": {
     "@feedback-fish/vue": "^1.0.1",
-    "lottie-web": "^5.11.0"
+    "@wagmi/core": "^1.0.5",
+    "ethers": "^6.3.0",
+    "lottie-web": "^5.11.0",
+    "viem": "^0.3.31",
+    "vue-social-sharing": "^4.0.0-alpha4"
   }
 }

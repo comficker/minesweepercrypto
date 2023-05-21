@@ -20,6 +20,7 @@
         </div>
       </div>
     </div>
+    <invite-form v-if="logged.id" :show-history="false"/>
     <div class="space-y-2">
       <div class="flex items-center gap-3 text-sm font-bold">
         <div
@@ -57,7 +58,9 @@
                     'text-red-500': item.status === 'dead'
                   }">{{ item.time }}</td>
                     <td class="px-2 py-2">{{ item.level }}</td>
-                    <td class="px-2 py-2">{{ item.since }}</td>
+                    <td class="px-2 py-2">
+                      <nuxt-link class="underline" :to="`/battle/${item.id}`">{{ item.since }}</nuxt-link>
+                    </td>
                   </tr>
                   </tbody>
                 </table>
@@ -86,6 +89,7 @@ import Game from "~/components/Game.vue";
 import {computed, ref, watch} from "vue";
 import {onMounted} from "@vue/runtime-core";
 import {useGlobalStore} from "~/composables/global";
+import InviteForm from "~/components/InviteForm.vue";
 
 const title = "Minesweeper Battle | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com"
 const desc = 'Minesweeper is a classic strategy game where players must uncover hidden mines on a grid without detonating them.'

@@ -65,5 +65,5 @@ export default defineConfig({
       'xs': {raw: '(max-width: 320px)'},
     }
   },
-  safelist: [],
+  safelist: ['i-icons-facebook', 'i-icons-telegram', 'i-icons-twitter', 'i-icons-discord', 'i-icons-pinterest'],
 })

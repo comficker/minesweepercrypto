@@ -1,5 +1,5 @@
 <template>
-  <div class="uppercase font-bold">Game Settings</div>
+  <div class="uppercase text-sm font-bold">Game Settings</div>
   <p class="text-gray-400">Play on your way!</p>
   <div class="space-y-3 mt-3">
     <div class="flex w-full gap-2 items-center">
