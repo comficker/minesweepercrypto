@@ -56,7 +56,7 @@ const user = computed(() => {
       <div v-if="modalOpening" class="absolute top-0 left-0 right-0">
         <div class="p-4 md:p-8 bg-white shadow rounded-bl-lg rounded-br-lg relative z-10">
           <div class="mx-auto md:w-2/3 ">
-            <Login v-if="modalOpening === 'login'"/>
+            <Login v-if="['login', 'register'].includes(modalOpening)"/>
             <Setting v-if="modalOpening === 'setting'"/>
           </div>
         </div>

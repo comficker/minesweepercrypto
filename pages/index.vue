@@ -4,10 +4,10 @@
     <div v-if="!isTelegram" class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
       <div v-if="!logged.id" class="flex p-4 pb-0">
         <div class="flex-1 flex flex-col space-y-2">
-          <h2 class="text-lg leading-6 sm:text-2xl font-bold uppercase font-proto-mono">Join to play and earn</h2>
+          <h2 class="text-lg leading-6 sm:text-3xl font-bold font-proto-mono">Join to play and earn</h2>
           <div>
             <div
-              class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer inline-flex gap-2"
+              class="rounded p-2 shadow cursor-pointer bg-neutral-50 cursor-pointer inline-flex gap-2"
               @click="userStore.setModal('login')"
             >
               <div class="i-icons-account w-4 h-4"/>
@@ -24,7 +24,7 @@
     <div class="space-y-2">
       <div class="flex items-center gap-3 text-sm font-bold">
         <div
-          v-for="item in ['Activity', 'History', 'Leaderboard']"
+          v-for="item in ['Activity', 'History']"
           class="cursor-pointer p-2 rounded flex gap-2 items-center"
           :class="{
             'bg-white text-neutral-80 shadow hover:shadow-lg duration-200': mode === item,
@@ -41,7 +41,7 @@
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
               <client-only>
-                <table class="min-w-full table-fixed overflow-auto">
+                <table v-if="items.length" class="min-w-full table-fixed overflow-auto">
                   <thead>
                   <tr role="rowheader" class="font-semibold text-right">
                     <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
@@ -59,11 +59,15 @@
                   }">{{ item.time }}</td>
                     <td class="px-2 py-2">{{ item.level }}</td>
                     <td class="px-2 py-2">
-                      <nuxt-link class="underline" :to="`/battle/${item.id}`">{{ item.since }}</nuxt-link>
+                      <nuxt-link class="underline" :to="`/battle/${item.game.id}`">{{ item.since }}</nuxt-link>
                     </td>
                   </tr>
                   </tbody>
                 </table>
+                <div v-else-if="!logged.id" class="pt-4 pb-3">
+                  <div class="font-bold uppercase">Member's feature!</div>
+                  <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view your game history</p>
+                </div>
               </client-only>
             </div>
           </div>
@@ -82,7 +86,7 @@
 <script lang="ts" setup>
 import {useSeoMeta, useRoute} from "nuxt/app";
 import {useAuthFetch} from "~/composables/useAuthFetch";
-import {ResponseGames, IGame} from "~/interface";
+import {ResponseUserGames, IUserGame} from "~/interface";
 import {useUserStore} from "~/composables/user";
 import {countDownTimer, timeSince} from "~/helpers";
 import Game from "~/components/Game.vue";
@@ -108,17 +112,17 @@ const userStore = useUserStore()
 const globalStore = useGlobalStore()
 
 const mode = ref('Activity')
-const response = ref<ResponseGames>({} as ResponseGames)
+const response = ref<ResponseUserGames>({} as ResponseUserGames)
 
 const isTelegram = computed(() => globalStore.isTelegram)
 const logged = computed(() => {
   return userStore.logged
 })
-const items = computed(() => {
-  return response.value && response.value.results ? response.value.results.map((x: IGame) => {
+const items = computed<IUserGame[]>(() => {
+  return response.value && response.value.results ? response.value.results.map((x: IUserGame) => {
     return {
       ...x,
-      level: `${x.width}x${x.height}`,
+      level: `${x.game.width}x${x.game.height}`,
       time: x.end_at ? countDownTimer((new Date(x.start_at)).getTime(), (new Date(x.end_at)).getTime()) : '_',
       since: timeSince(x.start_at)
     }
@@ -126,7 +130,11 @@ const items = computed(() => {
 })
 
 const fetch = async function () {
-  const params: any = {}
+  response.value = {} as ResponseUserGames
+  if (mode.value === 'History' && !logged.value.id) return;
+  const params: any = {
+    page_size: 6
+  }
   if (mode.value === 'History' && logged.value && logged.value.id) {
     params['user__id'] = logged.value.id
   }
@@ -134,12 +142,9 @@ const fetch = async function () {
     params['ordering'] = '-score'
     params['status'] = 'win'
   }
-  const {data: res, pending, execute} = await useAuthFetch<ResponseGames>('/minesweeper/games/', {
+  const {data: res} = await useAuthFetch<ResponseUserGames>('/minesweeper/user-games/', {
     params: params
   })
-  if (pending.value) {
-    await execute()
-  }
   if (res.value) response.value = res.value;
 }
 

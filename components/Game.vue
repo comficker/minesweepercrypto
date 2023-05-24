@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-3">
-    <div class="flex gap-4 text-xs font-bold justify-between">
+    <div class="flex md:grid grid-cols-3 gap-4 text-xs font-bold justify-between">
       <div class="flex items-center gap-3">
         <div
           class="p-2 rounded flex gap-2 items-center cursor-pointer duration-300"
@@ -13,7 +13,7 @@
           <div class="i-icons-flag w-5 h-5"/>
         </div>
       </div>
-      <div class="flex items-center gap-3 justify-end">
+      <div class="flex justify-center">
         <div
           class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
           @click="handleNewGame"
@@ -21,6 +21,8 @@
           <div class="hidden md:block i-icons-dead w-5 h-5"/>
           <span class="uppercase">New Game</span>
         </div>
+      </div>
+      <div class="md:w-auto w-1/2 flex items-center gap-3 justify-end">
         <div class="shadow-inner p-2 rounded flex gap-2 items-center">
           <div class="i-icons-alarm w-5 h-5"/>
           <div>{{ countDown }}</div>
@@ -34,9 +36,9 @@
         </div>
       </div>
     </div>
-    <div class="relative p-1.5 md:p-2 bg-[#bbada0] shadow rounded">
+    <div class="relative p-1.5 md:p-2 bg-[#bbada0] shadow-lg rounded" :style="{'--timeout': `${timeout}s`}">
       <div
-        class="overflow-auto md:overflow-visible"
+        class="overflow-hidden"
         :class="{
           'p-1 -m-1': size.width < 16,
           'p-0.5 -m-0.5': size.width >= 16 && size.width < 24,
@@ -144,8 +146,8 @@
       >
         <div v-show="ending" class="bg-black/30 rounded absolute inset-0 flex flex-col items-center justify-center space-y-4">
         <div class="text-center" :class="{'-space-y-16': gameStatus === 'win'}">
-          <div v-if="gameStatus === 'win'" class="w-64 h-64" id="confetti"></div>
-          <div v-else class="my-6">
+          <div v-show="gameStatus === 'win'" class="w-64 h-64" id="confetti"></div>
+          <div v-show="gameStatus === 'dead'" class="my-6">
             <img class="mx-auto w-32 h-32" src="/nuclear.png" alt="">
           </div>
           <div class="text-3xl font-bold text-shine">
@@ -199,10 +201,6 @@
         </div>
       </div>
     </div>
-    <p v-if="false" class="text-xs text-gray-400 hover:text-neutral-800 duration-200 italic">Hint: Use the numbers
-      revealed in step 1
-      to deduce where the mines might be located. For example, if a square shows the number 2, it means that two of the
-      eight squares surrounding that square contain mines.</p>
   </div>
 </template>
 
@@ -223,30 +221,27 @@ const globalStore = useGlobalStore()
 let SOUND_TAP: HTMLAudioElement;
 let SOUND_OVER: HTMLAudioElement;
 
-const enableSound = computed(() => globalStore.setting.soundOn)
-const size = computed(() => globalStore.setting.size)
+const timeout = ref(10)
 const confettiAni = ref<any>(null)
-
 const maps: any = ref({})
 const results: any = ref({})
 const steps: any = ref<IStep[]>([])
 const isFlagging = ref(false)
 const gameStatus = ref('playing')
 const ending = ref(false)
-
 const startAt = ref<number>((new Date()).getTime())
 const countDown = ref("00:00")
 const lottery = ref<ILottery>({} as ILottery)
 const playQueue = ref<any[]>([])
 
+const enableSound = computed(() => globalStore.setting.soundOn)
+const size = computed(() => globalStore.setting.size)
 const isLogged = computed(() => {
   return userStore.isLogged
 })
-
 const totalBomb = computed(() => {
   return Math.floor(size.value.width * size.value.height * 0.2)
 })
-
 const bombFlagged = computed(() => {
   return Object.values(results.value).filter(x => x === -1).length
 })
@@ -289,6 +284,7 @@ const drawMapLocal = (ignoreCord: string) => {
 }
 
 const handleNewGame = () => {
+  startAt.value = new Date().getTime()
   gameStatus.value = 'playing'
   steps.value = []
   results.value = {}
@@ -376,7 +372,7 @@ const handlePlayLocal = (e: Event | null, cord: string, clicked: string[] = [], 
 const handlePlayServer = async (e: Event | null, x: number | undefined, y: number | undefined, isPurchased = false): Promise<string | null> => {
   if (e) e.preventDefault()
   if (!isLogged.value) return null
-  const {data: res, pending, execute} = await useAuthFetch(`/minesweeper/play`, {
+  const {data: res} = await useAuthFetch(`/minesweeper/play`, {
     method: 'POST',
     body: {
       x, y,
@@ -387,15 +383,11 @@ const handlePlayServer = async (e: Event | null, x: number | undefined, y: numbe
     },
     server: false
   })
-  if (pending.value) {
-    await execute()
-  }
   const value = res.value as any
   if (value) {
-    gameStatus.value = value.status
-    results.value = value.results || {}
-    startAt.value = (new Date(value.start_at)).getTime()
-    if (value.height !== size.value?.height || value.width !== size.value?.width) {
+    if (value.status) gameStatus.value = value.status;
+    if (value.start_at) startAt.value = (new Date(value.start_at)).getTime();
+    if (value.height && value.width && (value.height !== size.value?.height || value.width !== size.value?.width)) {
       globalStore.setSetting({
         size: {
           width: value.width,
@@ -403,6 +395,7 @@ const handlePlayServer = async (e: Event | null, x: number | undefined, y: numbe
         },
       }, false)
     }
+    results.value = value.results || {}
     return value.status
   }
   return null
@@ -414,8 +407,6 @@ const purchase = async (isPurchased = false) => {
     const status = await handlePlayServer(null, Number.parseInt(arr[1]), Number.parseInt(arr[2]), isPurchased)
     if (status && status?.startsWith("hold_")) {
       //TODO
-    } else {
-      gameStatus.value = 'playing'
     }
   }
 }
@@ -457,7 +448,7 @@ watch(isLogged, () => {
   handlePlayServer(null, undefined, undefined, false)
 })
 
-watch(gameStatus, (n) => {
+watch(gameStatus, (n, o) => {
   if (n.startsWith("hold_")) {
     fetchLottery()
   } else if (n === 'dead') {
@@ -479,7 +470,7 @@ onMounted(() => {
   handlePlayServer(null, undefined, undefined, false)
 
   setInterval(() => {
-    if (gameStatus.value === 'playing' && startAt.value) {
+    if (gameStatus.value === 'playing' && startAt.value && !ending.value) {
       countDown.value = countDownTimer(startAt.value, (new Date()).getTime())
     }
   }, 1000)
@@ -532,5 +523,18 @@ onMounted(() => {
   color: transparent;
   animation: rainbow_animation 6s ease-in-out infinite;
   background-size: 400% 100%;
+}
+
+.running .squiggle {
+  stroke-dasharray: 832;
+  stroke-dashoffset: 832;
+  animation: draw linear forwards;
+  animation-duration: var(--timeout);
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 </style>

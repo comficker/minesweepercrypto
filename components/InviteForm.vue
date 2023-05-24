@@ -4,10 +4,10 @@
     <div class="text-2xl font-bold flex items-center gap-1">
       <span>Earn </span>
       <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
-      <span class="underline">2</span>
+      <span class="underline">1</span>
       <span>For each</span>
     </div>
-    <div class="border rounded px-3 py-2 uppercase space-y-2">
+    <div class="uppercase space-y-2">
       <div class="text-xs font-semibold">Your referral code</div>
       <div class="flex bg-yellow-50 p-2 gap-2">
         <input

@@ -61,12 +61,12 @@ const ERROR_DICT: {[key: string]: string} = {
 }
 const route = useRoute()
 const userStore = useUserStore()
-const mode = ref('login')
+const mode = ref(userStore.modalOpening || 'login')
 const form = ref({
   username: null,
   email: null,
   password: null,
-  refer: route.query.ref
+  ref: route.query.ref
 })
 const errors = ref<string[]>([])
 
@@ -95,8 +95,8 @@ const submit = () => {
         }
       }
     }
-    if (mode.value !== 'login' && window.gtag) {
-      window.gtag('event', 'conversion', {'send_to': 'AW-987081603/rGqwCMby2Z8YEIPX1tYD'});
+    if (mode.value !== 'login' && window.dataLayer) {
+      window.dataLayer.push('event', 'conversion', {'send_to': 'AW-987081603/rGqwCMby2Z8YEIPX1tYD'});
     }
   })
 }
