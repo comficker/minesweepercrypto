@@ -25,7 +25,7 @@
     <div class="flex justify-center flex-wrap gap-3 md:text-lg text-white">
       <div v-if="gs.host" class="flex rounded overflow-hidden font-semibold">
         <div class="bg-gray-200 text-gray-500 px-3 py-1">Host</div>
-        <div class="bg-green-400 px-3 py-1">{{ gs.host.first_name || gs.host.username }}</div>
+        <div class="bg-green-400 px-3 py-1">{{ gs.host?.first_name || gs.host?.username }}</div>
       </div>
       <div class="flex rounded overflow-hidden font-semibold">
         <div class="bg-gray-200 text-gray-500 px-3 py-1">Size</div>

@@ -43,42 +43,6 @@ export const getNeighbors = (x: number, y: number) => {
   return [[x, y - 1], [x, y + 1], [x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]];
 }
 
-export const randomCord = (maps: any, size: {width: number, height: number}, ignoreCord: string): string => {
-  const x = Math.floor(Math.random() * size.width)
-  const y = Math.floor(Math.random() * size.height)
-  const key = `${x}_${y}`
-  if (key !== ignoreCord && maps[key] !== -1) {
-    return key
-  } else {
-    return randomCord(maps, size, ignoreCord)
-  }
-}
-
-export const drawMapLocal = (size: {width: number, height: number}, ignoreCord: string):any => {
-  const maps:any = {}
-  const totalBomb = size.width * size.height
-  while (Object.keys(maps).length < totalBomb) {
-    maps[randomCord(maps, size, ignoreCord)] = -1
-    console.log(maps);
-  }
-  Object.keys(maps).forEach((key: string) => {
-    const cord = key.split("_")
-    const neighbors = getNeighbors(Number.parseInt(cord[0]), Number.parseInt(cord[1]))
-    neighbors.forEach((nb: number[]) => {
-      if (nb[0] >= 0 && nb[1] >= 0) {
-        const nbKey = `${nb[0]}_${nb[1]}`
-        if (maps.value[nbKey] !== -1) {
-          if (typeof maps[nbKey] === "undefined") {
-            maps[nbKey] = 0
-          }
-          maps[nbKey]++
-        }
-      }
-    })
-  })
-  return maps
-}
-
 export const getSteps = (resPlayers: IUserGame[]) => {
   let temp_steps: IStep[] = []
   resPlayers.forEach(p => {

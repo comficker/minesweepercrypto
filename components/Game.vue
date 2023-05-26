@@ -9,19 +9,19 @@
       </a>
       <div class="flex justify-end gap-4 flex-wrap grayscale">
         <div id="market-apple" class="flex gap-1 items-center">
-          <img class="w-4" width="24px" height="24px" src="/market/apple-logo.png" alt="">
+          <img class="w-4" width="32" height="32" src="/market/apple-logo.png" alt="">
           <div class="hidden md:block text-xs">
             <div class="uppercase font-bold">IOS</div>
           </div>
         </div>
         <div id="market-google" class="flex gap-1 items-center">
-          <img class="w-4" width="24px" height="24px" src="/market/google-play-logo.png" alt="">
+          <img class="w-4" width="32" height="32" src="/market/google-play-logo.png" alt="">
           <div class="hidden md:block text-xs">
             <div class="uppercase font-bold">Android</div>
           </div>
         </div>
         <div id="market-telegram" class="flex gap-1 items-center">
-          <img class="w-4" width="24px" height="24px" src="/market/telegram.png" alt="">
+          <img class="w-4" width="32" height="32" src="/market/telegram.png" alt="">
           <div class="hidden md:block text-xs">
             <div class="uppercase font-bold">Telegram</div>
           </div>

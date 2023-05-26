@@ -6,7 +6,9 @@ import {useCookie, useRoute} from "#app";
 
 
 export const useGlobalStore = defineStore('global', () => {
-  const cookieFormSize = useCookie('form.size')
+  const cookieFormSize = useCookie('form.size', {
+    sameSite: true
+  })
   const route = useRoute()
   const arr = cookieFormSize.value ? cookieFormSize.value.split("_") : ['6', '6']
 

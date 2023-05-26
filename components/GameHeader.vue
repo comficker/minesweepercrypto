@@ -14,7 +14,15 @@
     </div>
     <div class="flex justify-center">
       <div
-        v-if="gs.is_multiple"
+        v-if="route.path === '/' && !gs.is_multiple"
+        class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
+        @click="gs.newGame()"
+      >
+        <div class="hidden md:block i-icons-dead w-5 h-5"/>
+        <span class="uppercase">New Game</span>
+      </div>
+      <div
+        v-else-if="gs.is_multiple"
         class="border p-1.5 rounded flex gap-1.5 text-xs uppercase font-semibold items-center"
       >
         <div
@@ -25,14 +33,6 @@
           <span>You</span>
         </div>
       </div>
-      <div
-        v-else-if="!gs.id"
-        class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
-        @click="gs.newGame(isLogged)"
-      >
-        <div class="hidden md:block i-icons-dead w-5 h-5"/>
-        <span class="uppercase">New Game</span>
-      </div>
     </div>
     <div class="md:w-auto w-1/2 flex items-center gap-3 justify-end">
       <div class="shadow-inner p-2 rounded flex gap-2 items-center">
@@ -41,24 +41,19 @@
       </div>
       <div
         v-if="['win', 'dead', 'replaying'].includes(gs.status) || gs.ending"
-        class="border p-2 rounded flex gap-1.5 text-gray-400"
+        class="border p-2 rounded flex gap-3 items-center text-gray-400"
       >
         <div
           class="cursor-pointer"
           :class="{'text-blue-500': gs.status !== 'replaying'}"
           @click="gs.replay()"
         >
-          <div class="i-icons-play w-5 h-5"/>
+          <div class="i-icons-replay w-4 h-4"/>
         </div>
         <div
           class="cursor-pointer"
           :class="{'text-blue-500': gs.status === 'replaying'}"
-        >
-          <div class="i-icons-pause w-5 h-5"/>
-        </div>
-        <div
-          class="cursor-pointer"
-          :class="{'text-blue-500': gs.status === 'replaying'}"
+          @click="gs.stopPlay()"
         >
           <div class="i-icons-stop w-5 h-5"/>
         </div>
@@ -79,18 +74,18 @@
 <script lang="ts" setup>
 import {useGameStore} from "~/composables/game";
 import {useUserStore} from "~/composables/user";
-import {computed, ref, onMounted} from "vue";
+import {ref, onMounted} from "vue";
 import {countDownTimer} from "~/helpers";
+import {useRoute} from "nuxt/app";
 
 const userStore = useUserStore()
 const gs = useGameStore()
 const count_down = ref('00:00')
-
-const isLogged = computed(() => userStore.isLogged)
+const route = useRoute()
 
 onMounted(() => {
   setInterval(() => {
-    if (gs.status === 'playing') {
+    if (gs.status === 'playing' && gs.start_at) {
       const to = gs.end_at ? gs.end_at : new Date().getTime()
       count_down.value = countDownTimer(gs.start_at, to)
     }

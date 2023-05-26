@@ -6,7 +6,7 @@
           'p-1 -m-1': gs.width < 16,
           'p-0.5 -m-0.5': gs.width >= 16 && gs.width < 24,
           'p-0.25 -m-0.25': gs.width >= 16,
-          'grayscale blur-sm': gs.status.startsWith('hold_') ||  gs.ending
+          'grayscale': gs.playStatus.startsWith('hold_') ||  gs.ending
         }"
     >
       <div class="flex h-full font-bold font-proto-mono">
@@ -22,8 +22,8 @@
           <div v-for="y in gs.height" class="flex-auto md:min-w-auto md:min-h-auto min-w-1/12">
             <div
               class="pt-full relative"
-              @click="gs.play(isLogged, null, x - 1, y - 1)"
-              @contextmenu="gs.play(isLogged, $event, x - 1, y - 1)"
+              @click="gs.play(null, x - 1, y - 1)"
+              @contextmenu="gs.play($event, x - 1, y - 1)"
             >
               <div
                 class="cell"
@@ -63,7 +63,7 @@
       enter-active-class="animated animated-faster animated-fade-in"
       leave-active-class="animated animated-faster animated-fade-out-down"
     >
-      <div v-if="gs.status.startsWith('hold_')" class="absolute inset-0 p-6">
+      <div v-if="gs.playStatus.startsWith('hold_')" class="absolute inset-0 p-6">
         <div
           class="md:max-w-2/3 mx-auto w-full bg-white p-4 rounded shadow h-full max-h-[512px] flex flex-col space-y-3">
           <div class="flex items-center gap-3">
@@ -145,26 +145,26 @@
 
 <script lang="ts" setup>
 import {useGameStore} from "~/composables/game";
-import {useUserStore} from "~/composables/user";
-import {useGlobalStore} from "~/composables/global";
 import {ILottery} from "~/interface";
-import {computed, ref, watch} from "vue";
+import {ref, watch} from "vue";
 
-const userStore = useUserStore()
-const globalStore = useGlobalStore()
 const gs = useGameStore()
 
 const lottery = ref<ILottery>({} as ILottery)
-
-const isLogged = computed(() => userStore.isLogged)
 
 const fetchLottery = async () => {
   const {data: res} = await useAuthFetch<ILottery>('/minesweeper/lottery')
   if (res.value) lottery.value = res.value as ILottery
 }
 
-watch(() => gs.status, (n: string, o) => {
+watch(() => gs.playStatus, (n: string, o) => {
   if (n.startsWith("hold_")) {
+    fetchLottery()
+  }
+})
+
+onMounted(() => {
+  if (gs.playStatus.startsWith("hold_")) {
     fetchLottery()
   }
 })

@@ -7,10 +7,7 @@
     <Header class="z-20"/>
     <div v-if="!!modalOpening" class="fixed inset-0 z-10"/>
     <div class="flex-1 flex flex-col" :class="{'blur-sm': !!modalOpening}">
-      <div class="w-full space-y-4">
-        <div class="w-full max-w-xl mx-auto">
-          <Game/>
-        </div>
+      <div class="w-full">
         <slot/>
       </div>
     </div>

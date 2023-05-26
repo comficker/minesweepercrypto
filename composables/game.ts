@@ -3,6 +3,7 @@ import {defineStore} from 'pinia'
 import {IStep, IUserGame, User, IGame} from "~/interface";
 import {getNeighbors, getSteps} from "~/helpers";
 import {useAuthFetch} from "~/composables/useAuthFetch";
+import {useUserStore} from "~/composables/user";
 
 export const useGameStore = defineStore('game', () => {
   const id = ref(0)
@@ -29,6 +30,8 @@ export const useGameStore = defineStore('game', () => {
   const is_multiple = computed(() => {
     return false
   })
+
+  const userStore = useUserStore()
 
   function toggleFlag() {
     is_flagging.value = !is_flagging.value
@@ -85,11 +88,10 @@ export const useGameStore = defineStore('game', () => {
     if (clicked.length === 0 && isRecording) {
       steps.value.push({
         time: new Date().getTime(),
-        cord: cord,
+        cord: is_flagging.value || e ? cord + '_?' : cord,
         user: null
       })
     }
-
     if (is_flagging.value || e || results.value[cord] === null) {
       if (is_flagging.value || e)
         localFlag(cord)
@@ -118,7 +120,7 @@ export const useGameStore = defineStore('game', () => {
         }
       })
     }
-    const opened = Object.values(results).filter(x => x !== null).length
+    const opened = Object.values(results.value).filter(x => x !== null).length
     if (width.value * height.value - opened === total_bomb.value) {
       status.value = 'win'
     }
@@ -148,8 +150,6 @@ export const useGameStore = defineStore('game', () => {
 
   const transformData = (value: IGame) => {
     if (value.id) id.value = value.id
-    if (value.maps) maps.value = value.maps
-    if (value.results) results.value = value.results
     if (value.status) status.value = value.status;
     if (value.start_at) start_at.value = (new Date(value.start_at)).getTime();
     if (value.height && value.width) {
@@ -157,37 +157,55 @@ export const useGameStore = defineStore('game', () => {
       width.value = value.width
     }
     if (value.players) players.value = value.players
-    steps.value = getSteps(value.players)
+    if (value.user) host.value = value.user
     results.value = value.results || {}
+    if (value.maps) {
+      maps.value = value.maps
+      if (status.value === 'dead') {
+        results.value = value.maps
+      }
+    }
+    steps.value = getSteps(value.players)
+    if (userStore.isLogged) {
+      const currentTurn = value.players.filter(x => x.user.id === userStore.logged.id)[0]
+      if (currentTurn) {
+        playStatus.value = currentTurn.status
+      }
+    }
   }
 
-  const play = (is_server: boolean, e: Event | null, x: number, y: number) => {
+  const play = (e: Event | null, x: number, y: number) => {
     if (status.value !== 'playing') return;
     if (typeof results.value[`${x}_${y}`] === "number" || (results.value[`${x}_${y}`] === null && !is_flagging.value && !e))
       return;
-    if (is_server) {
+    if (userStore.isLogged) {
       playServer(e, x, y).then()
     } else {
       playLocal(e, `${x}_${y}`, [])
     }
   }
 
-  const init = (is_server: boolean, game: IGame | undefined) => {
+  const init = async (game: IGame | undefined) => {
     if (game) {
       transformData(game)
-    } else if (is_server) {
-      playServer(null, undefined, undefined, false).then()
+    } else if (userStore.isLogged) {
+      id.value = 0
+      await playServer(null, -1, -1, false).then()
     }
   }
 
-  const newGame = (is_server: boolean) => {
+  const newGame = () => {
+    id.value = 0
     start_at.value = new Date().getTime()
     status.value = 'playing'
     steps.value = []
     results.value = {}
     maps.value = {}
-    if (is_server) {
-      playServer(null, -1, -1, false).then()
+    playQueue.value.forEach(to => {
+      clearTimeout(to)
+    })
+    if (userStore.isLogged) {
+      playServer(null, undefined, undefined, false).then()
     }
   }
 
@@ -211,13 +229,28 @@ export const useGameStore = defineStore('game', () => {
         if (i === steps.value.length - 1 && !id.value) {
           ending.value = true
         }
-      }, i * 500))
+      }, i * 800))
+    })
+  }
+
+  const stopPlay = () => {
+    playQueue.value.forEach(to => {
+      clearTimeout(to)
+    })
+    steps.value.forEach((step: IStep, i: number) => {
+      let cord = step.cord
+      is_flagging.value = false
+      if (step.cord.endsWith("_?")) {
+        is_flagging.value = true
+        cord = step.cord.replace("_?", "")
+      }
+      playLocal(null, cord, [], false)
     })
   }
 
   const purchase = async (isPurchased = false) => {
-    if (status.value.startsWith("hold_")) {
-      const arr = status.value.split("_")
+    if (playStatus.value.startsWith("hold_")) {
+      const arr = playStatus.value.split("_")
       const s = await playServer(null, Number.parseInt(arr[1]), Number.parseInt(arr[2]), isPurchased)
       if (s && s?.startsWith("hold_")) {
         //TODO
@@ -246,6 +279,7 @@ export const useGameStore = defineStore('game', () => {
     toggleFlag,
     newGame,
     replay,
+    stopPlay,
     purchase
   }
 })

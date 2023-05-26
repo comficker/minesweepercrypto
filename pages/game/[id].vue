@@ -1,16 +1,21 @@
 <template>
-  <div class="w-full max-w-xl mx-auto space-y-4">
-    <game :game="game"/>
+  <div class="w-full max-w-xl mx-auto">
+    <Game/>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {ref} from "vue"
+import {IGame} from "~/interface";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {useRoute} from "#app";
-import {IGame} from "~/interface";
+import {useGameStore} from "~/composables/game";
 import Game from "~/components/Game.vue";
 
+const gs = useGameStore()
+
 const res = await useAuthFetch<IGame>(`/minesweeper/games/${useRoute().params.id}/`)
-const game = ref<IGame>(res.data.value as IGame)
+
+if (res.data.value) {
+  gs.init(res.data.value)
+}
 </script>
