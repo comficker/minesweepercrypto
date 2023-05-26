@@ -13,11 +13,14 @@ export interface Links {
 export interface IGame {
   "id": number
   "status": string
-  "user": User
-  "start_at": string
-  "end_at": string
+  "user": User | null
+  "start_at": string | number
+  "end_at": string | number
   "width": number
   "height": number
+  "players": IUserGame[]
+  "maps": any
+  "results": any
 }
 
 export interface IUserGame {
@@ -28,6 +31,8 @@ export interface IUserGame {
   "start_at": string
   "end_at": string
   "since"?: string
+  "score": number
+  "steps": IStep[]
 }
 
 export interface ILottery {
@@ -43,6 +48,7 @@ export interface GameSize {
 }
 
 export interface Setting {
+  refresh?: boolean
   soundOn?: boolean
   size: GameSize
 }
@@ -52,8 +58,6 @@ export interface IStep {
   cord: string
   user: number | null
 }
-
-
 
 export interface ResponseLogin {
   access: string

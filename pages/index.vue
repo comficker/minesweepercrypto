@@ -1,8 +1,7 @@
 <template>
   <div class="w-full max-w-xl mx-auto space-y-4">
-    <Game/>
-    <div v-if="!isTelegram" class="rounded overflow-hidden w-full  divide-y" :class="{'shadow bg-white': !logged.id}">
-      <div v-if="!logged.id" class="flex p-4 pb-0">
+    <div v-if="!isTelegram && !logged.id" class="rounded overflow-hidden w-full divide-y shadow bg-white">
+      <div class="flex p-4 pb-0">
         <div class="flex-1 flex flex-col space-y-2">
           <h2 class="text-lg leading-6 sm:text-3xl font-bold font-proto-mono">Join to play and earn</h2>
           <div>
@@ -22,53 +21,69 @@
     </div>
     <invite-form v-if="logged.id" :show-history="false"/>
     <div class="space-y-2">
-      <div class="flex items-center gap-3 text-sm font-bold">
-        <div
-          v-for="item in ['Activity', 'History']"
-          class="cursor-pointer p-2 rounded flex gap-2 items-center"
-          :class="{
+      <div class="flex justify-between">
+        <div class="flex items-center gap-3 text-sm font-bold">
+          <div
+            v-for="item in ['Activity', 'History']"
+            class="cursor-pointer p-2 rounded flex gap-2 items-center"
+            :class="{
             'bg-white text-neutral-80 shadow hover:shadow-lg duration-200': mode === item,
             'shadow-inner': mode !== item
           }"
-          @click="mode = item"
-        >
-          <div class="i-icons-history w-4 h-4"/>
-          <div>{{ item }}</div>
+            @click="mode = item"
+          >
+            <div class="i-icons-history w-4 h-4"/>
+            <div>{{ item }}</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div
+            class="p-2 rounded"
+            :class="{'bg-white cursor-pointer shadow hover:shadow-lg duration-200': !!response.links?.previous}"
+            @click="page--"
+          >
+            <div class="i-icons-left w-4 h-4"/>
+          </div>
+          <div
+            class="p-2 rounded"
+            :class="{'bg-white cursor-pointer shadow hover:shadow-lg duration-200': !!response.links?.next}"
+            @click="page++"
+          >
+            <div class="i-icons-right w-4 h-4"/>
+          </div>
         </div>
       </div>
-      <div id="activity" class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2">
-        <div class="flow-root text-sm">
+      <div id="activity" class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2 flex items-center">
+        <div class="flow-root text-sm w-full">
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
-              <client-only>
-                <table v-if="items.length" class="min-w-full table-fixed overflow-auto">
-                  <thead>
-                  <tr role="rowheader" class="font-semibold text-right">
-                    <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
-                    <th role="columnheader" class="w-32 px-2 py-1.5">Time</th>
-                    <th role="columnheader" class="w-32 px-2 py-1.5">Level</th>
-                    <th role="columnheader" class="w-32 px-2 py-1.5">Date</th>
-                  </tr>
-                  </thead>
-                  <tbody class="whitespace-nowrap font-bold">
-                  <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right">
-                    <td class="px-2 py-2 text-left">{{ item.user.username }}</td>
-                    <td class="px-2 py-2" :class="{
+              <table v-if="items.length" class="min-w-full table-fixed overflow-auto">
+                <thead>
+                <tr role="rowheader" class="font-semibold text-right">
+                  <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
+                  <th role="columnheader" class="w-32 px-2 py-1.5">Time</th>
+                  <th role="columnheader" class="w-32 px-2 py-1.5">Level</th>
+                  <th role="columnheader" class="w-32 px-2 py-1.5">Date</th>
+                </tr>
+                </thead>
+                <tbody class="whitespace-nowrap font-bold">
+                <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right">
+                  <td class="px-2 py-2 text-left">{{ item.user.username }}</td>
+                  <td class="px-2 py-2" :class="{
                     'text-blue-500': item.status === 'win',
                     'text-red-500': item.status === 'dead'
                   }">{{ item.time }}</td>
-                    <td class="px-2 py-2">{{ item.level }}</td>
-                    <td class="px-2 py-2">
-                      <nuxt-link class="underline" :to="`/battle/${item.game.id}`">{{ item.since }}</nuxt-link>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-                <div v-else-if="!logged.id" class="pt-4 pb-3">
-                  <div class="font-bold uppercase">Member's feature!</div>
-                  <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view your game history</p>
-                </div>
-              </client-only>
+                  <td class="px-2 py-2">{{ item.level }}</td>
+                  <td class="px-2 py-2">
+                    <nuxt-link class="underline" :to="`/game/${item.game.id}`">{{ item.since }}</nuxt-link>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div v-else-if="!logged.id" class="pt-4 h-full flex flex-col justify-center items-center pb-3">
+                <div class="font-bold uppercase">Member's feature!</div>
+                <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view your game history</p>
+              </div>
             </div>
           </div>
         </div>
@@ -94,6 +109,7 @@ import {computed, ref, watch} from "vue";
 import {onMounted} from "@vue/runtime-core";
 import {useGlobalStore} from "~/composables/global";
 import InviteForm from "~/components/InviteForm.vue";
+import {useGameStore} from "~/composables/game";
 
 const title = "Minesweeper Battle | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com"
 const desc = 'Minesweeper is a classic strategy game where players must uncover hidden mines on a grid without detonating them.'
@@ -110,9 +126,11 @@ useSeoMeta({
 const isActivityAppear = ref(false)
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
+const gameStore = useGameStore()
 
 const mode = ref('Activity')
 const response = ref<ResponseUserGames>({} as ResponseUserGames)
+const page = ref(1)
 
 const isTelegram = computed(() => globalStore.isTelegram)
 const logged = computed(() => {
@@ -130,10 +148,12 @@ const items = computed<IUserGame[]>(() => {
 })
 
 const fetch = async function () {
-  response.value = {} as ResponseUserGames
+  response.value.results = [] as IUserGame[]
   if (mode.value === 'History' && !logged.value.id) return;
   const params: any = {
-    page_size: 6
+    page_size: 6,
+    ordering: '-id',
+    page: page.value
   }
   if (mode.value === 'History' && logged.value && logged.value.id) {
     params['user__id'] = logged.value.id
@@ -166,6 +186,10 @@ watch(mode, () => {
   fetch()
 })
 
+watch(page, () => {
+  fetch()
+})
+
 onMounted(() => {
   if (checkActivityAppear()) {
     isActivityAppear.value = true
@@ -184,20 +208,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-table {
-  border-spacing: 0 4px;
-  border-collapse: separate;
-}
-
-tr.rounded {
-  z-index: 1;
-  position: relative;
-}
-
-tr.rounded td:first-child:before {
-  @apply absolute inset-0 rounded box-content;
-  content: "";
-  z-index: -1;
-  background-color: #faf8ef;
+#activity {
+  min-height: 288px;
 }
 </style>

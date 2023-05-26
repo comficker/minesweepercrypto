@@ -7,7 +7,12 @@
     <Header class="z-20"/>
     <div v-if="!!modalOpening" class="fixed inset-0 z-10"/>
     <div class="flex-1 flex flex-col" :class="{'blur-sm': !!modalOpening}">
-      <slot class="w-full"/>
+      <div class="w-full space-y-4">
+        <div class="w-full max-w-xl mx-auto">
+          <Game/>
+        </div>
+        <slot/>
+      </div>
     </div>
     <Footer/>
   </main>
@@ -17,6 +22,7 @@ import {useUserStore} from "~/composables/user";
 import {computed} from "vue";
 import {useRoute} from "#app";
 import {onMounted} from "@vue/runtime-core";
+import Game from "~/components/Game.vue";
 const route = useRoute()
 const userStore = useUserStore()
 const modalOpening = computed(() => {

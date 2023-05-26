@@ -2,7 +2,6 @@ import {ref} from "vue"
 import {defineStore} from 'pinia'
 
 import {Setting} from "~/interface";
-import {onMounted} from "@vue/runtime-core";
 import {useCookie, useRoute} from "#app";
 
 
@@ -17,14 +16,18 @@ export const useGlobalStore = defineStore('global', () => {
     size: {
       width: Number.parseInt(arr[0]),
       height: Number.parseInt(arr[1])
-    }
+    },
+    refresh: true
   })
 
   const setSetting = (stt: Setting, ignoreForced = true) => {
+    setting.value = {
+      ...setting.value,
+      ...stt
+    }
+    cookieFormSize.value = `${stt.size.width}_${stt.size.height}`
     if (ignoreForced) {
-      setting.value = stt
-    } else {
-      cookieFormSize.value = `${stt.size.width}_${stt.size.height}`
+      setting.value.refresh = !setting.value.refresh
     }
   }
 

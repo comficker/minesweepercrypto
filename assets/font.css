@@ -2,3 +2,63 @@ body {
   @apply md:overflow-overlay;
   font-family: 'Inter', Helvetica, Arial, sans-serif;
 }
+
+table {
+  border-spacing: 0 4px;
+  border-collapse: separate;
+}
+
+tr.rounded {
+  z-index: 1;
+  position: relative;
+}
+
+tr.rounded td:first-child:before {
+  @apply absolute inset-0 rounded box-content;
+  content: "";
+  z-index: -1;
+  background-color: #faf8ef;
+}
+
+.cell {
+  @apply rounded-sm absolute flex items-center justify-center;
+}
+
+.cell.shadow {
+  box-shadow: rgba(0, 0, 0, 0.16) 0 1px 1px;
+}
+
+.cell.shadow-inner {
+  box-shadow: inset rgba(0, 0, 0, 0.16) 0 1px 1px;
+}
+
+@keyframes rainbow_animation {
+  0%, 100% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 0;
+  }
+}
+
+.text-shine {
+  background: linear-gradient(270deg, #ff7356, #ff59e2 25.52%, #52ddf6 50%, #eadf4e 76.04%, #ff7356);
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+.running .squiggle {
+  stroke-dasharray: 832;
+  stroke-dashoffset: 832;
+  animation: draw linear forwards;
+  animation-duration: var(--timeout);
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

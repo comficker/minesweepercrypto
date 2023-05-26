@@ -21,9 +21,9 @@ const user = computed(() => {
     <div class="pt-4 flex justify-between gap-4 items-center">
       <div class="flex flex-wrap gap-6 text-xs uppercase items-center font-bold">
         <nuxt-link to="/" class="flex items-center gap-2 text-base">
-          <img class="h-6 md:h-10 w-auto" src="/logo.png" alt="MinesweeperCrypto">
+          <img class="h-6 md:h-8 w-auto" src="/logo.png" alt="MinesweeperCrypto">
         </nuxt-link>
-        <nuxt-link to="/battle" class="font-semibold underline flex gap-1 items-center">
+        <nuxt-link to="/game" class="font-semibold underline flex gap-1 items-center">
           <div class="i-icons-multiple w-5 h-5"/>
           <span>Battle</span>
         </nuxt-link>
@@ -36,9 +36,9 @@ const user = computed(() => {
         <nuxt-link
           to="/manager"
           v-if="user && user.id"
-          class="flex gap-1 items-center rounded p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer"
+          class="flex gap-1 items-center rounded-xl p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer"
         >
-          <div class="i-icons-swap w-4 h-4"/>
+          <div class="i-icons-account w-4 h-4"/>
         </nuxt-link>
         <div
           v-else class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"

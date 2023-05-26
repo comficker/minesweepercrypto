@@ -70,4 +70,8 @@ export default defineNuxtConfig({
       apiBase: process.env.API
     }
   },
+  sourcemap: {
+    server: true,
+    client: false,
+  },
 })
