@@ -37,7 +37,7 @@
     <table class="min-w-full table-fixed overflow-auto">
       <thead>
       <tr role="rowheader" class="font-semibold text-right">
-        <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">Results</th>
+        <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">Players</th>
         <th role="columnheader" class="w-32 px-2 py-1.5">Time</th>
         <th role="columnheader" class="w-32 px-2 py-1.5">Score</th>
       </tr>
@@ -46,9 +46,9 @@
       <tr role="row" v-for="(item, i) in gs.players" :key="i" class="rounded text-right">
         <td class="px-2 py-2 text-left">{{ item.user.username }}</td>
         <td class="px-2 py-2" :class="{
-            'text-blue-500': item.status === 'win',
-            'text-red-500': item.status === 'dead'
-          }">0
+          'text-blue-500': item.status === 'win',
+          'text-red-500': item.status === 'dead'
+        }">0
         </td>
         <td class="px-2 py-2">{{ item.score || 0 }}</td>
       </tr>

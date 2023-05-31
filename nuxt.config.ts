@@ -67,7 +67,8 @@ export default defineNuxtConfig({
   pwa,
   runtimeConfig: {
     public: {
-      apiBase: process.env.API
+      apiBase: process.env.API,
+      socket: process.env.SOCKET
     }
   },
   sourcemap: {

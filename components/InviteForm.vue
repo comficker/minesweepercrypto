@@ -11,7 +11,7 @@
       <div class="text-xs font-semibold">Your referral code</div>
       <div class="flex bg-yellow-50 p-2 gap-2">
         <input
-          type="text" disabled class="flex-1 w-full outline-none text-sm"
+          type="text" disabled class="flex-1 w-full outline-none text-sm font-semibold"
           :value="referUri"
         >
         <div class="w-4 h-4 i-icons-copy cursor-pointer" @click="copy"/>

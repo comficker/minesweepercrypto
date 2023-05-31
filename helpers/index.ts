@@ -46,7 +46,7 @@ export const getNeighbors = (x: number, y: number) => {
 export const getSteps = (resPlayers: IUserGame[]) => {
   let temp_steps: IStep[] = []
   resPlayers.forEach(p => {
-    temp_steps = temp_steps.concat(p.steps)
+    temp_steps = temp_steps.concat(p.steps.filter(x => !x.status || !x.status.startsWith('hold_')))
   })
   return temp_steps.map(x => ({
     ...x,

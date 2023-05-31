@@ -1,6 +1,6 @@
 import {useUserStore} from "~/composables/user";
 
-export default defineNuxtPlugin(async nuxtApp => {
+export default defineNuxtPlugin( nuxtApp => {
   const userStore = useUserStore()
-  userStore.fetchUser()
+  userStore.fetchUser().then()
 })

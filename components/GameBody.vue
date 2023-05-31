@@ -111,8 +111,10 @@
         v-show="gs.ending"
         class="bg-black/30 rounded absolute inset-0 flex flex-col items-center justify-center space-y-4"
       >
-        <div class="text-center" :class="{'-space-y-16': gs.status === 'win'}">
-          <div v-show="gs.status === 'win'" class="w-64 h-64" id="confetti"></div>
+        <div class="text-center">
+          <div v-show="gs.status === 'win'" class="my-6" id="confetti">
+            <img class="mx-auto w-32 h-32" src="/confetti.gif" alt="">
+          </div>
           <div v-show="gs.status === 'dead'" class="my-6">
             <img class="mx-auto w-32 h-32" src="/nuclear.png" alt="">
           </div>

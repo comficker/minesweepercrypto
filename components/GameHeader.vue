@@ -11,18 +11,8 @@
       >
         <div class="i-icons-flag w-5 h-5"/>
       </div>
-    </div>
-    <div class="flex justify-center">
       <div
-        v-if="route.path === '/' && !gs.is_multiple"
-        class="bg-white text-neutral-80 shadow hover:shadow-lg duration-200 p-2 md:px-4 rounded flex gap-2 items-center cursor-pointer"
-        @click="gs.newGame()"
-      >
-        <div class="hidden md:block i-icons-dead w-5 h-5"/>
-        <span class="uppercase">New Game</span>
-      </div>
-      <div
-        v-else-if="gs.is_multiple"
+        v-if="gs.is_multiple"
         class="border p-1.5 rounded flex gap-1.5 text-xs uppercase font-semibold items-center"
       >
         <div
@@ -31,6 +21,22 @@
         >
           <div class="i-icons-account w-4 h-4"/>
           <span>You</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <div
+        v-if="route.path === '/'"
+        class="flex items-center cursor-pointer bg-gray-300 rounded-full px-0.5"
+      >
+        <div class="rounded-xl p-2 hover:shadow-inner cursor-pointer" @click="userStore.setModal('setting')">
+          <div class="i-icons-cog w-4 h-4"/>
+        </div>
+        <div
+          class="p-2 px-3 flex gap-1 items-center cursor-pointer bg-white rounded-full"
+          @click="gs.newGame()"
+        >
+          <span class="uppercase">New <span class="hidden md:inline-flex">Game</span></span>
         </div>
       </div>
     </div>
@@ -63,9 +69,6 @@
           <div class="i-icons-bomb w-5 h-5"/>
           <div>{{ gs.total_bomb }}</div>
         </div>
-        <div class="rounded-xl p-2 shadow cursor-pointer" @click="userStore.setModal('setting')">
-          <div class="i-icons-cog w-4 h-4"/>
-        </div>
       </template>
     </div>
   </div>
@@ -88,6 +91,8 @@ onMounted(() => {
     if (gs.status === 'playing' && gs.start_at) {
       const to = gs.end_at ? gs.end_at : new Date().getTime()
       count_down.value = countDownTimer(gs.start_at, to)
+    } else {
+      count_down.value = "00:00"
     }
   }, 1000)
 })

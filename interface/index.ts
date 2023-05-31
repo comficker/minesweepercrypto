@@ -13,7 +13,7 @@ export interface Links {
 export interface IGame {
   "id": number
   "status": string
-  "user": User | null
+  "user": User | null | number
   "start_at": string | number
   "end_at": string | number
   "width": number
@@ -21,6 +21,15 @@ export interface IGame {
   "players": IUserGame[]
   "maps": any
   "results": any
+  "is_multiple": boolean
+}
+
+export interface ITurnMessage {
+  game: number
+  step: IStep,
+  status: string
+  results: { [key: string]: number | null | undefined },
+  maps: { [key: string]: number | null | undefined }
 }
 
 export interface IUserGame {
@@ -42,21 +51,17 @@ export interface ILottery {
   "open_at": string
 }
 
-export interface GameSize {
+export interface Setting {
+  is_multiple: boolean
   width: number
   height: number
-}
-
-export interface Setting {
-  refresh?: boolean
-  soundOn?: boolean
-  size: GameSize
 }
 
 export interface IStep {
   time: number
   cord: string
   user: number | null
+  status?: string
 }
 
 export interface ResponseLogin {
@@ -78,4 +83,14 @@ export interface ResponseUserGames {
   "page_size": number
   "num_pages": number
   "results": IUserGame[]
+}
+
+export interface PlayingTurn {
+  end_at: number
+  id: number
+}
+
+export interface MessageTurn {
+  game: number
+  playing: PlayingTurn
 }
