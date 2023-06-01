@@ -2,7 +2,7 @@
   <div class="uppercase text-sm font-bold">Game Settings</div>
   <p class="text-gray-400">Play on your way!</p>
   <div class="space-y-3 mt-3">
-    <div class="flex items-center gap-2">
+    <div v-if="useUserStore().isLogged" class="flex items-center gap-2">
       <span class="uppercase text-xs font-bold" id="Multiplayer">Multiplayer</span>
       <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
       <button
@@ -60,6 +60,7 @@ import {ref} from "vue"
 import {Setting} from "~/interface";
 import {useCookie} from "#app";
 import {useGameStore} from "~/composables/game";
+import {useUserStore} from "~/composables/user";
 
 const cookieFormSize = useCookie('form.size')
 const gs = useGameStore()

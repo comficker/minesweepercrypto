@@ -1,26 +1,7 @@
 <template>
   <div class="w-full max-w-xl mx-auto space-y-4">
     <Game/>
-    <div v-if="!isTelegram && !logged.id" class="rounded overflow-hidden w-full divide-y shadow bg-white">
-      <div class="flex p-4 pb-0">
-        <div class="flex-1 flex flex-col space-y-2">
-          <h2 class="text-lg leading-6 sm:text-3xl font-bold font-proto-mono">Join to play and earn</h2>
-          <div>
-            <div
-              class="rounded p-2 shadow cursor-pointer bg-neutral-50 cursor-pointer inline-flex gap-2"
-              @click="userStore.setModal('login')"
-            >
-              <div class="i-icons-account w-4 h-4"/>
-              <span class="text-xs uppercase font-bold">Become member</span>
-            </div>
-          </div>
-        </div>
-        <div>
-          <img class="w-24 h-24" width="128" src="/flag.png" alt="Flag">
-        </div>
-      </div>
-    </div>
-    <invite-form v-if="logged.id" :show-history="false"/>
+    <invite-form v-if="userStore.isLogged" :show-history="false"/>
     <div class="space-y-2">
       <div class="flex justify-between">
         <div class="flex items-center gap-3 text-sm font-bold">
@@ -56,12 +37,29 @@
       </div>
       <div
         id="activity"
-        class="rounded shadow overflow-hidden w-full bg-white px-3 pb-2 flex"
-        :class="{'items-center': items.length === 0}"
+        class="rounded-lg shadow overflow-hidden w-full bg-white p-4 flex"
+        :class="{'items-center': items.length === 0 && !loading}"
       >
         <div class="flow-root text-sm w-full">
           <div class="overflow-x-auto">
-            <div class="inline-block min-w-full align-middle">
+            <div class="inline-block min-w-full space-y-3">
+              <template v-if="!userStore.isLogged">
+                <div v-if="mode === 'History'" class="pt-4 h-full flex flex-col justify-center items-center">
+                  <div class="font-bold uppercase">Member's feature!</div>
+                  <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or
+                    <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view
+                    your game history</p>
+                </div>
+                <div v-else>
+                  <div
+                    class="rounded p-2 shadow cursor-pointer bg-blue-500 text-white cursor-pointer inline-flex gap-1"
+                    @click="userStore.setModal('register')"
+                  >
+                    <div class="i-icons-account w-4 h-4"/>
+                    <span class="text-xs uppercase font-bold">Join us</span>
+                  </div>
+                </div>
+              </template>
               <table v-if="items.length" class="min-w-full table-fixed overflow-auto">
                 <thead>
                 <tr role="rowheader" class="font-semibold text-right">
@@ -72,12 +70,13 @@
                 </tr>
                 </thead>
                 <tbody class="whitespace-nowrap font-bold">
-                <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right">
+                <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right border-t-4 border-white">
                   <td class="px-2 py-2 text-left">{{ item.user.username }}</td>
                   <td class="px-2 py-2" :class="{
                     'text-blue-500': item.status === 'win',
                     'text-red-500': item.status === 'dead'
-                  }">{{ item.time }}</td>
+                  }">{{ item.time }}
+                  </td>
                   <td class="px-2 py-2">{{ item.level }}</td>
                   <td class="px-2 py-2">
                     <nuxt-link class="underline" :to="`/game/${item.game.id}`">{{ item.since }}</nuxt-link>
@@ -85,19 +84,21 @@
                 </tr>
                 </tbody>
               </table>
-              <div v-else-if="!logged.id" class="pt-4 h-full flex flex-col justify-center items-center pb-3">
-                <div class="font-bold uppercase">Member's feature!</div>
-                <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view your game history</p>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div v-if="!isTelegram" class="rounded shadow overflow-hidden w-full bg-white p-6 space-y-2 text-sm">
-      <h2 class="text-2xl font-bold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
-      <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without detonating any of the hidden explosives.</p>
-      <p>Minesweeper requires careful observation and logical deduction to succeed. With different levels of difficulty and endless possibilities, Minesweeper offers a fun and challenging experience for players of all levels. Whether you're an experienced player or a beginner, Minesweeper is a game that never gets old. <nuxt-link class="underline" to="/how-to-play">How to play Minesweeper?</nuxt-link></p>
+    <div v-if="!isTelegram" class="rounded-lg shadow overflow-hidden w-full bg-white p-4 text-sm space-y-1">
+      <h2 class="uppercase font-bold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
+      <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a
+        grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without
+        detonating any of the hidden explosives.</p>
+      <p>Minesweeper requires careful observation and logical deduction to succeed. With different levels of difficulty
+        and endless possibilities, Minesweeper offers a fun and challenging experience for players of all levels.
+        Whether you're an experienced player or a beginner, Minesweeper is a game that never gets old.
+        <nuxt-link class="underline" to="/how-to-play">How to play Minesweeper?</nuxt-link>
+      </p>
       <p>Are you ready to put your wits to the test and see if you can uncover all the mines?</p>
     </div>
   </div>
@@ -128,6 +129,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
+const loading = ref(true)
 const isActivityAppear = ref(false)
 const userStore = useUserStore()
 const globalStore = useGlobalStore()

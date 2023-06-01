@@ -39,6 +39,7 @@ const user = computed(() => {
           class="flex gap-1 items-center rounded-xl p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer"
         >
           <div class="i-icons-account w-4 h-4"/>
+          <span class="hidden md:block text-xs uppercase font-bold">Control Panel</span>
         </nuxt-link>
         <div
           v-else class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
