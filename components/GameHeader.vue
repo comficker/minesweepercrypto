@@ -47,7 +47,7 @@
       </div>
       <div
         v-if="['win', 'dead', 'replaying'].includes(gs.status) || gs.ending"
-        class="border p-2 rounded flex gap-3 items-center text-gray-400"
+        class="border p-1.5 h-full rounded flex gap-3 items-center text-gray-400"
       >
         <div
           class="cursor-pointer"
