@@ -38,7 +38,7 @@ useSeoMeta({
   description: desc,
   ogDescription: desc,
   ogTitle: title,
-  ogImage: '/screenshot/color-guessing-game.png',
+  ogImage: '/banner.jpg',
   twitterCard: 'summary_large_image',
 })
 </script>
