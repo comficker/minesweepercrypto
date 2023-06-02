@@ -1,13 +1,16 @@
 <template>
-  <div class="space-y-3">
-    <game-header/>
-    <game-body/>
+  <div class="space-y-4">
     <div class="flex justify-between">
       <a target="_blank" class="text-xs uppercase underline font-bold flex items-center gap-1" href="/how-to-play">
-        <div class="i-icons-info w-5 h-5"/>
         <span>How to play minesweeper?</span>
       </a>
-      <div class="flex justify-end gap-4 flex-wrap grayscale">
+      <div class="flex justify-end gap-6 flex-wrap grayscale">
+        <div id="market-telegram" class="flex gap-1 items-center">
+          <img class="w-4" width="32" height="32" src="/market/telegram.png" alt="">
+          <div class="hidden md:block text-xs">
+            <div class="uppercase font-bold">Telegram</div>
+          </div>
+        </div>
         <div id="market-apple" class="flex gap-1 items-center">
           <img class="w-4" width="32" height="32" src="/market/apple-logo.png" alt="">
           <div class="hidden md:block text-xs">
@@ -20,14 +23,10 @@
             <div class="uppercase font-bold">Android</div>
           </div>
         </div>
-        <div id="market-telegram" class="flex gap-1 items-center">
-          <img class="w-4" width="32" height="32" src="/market/telegram.png" alt="">
-          <div class="hidden md:block text-xs">
-            <div class="uppercase font-bold">Telegram</div>
-          </div>
-        </div>
       </div>
     </div>
+    <game-body/>
+    <game-header/>
     <game-result/>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="border rounded-lg p-4 space-y-2 bg-white">
+  <div class="border rounded p-4 space-y-2 bg-white">
     <div class="uppercase font-bold text-gray-400 text-xs">More fun with friends</div>
     <div class="text-2xl font-bold flex items-center gap-1">
       <span>Earn </span>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-xl mx-auto">
+  <div class="w-full max-w-lg mx-auto">
     <Game/>
   </div>
 </template>

@@ -17,15 +17,11 @@ const user = computed(() => {
 </script>
 
 <template>
-  <div class="w-full max-w-lg mx-auto relative md:mb-4">
+  <div class="w-full max-w-lg mx-auto relative">
     <div class="pt-4 flex justify-between gap-4 items-center">
-      <div class="flex flex-wrap gap-6 text-xs uppercase items-center font-bold">
-        <nuxt-link to="/" class="flex items-center gap-2 text-base">
-          <img class="h-6 md:h-10 w-auto" src="/logo.png" alt="MinesweeperCrypto">
-        </nuxt-link>
-        <nuxt-link to="/game" class="font-semibold underline flex gap-1 items-center">
-          <div class="i-icons-multiple w-5 h-5"/>
-          <span>Battle</span>
+      <div class="flex flex-wrap text-xs uppercase items-center font-bold">
+        <nuxt-link to="/" class="flex items-center text-base">
+          <img class="h-10 w-auto" src="/logo.png" alt="MinesweeperCrypto">
         </nuxt-link>
       </div>
       <div class="flex gap-3 items-center">
@@ -36,13 +32,13 @@ const user = computed(() => {
         <nuxt-link
           to="/manager"
           v-if="user && user.id"
-          class="flex gap-1 items-center rounded-xl p-2 shadow bg-neutral-800 text-orange-500 cursor-pointer"
+          class="flex gap-1 items-center rounded-xl p-2.5 shadow bg-neutral-800 text-orange-500 cursor-pointer"
         >
           <div class="i-icons-account w-4 h-4"/>
           <span class="hidden md:block text-xs uppercase font-bold">Control Panel</span>
         </nuxt-link>
         <div
-          v-else class="rounded p-2 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
+          v-else class="rounded p-2.5 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
           @click="userStore.setModal('login')"
         >
           <div class="i-icons-account w-4 h-4"/>

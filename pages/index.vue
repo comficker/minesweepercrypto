@@ -37,29 +37,18 @@
       </div>
       <div
         id="activity"
-        class="rounded-lg shadow overflow-hidden w-full bg-white p-4 flex"
+        class="rounded border overflow-hidden w-full bg-white p-4 flex"
         :class="{'items-center': items.length === 0 && !loading}"
       >
         <div class="flow-root text-sm w-full">
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full space-y-3">
-              <template v-if="!userStore.isLogged">
-                <div v-if="mode === 'History'" class="pt-4 h-full flex flex-col justify-center items-center">
-                  <div class="font-bold uppercase">Member's feature!</div>
-                  <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or
-                    <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view
-                    your game history</p>
-                </div>
-                <div v-else>
-                  <div
-                    class="rounded p-2 shadow cursor-pointer bg-blue-500 text-white cursor-pointer inline-flex gap-1"
-                    @click="userStore.setModal('register')"
-                  >
-                    <div class="i-icons-account w-4 h-4"/>
-                    <span class="text-xs uppercase font-bold">Join us</span>
-                  </div>
-                </div>
-              </template>
+              <div v-if="!userStore.isLogged && mode === 'History'" class="pt-4 h-full flex flex-col justify-center items-center">
+                <div class="font-bold uppercase">Member's feature!</div>
+                <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or
+                  <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view
+                  your game history</p>
+              </div>
               <table v-if="items.length" class="min-w-full table-fixed overflow-auto">
                 <thead>
                 <tr role="rowheader" class="font-semibold text-right">
@@ -89,7 +78,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!isTelegram" class="rounded-lg shadow overflow-hidden w-full bg-white p-4 text-sm space-y-1">
+    <div v-if="!isTelegram" class="rounded border overflow-hidden w-full bg-white p-4 text-sm space-y-1">
       <h2 class="uppercase font-bold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
       <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a
         grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without
