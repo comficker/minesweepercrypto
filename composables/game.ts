@@ -243,6 +243,9 @@ export const useGameStore = defineStore('game', () => {
       if (value) {
         transformData(value)
       }
+    } else {
+      width.value = setting.value.width
+      height.value = setting.value.height
     }
   }
 

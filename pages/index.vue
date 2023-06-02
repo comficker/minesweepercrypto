@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-xl mx-auto space-y-4">
+  <div class="w-full max-w-lg mx-auto space-y-4">
     <Game/>
     <invite-form v-if="userStore.isLogged" :show-history="false"/>
     <div class="space-y-2">
