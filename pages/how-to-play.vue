@@ -1,5 +1,5 @@
 <template>
-<div class="w-full max-w-xl mx-auto space-y-4">
+<div class="w-full max-w-lg mx-auto space-y-4">
   <div class="space-y-3 text-sm">
     <h2 class="text-2xl font-bold">How to play Minesweeper?</h2>
     <p class="font-bold">Minesweeper is a classic strategy game where players must uncover hidden mines on a grid
