@@ -13,7 +13,7 @@ export const useGameStore = defineStore('game', () => {
   const cookieFormSize = useCookie('form.size', {
     sameSite: true
   })
-  const arr = cookieFormSize.value ? cookieFormSize.value.split("_") : ['6', '6']
+  const arr = cookieFormSize.value ? cookieFormSize.value.split("_") : ['8', '10']
 
   const setting = ref<Setting>({
     width: Number.parseInt(arr[0]),

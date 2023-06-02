@@ -17,11 +17,11 @@ const user = computed(() => {
 </script>
 
 <template>
-  <div class="w-full max-w-lg mx-auto relative">
+  <div class="w-full max-w-lg mx-auto relative md:mb-4">
     <div class="pt-4 flex justify-between gap-4 items-center">
       <div class="flex flex-wrap gap-6 text-xs uppercase items-center font-bold">
         <nuxt-link to="/" class="flex items-center gap-2 text-base">
-          <img class="h-6 md:h-8 w-auto" src="/logo.png" alt="MinesweeperCrypto">
+          <img class="h-6 md:h-10 w-auto" src="/logo.png" alt="MinesweeperCrypto">
         </nuxt-link>
         <nuxt-link to="/game" class="font-semibold underline flex gap-1 items-center">
           <div class="i-icons-multiple w-5 h-5"/>
