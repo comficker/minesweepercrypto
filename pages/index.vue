@@ -37,7 +37,7 @@
       </div>
       <div
         id="activity"
-        class="rounded border overflow-hidden w-full bg-white p-4 flex"
+        class="md:rounded md:border md:p-4 overflow-hidden w-full bg-white flex"
         :class="{'items-center': items.length === 0 && !loading}"
       >
         <div class="flow-root text-sm w-full">
@@ -78,8 +78,8 @@
         </div>
       </div>
     </div>
-    <div v-if="!isTelegram" class="rounded border overflow-hidden w-full bg-white p-4 text-sm space-y-1">
-      <h2 class="uppercase font-bold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
+    <div v-if="!isTelegram" class="md:rounded md:border md:bg-white md:p-4 overflow-hidden w-full text-sm space-y-1 font-semibold">
+      <h2 class="uppercase font-extrabold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
       <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a
         grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without
         detonating any of the hidden explosives.</p>

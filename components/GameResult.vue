@@ -33,7 +33,7 @@
       </div>
     </div>
   </div>
-  <div v-if="gs.players.length" class="rounded border overflow-hidden w-full bg-white px-3 pt-2 pb-2 text-sm">
+  <div v-if="gs.players.length" class="md:rounded md:border overflow-hidden w-full bg-white md:px-3 pt-2 pb-2 text-sm">
     <table class="min-w-full table-fixed overflow-auto">
       <thead>
       <tr role="rowheader" class="font-semibold text-right">
