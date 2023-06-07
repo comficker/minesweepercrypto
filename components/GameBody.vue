@@ -1,5 +1,5 @@
 <template>
-  <div class="relative p-3 md:p-2 bg-[#bbada0] shadow-lg md:rounded -mx-4 md:mx-0">
+  <div class="relative p-1.5 md:p-2 bg-[#bbada0] shadow-lg md:rounded">
     <div
       class="overflow-hidden"
       :class="{
