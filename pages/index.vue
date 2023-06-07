@@ -78,8 +78,8 @@
         </div>
       </div>
     </div>
-    <div v-if="!isTelegram" class="md:rounded md:border md:bg-white md:p-4 overflow-hidden w-full text-sm space-y-1 font-semibold">
-      <h2 class="uppercase font-extrabold">What is <b class="font-bold">Minesweeper online</b> game?</h2>
+    <div v-if="!isTelegram" class="md:rounded md:border md:bg-white md:p-4 overflow-hidden w-full space-y-2">
+      <h2 class="font-bold text-3xl mb-3">What is <b class="font-bold">Minesweeper online</b> game?</h2>
       <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a
         grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without
         detonating any of the hidden explosives.</p>

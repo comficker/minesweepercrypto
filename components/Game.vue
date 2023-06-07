@@ -1,5 +1,28 @@
 <template>
   <div class="space-y-4">
+    <div v-if="route.path === '/'" class="grid grid-cols-3 gap-3 uppercase font-bold text-xs">
+      <div
+        v-for="item in modes" :key="item.name"
+        class="border p-3 py-2 bg-white rounded cursor-pointer"
+        @click="setSize(item)"
+      >
+        <div class="flex items-center justify-between">
+          <div class="hidden md:block">{{ item.name }}</div>
+          <div class="flex">
+            <div
+              v-for="i in item.stars" :key="i"
+              class="w-3 h-3"
+              :class="{'i-icons-star': i, 'i-icons-star-outline': !i}"
+            />
+          </div>
+        </div>
+        <div class="flex items-center gap-1 text-xl">
+          <span>{{ item.w }}</span>
+          <div class="i-icons-close-thick w-3 h-3"/>
+          <span>{{ item.h }}</span>
+        </div>
+      </div>
+    </div>
     <div class="flex justify-between text-xs font-bold uppercase">
       <a target="_blank" class="underline flex items-center gap-1" href="/how-to-play">
         <span>How to play minesweeper?</span>
@@ -27,29 +50,6 @@
     </div>
     <game-body/>
     <game-header/>
-    <div class="grid md:grid-cols-3 gap-3 uppercase font-bold text-xs">
-      <div
-        v-for="item in modes" :key="item.name"
-        class="border p-3 py-2 bg-white rounded cursor-pointer"
-        @click="setSize(item)"
-      >
-        <div class="flex items-center justify-between">
-          <div>{{ item.name }}</div>
-          <div class="flex">
-            <div
-              v-for="i in item.stars" :key="i"
-              class="w-3 h-3"
-              :class="{'i-icons-star': i, 'i-icons-star-outline': !i}"
-            />
-          </div>
-        </div>
-        <div class="flex items-center gap-1 text-xl">
-          <span>{{ item.w }}</span>
-          <div class="i-icons-close-thick w-3 h-3"/>
-          <span>{{ item.h }}</span>
-        </div>
-      </div>
-    </div>
     <game-result/>
   </div>
 </template>
@@ -62,6 +62,7 @@ import {useCookie} from "#app";
 import {useGameStore} from "~/composables/game";
 
 const cookieFormSize = useCookie('form.size')
+const route = useRoute()
 const gs = useGameStore()
 const modes = ref([
   {w: 8, h: 8, name: 'Beginner', stars: [1, 0, 0]},
