@@ -4,8 +4,8 @@
       class="overflow-hidden"
       :class="{
           'p-1 -m-1': gs.width < 16,
-          'p-0.5 -m-0.5': gs.width >= 16 && gs.width < 24,
-          'p-0.25 -m-0.25': gs.width >= 16,
+          'p-0.25 -m-0.25': gs.width >= 16 && gs.width < 24,
+          'p-0.125 -m-0.125': gs.width >= 16,
           'grayscale': gs.playStatus.startsWith('hold_') ||  gs.ending
         }"
     >
@@ -15,8 +15,8 @@
           class="flex flex-col flex-auto"
           :class="{
               'p-1 -m-1': gs.width < 16,
-              'p-0.5 -m-0.5': gs.width >= 16 && gs.width < 24,
-              'p-0.25 -m-0.25': gs.width >= 16
+              'p-0.25 -m-0.25': gs.width >= 16 && gs.width < 24,
+              'p-0.125 -m-0.125': gs.width >= 16
             }"
         >
           <div v-for="y in gs.height" class="flex-auto md:min-w-auto md:min-h-auto min-w-1/12">
@@ -29,8 +29,8 @@
                 class="cell"
                 :class="{
                     'inset-0.5':  gs.width < 16,
-                    'md:inset-0.5 inset-0.25 text-xs': gs.width >= 16 && gs.width < 24,
-                    'inset-0.25 text-2xs': gs.width >= 24,
+                    'inset-0.25 text-xs': gs.width >= 16 && gs.width < 24,
+                    'inset-0.125 text-2xs': gs.width >= 24,
                     '!bg-[#ccc1b4] shadow': typeof gs.results[`${x - 1}_${y - 1}`] === 'undefined' && gs.status !== 'dead',
                     'bg-[#bbada0]': gs.results[`${x - 1}_${y - 1}`] === 0 || (typeof gs.results[`${x - 1}_${y - 1}`] === 'undefined' && gs.status === 'dead'),
                     'bg-[#eee4da] shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 1,
