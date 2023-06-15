@@ -9,7 +9,7 @@ import {useCookie, useRuntimeConfig} from "#app";
 
 export const useGameStore = defineStore('game', () => {
   const config = useRuntimeConfig()
-
+  const userStore = useUserStore()
   const cookieFormSize = useCookie('form.size', {
     sameSite: true
   })
@@ -40,11 +40,9 @@ export const useGameStore = defineStore('game', () => {
   const playStatus = ref('playing')
   const playQueue = ref<any[]>([])
   const total_bomb = computed(() => {
-    return Math.floor(width.value * height.value * 0.2)
+    return Math.floor(width.value * height.value * (userStore.isLogged ? 0.2 : 0.1))
   })
   const playingTurn = ref<PlayingTurn | null>(null)
-
-  const userStore = useUserStore()
 
   function saveSetting(data: {
     width: number

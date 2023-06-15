@@ -78,8 +78,8 @@
         </div>
       </div>
     </div>
-    <div v-if="!isTelegram" class="hidden md:block overflow-hidden w-full space-y-2 text-sm">
-      <h2 class="font-bold text-3xl mb-3">What is <b class="font-bold">Minesweeper online</b> game?</h2>
+    <div v-if="!isTelegram" class="hidden md:block overflow-hidden w-full space-y-2">
+      <h2 class="font-bold text-5xl mb-3">Minesweeper online</h2>
       <p>Minesweeper is a classic puzzle game that challenges your logic and reasoning skills. The game is played on a
         grid filled with hidden mines, and the objective is to uncover all the squares that do not contain mines without
         detonating any of the hidden explosives.</p>
@@ -193,20 +193,22 @@ watch(() => userStore.isLogged, (n) => {
   }
 })
 
-onMounted(() => {
-  if (checkActivityAppear()) {
-    isActivityAppear.value = true
-    fetch()
-  }
-  window.onscroll = () => {
-    if (checkActivityAppear()) {
-      if (!isActivityAppear.value) {
-        isActivityAppear.value = true
-        fetch()
-      }
-    }
-  }
-})
+await fetch()
+
+// onMounted(() => {
+//   if (checkActivityAppear()) {
+//     isActivityAppear.value = true
+//     fetch()
+//   }
+//   window.onscroll = () => {
+//     if (checkActivityAppear()) {
+//       if (!isActivityAppear.value) {
+//         isActivityAppear.value = true
+//         fetch()
+//       }
+//     }
+//   }
+// })
 </script>
 
 <style scoped>
