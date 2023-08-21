@@ -1,5 +1,5 @@
 import type { ModuleOptions } from '@vite-pwa/nuxt'
-import { appDescription, appName } from '~/constants'
+import { appDescription, appName } from '../constants'
 
 const scope = '/'
 
@@ -74,5 +74,5 @@ export const pwa: ModuleOptions = {
   devOptions: {
     enabled: process.env.VITE_PLUGIN_PWA === 'true',
     navigateFallback: scope,
-  }
+  },
 }
