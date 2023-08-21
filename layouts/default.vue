@@ -1,7 +1,7 @@
 <template>
   <main
     id="main"
-    class="flex flex-col text-emerald-800 min-h-full px-4 gap-4"
+    class="flex flex-col bg-white text-emerald-800 min-h-full px-4 gap-4"
     :class="{'h-full overflow-hidden': !!modalOpening}"
   >
     <Header class="z-20"/>

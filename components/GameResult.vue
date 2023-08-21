@@ -16,9 +16,9 @@
         v-else
         class="font-semibold px-4 py-1 rounded capitalize"
         :class="{
-            'bg-gray-200': gs.status === 'dead',
-            'bg-green-500 text-white': gs.status === 'win'
-          }"
+          'bg-gray-200': gs.status === 'dead',
+          'bg-green-500 text-white': gs.status === 'win'
+        }"
       >{{ gs.status }}
       </div>
     </div>

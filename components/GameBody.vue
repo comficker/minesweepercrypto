@@ -3,21 +3,21 @@
     <div
       class="overflow-hidden"
       :class="{
-          'p-1 -m-1': gs.width < 16,
-          'p-0.25 -m-0.25': gs.width >= 16 && gs.width < 24,
-          'p-0.125 -m-0.125': gs.width >= 16,
-          'grayscale': gs.playStatus.startsWith('hold_') ||  gs.ending
-        }"
+        'p-1 -m-1': gs.width < 16,
+        'p-0.25 -m-0.25': gs.width >= 16 && gs.width < 24,
+        'p-0.125 -m-0.125': gs.width >= 16,
+        'grayscale': gs.playStatus.startsWith('hold_') ||  gs.ending
+      }"
     >
       <div class="flex h-full font-bold font-proto-mono">
         <div
           v-for="x in gs.width"
           class="flex flex-col flex-auto"
           :class="{
-              'p-1 -m-1': gs.width < 16,
-              'p-0.25 -m-0.25': gs.width >= 16 && gs.width < 24,
-              'p-0.125 -m-0.125': gs.width >= 16
-            }"
+            'p-1 -m-1': gs.width < 16,
+            'p-0.25 -m-0.25': gs.width >= 16 && gs.width < 24,
+            'p-0.125 -m-0.125': gs.width >= 16
+          }"
         >
           <div v-for="y in gs.height" class="flex-auto md:min-w-auto md:min-h-auto min-w-1/12">
             <div
@@ -28,20 +28,20 @@
               <div
                 class="cell"
                 :class="{
-                    'inset-0.5':  gs.width < 16,
-                    'inset-0.25 text-xs': gs.width >= 16 && gs.width < 24,
-                    'inset-0.125 text-2xs': gs.width >= 24,
-                    '!bg-[#ccc1b4] shadow': typeof gs.results[`${x - 1}_${y - 1}`] === 'undefined' && gs.status !== 'dead',
-                    'bg-[#bbada0]': gs.results[`${x - 1}_${y - 1}`] === 0 || (typeof gs.results[`${x - 1}_${y - 1}`] === 'undefined' && gs.status === 'dead'),
-                    'bg-[#eee4da] shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 1,
-                    'bg-[#eee1c9] shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 2,
-                    'bg-[#f3b27a] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 3,
-                    'bg-[#f69664] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 4,
-                    'bg-[#f77c5f] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 5,
-                    'bg-[#f75f3b] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 6,
-                    'bg-gray-100 shadow':  gs.results[`${x - 1}_${y - 1}`] === null,
-                    'bg-[#f75f3b] text-white shadow':  gs.results[`${x - 1}_${y - 1}`] === -1,
-                  }"
+                  'inset-0.5':  gs.width < 16,
+                  'inset-0.25 text-xs': gs.width >= 16 && gs.width < 24,
+                  'inset-0.125 text-2xs': gs.width >= 24,
+                  '!bg-[#ccc1b4] shadow': typeof gs.results[`${x - 1}_${y - 1}`] === 'undefined' && gs.status !== 'dead',
+                  'bg-[#bbada0]': gs.results[`${x - 1}_${y - 1}`] === 0 || (typeof gs.results[`${x - 1}_${y - 1}`] === 'undefined' && gs.status === 'dead'),
+                  'bg-[#eee4da] shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 1,
+                  'bg-[#eee1c9] shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 2,
+                  'bg-[#f3b27a] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 3,
+                  'bg-[#f69664] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 4,
+                  'bg-[#f77c5f] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 5,
+                  'bg-[#f75f3b] text-white shadow-inner': gs.results[`${x - 1}_${y - 1}`] === 6,
+                  'bg-gray-100 shadow':  gs.results[`${x - 1}_${y - 1}`] === null,
+                  'bg-[#f75f3b] text-white shadow':  gs.results[`${x - 1}_${y - 1}`] === -1,
+                }"
               >
                 <div
                   v-if="gs.results[`${x - 1}_${y - 1}`] === -1"
