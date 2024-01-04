@@ -49,9 +49,9 @@
 </template>
 
 <script lang="ts" setup>
-import {appName, appDescription} from "~/constants";
+import {appDescription} from "~/constants";
 import {computed} from "vue";
-import {useUserStore} from "~/composables/user";
+import {useUserStore} from "~/stores/user";
 
 const {showHistory} = defineProps<{ showHistory: boolean }>()
 const userStore = useUserStore()

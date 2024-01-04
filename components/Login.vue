@@ -1,5 +1,5 @@
 <template>
-  <div class="uppercase font-bold">Membership</div>
+  <div class="uppercase font-bold">Join</div>
   <p class="text-gray-400">Game on, together!</p>
   <div class="space-y-3 mt-3">
     <div
@@ -40,16 +40,17 @@
     <div class="flex gap-4 uppercase text-xs font-bold">
       <div class="underline cursor-pointer" @click="swap">{{ mode === 'login' ? 'Register' : 'Login' }}</div>
       <div v-if="false" class="underline">Reset Password</div>
+      <div class="underline cursor-pointer" @click="$connectWeb3">Connect wallet</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import {computed, ref} from "vue"
-import {useAuthFetch} from "~/composables/useAuthFetch";
-import {ResponseLogin} from "~/interface";
-import {useUserStore} from "~/composables/user";
+import {useUserStore} from "~/stores/user";
 import {useRoute} from "#app";
+import {useGlobalStore} from "~/stores/global";
+const {$login, $register, $forgot, $connectWeb3} = useNuxtApp()
 
 const ERROR_DICT: {[key: string]: string} = {
   EMAIL_BLANK: 'Email field cannot be left blank. Please enter a valid email address.',
@@ -61,11 +62,13 @@ const ERROR_DICT: {[key: string]: string} = {
 }
 const route = useRoute()
 const userStore = useUserStore()
-const mode = ref(userStore.modalOpening || 'login')
+const globalStore = useGlobalStore()
+const mode = ref(globalStore.modal || 'login')
+
 const form = ref({
-  username: null,
-  email: null,
-  password: null,
+  username: '',
+  email: '',
+  password: '',
   ref: route.query.ref
 })
 const errors = ref<string[]>([])
@@ -75,30 +78,17 @@ const errorStrings = computed(() => {
 })
 
 const submit = () => {
-  const path = mode.value === 'login' ? '/auth/token' : '/auth/user'
-  errors.value = []
-  useAuthFetch(path, {
-    method: 'POST',
-    body: form.value
-  }).then(res => {
-    if (res.data.value) {
-      const data = res.data.value as ResponseLogin
-      userStore.setToken(data.access)
-      userStore.setModal(null)
-      errors.value = []
-    } else if (res.error.value) {
-      if (Array.isArray(res.error.value.data)) {
-        errors.value = res.error.value.data
-      } else {
-        if ('detail' in res.error.value.data) {
-          errors.value.push(res.error.value.data.detail)
-        }
-      }
-    }
-    if (mode.value !== 'login' && window.dataLayer) {
-      window.dataLayer.push('event', 'conversion', {'send_to': 'AW-987081603/rGqwCMby2Z8YEIPX1tYD'});
-    }
-  })
+  switch (mode.value) {
+    case "forgot":
+      $forgot(form.value.email)
+      break
+    case "login":
+      $login(form.value.username, form.value.password)
+      break
+    case "register":
+      $register(form.value.username, form.value.password, form.value.email, form.value.ref)
+      break
+  }
 }
 
 const swap = () => {

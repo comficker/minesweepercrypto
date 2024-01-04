@@ -1,3 +1,42 @@
+<script lang="ts" setup>
+import {ref} from "vue"
+import {Setting} from "~/interface";
+import {useCookie} from "#app";
+import {useGameStore} from "~/stores/game";
+import {useUserStore} from "~/stores/user";
+
+const cookieFormSize = useCookie('form.size')
+const gs = useGameStore()
+const form = ref<Setting>({
+  width: gs.setting.width,
+  height: gs.setting.height,
+  is_multiple: gs.setting.is_multiple
+})
+
+const submit = () => {
+  if (errors.value.length > 0) return;
+  cookieFormSize.value = `${form.value.width}_${form.value.height}`
+  gs.saveSetting(form.value)
+}
+
+const errors = computed(() => {
+  const out = []
+  if (form.value.width > form.value.height)
+    out.push("Width must be lower than or equal height!")
+
+  if (form.value.height > 32)
+    out.push("Sorry! We currently don't support large size!")
+
+  return out
+})
+
+watch(() => gs.setting, (n) => {
+  form.value.width = n.width
+  form.value.height = n.height
+  form.value.is_multiple = n.is_multiple
+})
+</script>
+
 <template>
   <div class="uppercase text-sm font-bold">Game Settings</div>
   <p class="text-gray-400">Play on your way!</p>
@@ -54,42 +93,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import {ref} from "vue"
-import {Setting} from "~/interface";
-import {useCookie} from "#app";
-import {useGameStore} from "~/composables/game";
-import {useUserStore} from "~/composables/user";
-
-const cookieFormSize = useCookie('form.size')
-const gs = useGameStore()
-const form = ref<Setting>({
-  width: gs.setting.width,
-  height: gs.setting.height,
-  is_multiple: gs.setting.is_multiple
-})
-
-const submit = () => {
-  if (errors.value.length > 0) return;
-  cookieFormSize.value = `${form.value.width}_${form.value.height}`
-  gs.saveSetting(form.value)
-}
-
-const errors = computed(() => {
-  const out = []
-  if (form.value.width > form.value.height)
-    out.push("Width must be lower than or equal height!")
-
-  if (form.value.height > 32)
-    out.push("Sorry! We currently don't support large size!")
-
-  return out
-})
-
-watch(() => gs.setting, (n) => {
-  form.value.width = n.width
-  form.value.height = n.height
-  form.value.is_multiple = n.is_multiple
-})
-</script>

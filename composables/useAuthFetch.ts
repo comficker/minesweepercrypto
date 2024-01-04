@@ -1,43 +1,23 @@
-import type { AvailableRouterMethod, NitroFetchRequest } from 'nitropack'
-import type { FetchError } from 'ofetch'
-import type { Ref } from 'vue'
-import type { FetchResult } from '#app/composables/fetch'
-import { useFetch, useRuntimeConfig } from '#app'
-import type { KeysOf } from '#app/composables/asyncData'
+import {type UseFetchOptions, useFetch} from '#app'
+import {defu} from 'defu'
+import useStatefulCookie from "~/composables/useStatefulCookie";
 
-export function useAuthFetch<ResT = void,
-  ErrorT = FetchError,
-  ReqT extends NitroFetchRequest = NitroFetchRequest,
-  Method extends AvailableRouterMethod<ReqT> = 'get' extends AvailableRouterMethod<ReqT> ? 'get' : any,
-  _ResT = ResT extends void ? FetchResult<ReqT, Method> : ResT, DataT = _ResT,
-  PickKeys extends KeysOf<DataT> = KeysOf<DataT>>(request: Ref<ReqT> | ReqT | (() => ReqT), opts?: any): any {
+export function useAuthFetch<T>(url: string, options: UseFetchOptions<T> = {}) {
+  const userAuth = useStatefulCookie('auth.token')
   const config = useRuntimeConfig()
-  const route = useRoute()
-  const authCookie = useCookie('auth.token', {
-    sameSite: true
-  })
-  const token = route.query.token || authCookie.value
-  if (!opts)
-    opts = {}
-
-  const headers: any = opts.headers || {}
-  if (token)
-    headers.Authorization = `Bearer ${token}`
-
-  headers['Content-Type'] = 'application/json'
-  headers.Accept = 'application/json; indent=4'
-  opts.headers = headers
-  return useFetch<ResT, ErrorT, ReqT, Method, _ResT, PickKeys>(request, {
-    method: opts?.method,
+  const defaults: UseFetchOptions<T> = {
     baseURL: config.public.apiBase,
-    body: opts?.body,
-    headers: opts.headers,
-    query: opts?.query,
-    params: opts?.params,
-  }).then(async (res) => {
-    if (res.pending.value)
-      await res.execute()
+    key: url,
+    headers: {
+      ...userAuth.value
+        ? {Authorization: `Bearer ${userAuth.value}`}
+        : {},
+      "Content-Type": 'application/json',
+      "Accept": 'application/json; indent=2'
+    }
+  }
 
-    return res
-  })
+  const params = defu(options, defaults)
+
+  return useFetch(url, params)
 }

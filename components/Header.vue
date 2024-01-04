@@ -1,19 +1,22 @@
 <script lang="ts" setup>
 import {computed} from "vue"
-import {useUserStore} from "~/composables/user";
+import {useUserStore} from "~/stores/user";
 import Login from "~/components/Login.vue";
 import Setting from "~/components/Setting.vue";
+import {useGlobalStore} from "~/stores/global";
 
 const userStore = useUserStore()
-
+const globalStore = useGlobalStore()
 const modalOpening = computed(() => {
-  return userStore.modalOpening
+  return globalStore.modal
 })
 
 const user = computed(() => {
   return userStore.logged
 })
 
+
+console.log(user);
 </script>
 
 <template>
@@ -25,24 +28,20 @@ const user = computed(() => {
         </nuxt-link>
       </div>
       <div class="flex gap-3 items-center">
-        <div v-if="user && user.id" class="hidden md:flex gap-2 items-center text-sm">
-          <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
-          <b>{{ user.meta?.minesweeper?.balance || 0 }}</b>
-        </div>
         <nuxt-link
           to="/manager"
           v-if="user && user.id"
-          class="flex gap-1 items-center rounded-xl p-2.5 shadow bg-neutral-800 text-orange-500 cursor-pointer"
+          class="flex gap-2 items-center border rounded p-1.5 px-3 text-orange-500 cursor-pointer"
         >
-          <div class="i-icons-account w-4 h-4"/>
-          <span class="hidden md:block text-xs uppercase font-bold">Control Panel</span>
+          <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
+          <b>{{ user.meta?.minesweeper?.balance || 0 }}</b>
         </nuxt-link>
         <div
           v-else class="rounded p-2.5 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"
-          @click="userStore.setModal('login')"
+          @click="globalStore.setModal('login')"
         >
           <div class="i-icons-account w-4 h-4"/>
-          <span class="hidden md:block text-xs uppercase font-bold">Signin</span>
+          <span class="hidden md:block text-xs uppercase font-bold">Login</span>
         </div>
       </div>
     </div>
@@ -50,14 +49,20 @@ const user = computed(() => {
       enter-active-class="animated animated-faster animated-fade-in-down"
       leave-active-class="animated animated-faster animated-fade-out-up"
     >
-      <div v-if="modalOpening" class="absolute top-0 left-0 right-0">
+      <div v-if="modalOpening" class="fixed inset-0 -z-10" @click="globalStore.setModal('')"></div>
+    </Transition>
+    <Transition
+      enter-active-class="animated animated-faster animated-fade-in-down"
+      leave-active-class="animated animated-faster animated-fade-out-up"
+    >
+      <div v-if="modalOpening" class="absolute z-10 top-0 left-0 right-0">
         <div class="p-4 md:p-8 bg-white shadow rounded-bl-lg rounded-br-lg relative z-10">
           <div class="mx-auto md:w-2/3 ">
             <Login v-if="['login', 'register'].includes(modalOpening)"/>
             <Setting v-if="modalOpening === 'setting'"/>
           </div>
         </div>
-        <div class="absolute cursor-pointer -bottom-5 right-0 left-0" @click="userStore.setModal(null)">
+        <div class="absolute cursor-pointer -bottom-5 right-0 left-0" @click="globalStore.setModal('')">
           <div class="shadow mx-auto h-6 w-10 rounded-bl-full rounded-br-full bg-white">
             <div class="mx-auto i-icons-up w-6 h-6"/>
           </div>
@@ -66,9 +71,3 @@ const user = computed(() => {
     </Transition>
   </div>
 </template>
-
-<style>
-input:-internal-autofill-selected {
-  background-color: white !important;
-}
-</style>

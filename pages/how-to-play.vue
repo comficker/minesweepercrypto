@@ -42,7 +42,3 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 </script>
-
-<style scoped>
-
-</style>

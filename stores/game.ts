@@ -3,13 +3,17 @@ import {defineStore} from 'pinia'
 import {IStep, IUserGame, User, IGame, ITurnMessage, Setting, PlayingTurn, MessageTurn} from "~/interface";
 import {getNeighbors, getSteps} from "~/helpers";
 import {useAuthFetch} from "~/composables/useAuthFetch";
-import {useUserStore} from "~/composables/user";
+import {useUserStore} from "~/stores/user";
 import {io} from "socket.io-client";
 import {useCookie, useRuntimeConfig} from "#app";
+import {useGlobalStore} from "~/stores/global";
+import router from "#app/plugins/router";
 
 export const useGameStore = defineStore('game', () => {
   const config = useRuntimeConfig()
+  const router = useRouter()
   const userStore = useUserStore()
+  const globalStore = useGlobalStore()
   const cookieFormSize = useCookie('form.size', {
     sameSite: true
   })
@@ -52,7 +56,7 @@ export const useGameStore = defineStore('game', () => {
     setting.value = {
       ...data
     }
-    newGame(true).then(() => userStore.setModal(null))
+    newGame(true).then(() => globalStore.setModal(''))
   }
 
   function toggleFlag() {
@@ -245,6 +249,7 @@ export const useGameStore = defineStore('game', () => {
       width.value = setting.value.width
       height.value = setting.value.height
     }
+    await router.replace('/')
   }
 
   const replay = () => {

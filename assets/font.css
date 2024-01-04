@@ -17,7 +17,8 @@ tr.rounded td:first-child:before {
   @apply absolute inset-0 rounded box-content;
   content: "";
   z-index: -1;
-  background-color: #faf8ef;
+  background-color: #FDFDFD;
+  box-shadow: rgb(99 99 99 / 6%) 0 2px 4px 0 inset;
 }
 
 .cell {
@@ -61,4 +62,8 @@ tr.rounded td:first-child:before {
   to {
     stroke-dashoffset: 0;
   }
+}
+
+input:-internal-autofill-selected {
+  background-color: white !important;
 }

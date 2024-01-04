@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import {computed} from "vue";
+import {useRoute} from "#app";
+import {onMounted} from "@vue/runtime-core";
+import {useGlobalStore} from "~/stores/global";
+const route = useRoute()
+const globalStore = useGlobalStore()
+const modalOpening = computed(() => {
+  return globalStore.modal
+})
+
+onMounted(() => {
+  if (route.query.ref) {
+    globalStore.setModal('login')
+  }
+})
+</script>
+
+
 <template>
   <main
     id="main"
@@ -11,26 +30,13 @@
         <slot/>
       </div>
     </div>
-    <Footer/>
+    <div class="text-center text-xs font-bold uppercase underline my-4 flex gap-2 justify-center">
+      <a target="_blank" href="/history">
+        <span>History</span>
+      </a>
+      <a target="_blank" href="/how-to-play">
+        <span>How to play minesweeper?</span>
+      </a>
+    </div>
   </main>
 </template>
-<script setup lang="ts">
-import {useUserStore} from "~/composables/user";
-import {computed} from "vue";
-import {useRoute} from "#app";
-import {onMounted} from "@vue/runtime-core";
-import Game from "~/components/Game.vue";
-const route = useRoute()
-const userStore = useUserStore()
-const modalOpening = computed(() => {
-  return userStore.modalOpening
-})
-
-onMounted(() => {
-  if (route.query.ref) {
-    userStore.setModal('login')
-  }
-})
-</script>
-<style>
-</style>

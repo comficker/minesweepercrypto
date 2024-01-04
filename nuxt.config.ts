@@ -68,7 +68,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API,
-      socket: process.env.SOCKET
+      socket: process.env.SOCKET,
+      connectWalletId: process.env.CONNECT_WALLET_ID
     }
   },
   sourcemap: {

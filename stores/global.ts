@@ -5,9 +5,14 @@ export const useGlobalStore = defineStore('global', () => {
   const route = useRoute()
 
   const isTelegram = ref(!!route.query.token)
-
+  const modal = ref('')
+  const setModal = (value: string) => {
+    modal.value  = value
+  }
   return {
-    isTelegram
+    isTelegram,
+    modal,
+    setModal
   }
 })
 

@@ -146,7 +146,7 @@
 </template>
 
 <script lang="ts" setup>
-import {useGameStore} from "~/composables/game";
+import {useGameStore} from "~/stores/game";
 import {ILottery} from "~/interface";
 import {ref, watch} from "vue";
 

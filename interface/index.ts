@@ -3,6 +3,7 @@ export interface User {
   first_name: string
   last_name: string
   username: string
+  meta: any
 }
 
 export interface Links {
@@ -42,6 +43,8 @@ export interface IUserGame {
   "since"?: string
   "score": number
   "steps": IStep[]
+  "level": string
+  "time": string
 }
 
 export interface ILottery {

@@ -8,7 +8,7 @@
 import {IGame} from "~/interface";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {useRoute} from "#app";
-import {useGameStore} from "~/composables/game";
+import {useGameStore} from "~/stores/game";
 import Game from "~/components/Game.vue";
 import {useSeoMeta} from "nuxt/app";
 
