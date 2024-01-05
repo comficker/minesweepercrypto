@@ -14,9 +14,6 @@ const modalOpening = computed(() => {
 const user = computed(() => {
   return userStore.logged
 })
-
-
-console.log(user);
 </script>
 
 <template>
