@@ -10,8 +10,6 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
   ],
   experimental: {
-    // when using generate, payload js assets included in sw precache manifest
-    // but missing on offline, disabling extraction it until fixed
     payloadExtraction: false,
     reactivityTransform: true,
     inlineSSRStyles: false,
@@ -28,11 +26,7 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext',
       },
-    },
-    prerender: {
-      crawlLinks: false,
-      ignore: ['/'],
-    },
+    }
   },
   app: {
     head: {
