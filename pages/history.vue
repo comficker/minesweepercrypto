@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {IUserGame, ResponseUserGames} from "~/interface";
+import type {IUserGame, ResponseUserGames} from "~/interface";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {computed, ref} from "vue";
 import {useUserStore} from "~/stores/user";

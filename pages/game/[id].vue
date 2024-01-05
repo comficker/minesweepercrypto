@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import {IGame} from "~/interface";
+import type {IGame} from "~/interface";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {useRoute} from "#app";
 import {useGameStore} from "~/stores/game";

@@ -147,7 +147,7 @@
 
 <script lang="ts" setup>
 import {useGameStore} from "~/stores/game";
-import {ILottery} from "~/interface";
+import type {ILottery} from "~/interface";
 import {ref, watch} from "vue";
 
 const gs = useGameStore()

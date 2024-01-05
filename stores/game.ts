@@ -1,13 +1,12 @@
 import {computed, ref} from "vue"
 import {defineStore} from 'pinia'
-import {IStep, IUserGame, User, IGame, ITurnMessage, Setting, PlayingTurn, MessageTurn} from "~/interface";
+import type {IStep, IUserGame, User, IGame, ITurnMessage, Setting, PlayingTurn, MessageTurn} from "~/interface";
 import {getNeighbors, getSteps} from "~/helpers";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {useUserStore} from "~/stores/user";
 import {io} from "socket.io-client";
 import {useCookie, useRuntimeConfig} from "#app";
 import {useGlobalStore} from "~/stores/global";
-import router from "#app/plugins/router";
 
 export const useGameStore = defineStore('game', () => {
   const config = useRuntimeConfig()
