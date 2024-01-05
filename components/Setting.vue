@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ref} from "vue"
-import {Setting} from "~/interface";
+import type {Setting} from "~/interface";
 import {useCookie} from "#app";
 import {useGameStore} from "~/stores/game";
 import {useUserStore} from "~/stores/user";
