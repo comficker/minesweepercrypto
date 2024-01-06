@@ -111,15 +111,14 @@
         class="bg-black/30 rounded absolute inset-0 flex flex-col items-center justify-center space-y-4"
       >
         <div class="text-center">
-          <div v-show="roomStore.currentPlayer?.status === 'win'" class="my-6" id="confetti">
+          <div v-show="roomStore.data.status === 'won'" class="my-6" id="confetti">
             <img class="mx-auto w-32 h-32" src="/confetti.gif" alt="">
           </div>
-          <div v-show="roomStore.currentPlayer?.status === 'dead'" class="my-6">
+          <div v-show="roomStore.data.status === 'dead'" class="my-6">
             <img class="mx-auto w-32 h-32" src="/nuclear.png" alt="">
           </div>
           <div class="text-3xl font-extrabold text-white">
-            <span v-if="roomStore.currentPlayer?.status === 'win'">WON!</span>
-            <span v-else>DEAD</span>
+            <span>{{roomStore.data.status}}!</span>
           </div>
         </div>
         <div class="flex justify-center gap-3">

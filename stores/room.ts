@@ -99,18 +99,19 @@ export const useRoomStore = defineStore('room', () => {
     }
   }
 
-  const onPlayMessage = function (playMessage: PlayMessage) {
-    console.log("onPlayMessage:", playMessage);
-    data.value.results = playMessage.results
-    data.value.turns.unshift(playMessage.data)
-    data.value.gms_members[currentPlayerIndex.value].status = playMessage.data.status
-    data.value.gms_members[currentPlayerIndex.value].score = playMessage.data.score
-    data.value.status = playMessage.status
-    if (playMessage.start_at) {
-      data.value.start_at = playMessage.start_at
+  const onPlayMessage = function (message: PlayMessage) {
+    console.log("onPlayMessage:", message);
+    data.value.results = message.results
+    data.value.turns.unshift(message.data)
+    const index = data.value.gms_members.map(x => x.id).indexOf(message.data.id)
+    data.value.gms_members[index].status = message.data.status
+    data.value.gms_members[index].score = message.data.score
+    data.value.status = message.status
+    if (message.start_at) {
+      data.value.start_at = message.start_at
     }
-    if (playMessage.end_at) {
-      data.value.end_at = playMessage.end_at
+    if (message.end_at) {
+      data.value.end_at = message.end_at
     }
   }
 
