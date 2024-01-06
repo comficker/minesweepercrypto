@@ -58,6 +58,7 @@ export interface Setting {
   is_multiplayer: boolean
   width: number
   height: number
+  num_bomb: number
 }
 
 export interface IStep {

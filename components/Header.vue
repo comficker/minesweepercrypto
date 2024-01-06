@@ -28,7 +28,7 @@ const user = computed(() => {
         <nuxt-link
           to="/manager"
           v-if="user && user.id"
-          class="flex gap-2 items-center border rounded p-1.5 px-3 text-orange-500 cursor-pointer"
+          class="flex gap-2 items-center p-1.5 text-orange-500 cursor-pointer"
         >
           <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
           <b>{{ user.meta?.minesweeper?.balance || 0 }}</b>

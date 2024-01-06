@@ -12,7 +12,8 @@ const globalStore = useGlobalStore()
 const form = ref<Setting>({
   width: roomStore.options.width,
   height: roomStore.options.height,
-  is_multiplayer: roomStore.options.is_multiplayer
+  is_multiplayer: roomStore.options.is_multiplayer,
+  num_bomb: Math.floor(roomStore.options.width * roomStore.options.height * 0.2)
 })
 
 const submit = () => {
@@ -41,6 +42,10 @@ watch(() => roomStore.options, (n) => {
   form.value.width = n.width
   form.value.height = n.height
   form.value.is_multiplayer = n.is_multiplayer
+})
+
+watch(() => [form.value.width, form.value.height], () => {
+  form.value.num_bomb = Math.floor(form.value.width * form.value.height * 0.2)
 })
 </script>
 

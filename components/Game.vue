@@ -80,13 +80,13 @@ const setSize = (mode: any) => {
   roomStore.setting({
     ...roomStore.options,
     width: mode.w,
-    height: mode.h
+    height: mode.h,
+    num_bomb: Math.floor(mode.w * mode.h * 0.2)
   })
   roomStore.makeGame(true)
 }
 
 const joinGame = () => {
-  console.log(roomStore.joinStatus);
   if (roomStore.joinStatus === 'join') {
     if (userStore.isLogged) {
       useAuthFetch('/gms/join', {
