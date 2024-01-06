@@ -2,21 +2,28 @@
 import {ref} from "vue"
 import type {Setting} from "~/interface";
 import {useCookie} from "#app";
-import {useGameStore} from "~/stores/game";
 import {useUserStore} from "~/stores/user";
+import {useRoomStore} from "~/stores/room";
+import {useGlobalStore} from "~/stores/global";
 
 const cookieFormSize = useCookie('form.size')
-const gs = useGameStore()
+const roomStore = useRoomStore()
+const globalStore = useGlobalStore()
 const form = ref<Setting>({
-  width: gs.setting.width,
-  height: gs.setting.height,
-  is_multiple: gs.setting.is_multiple
+  width: roomStore.options.width,
+  height: roomStore.options.height,
+  is_multiplayer: roomStore.options.is_multiplayer
 })
 
 const submit = () => {
   if (errors.value.length > 0) return;
   cookieFormSize.value = `${form.value.width}_${form.value.height}`
-  gs.saveSetting(form.value)
+  roomStore.setting({
+    ...roomStore.options,
+    ...form.value
+  })
+  roomStore.makeGame(true)
+  globalStore.setModal('')
 }
 
 const errors = computed(() => {
@@ -30,10 +37,10 @@ const errors = computed(() => {
   return out
 })
 
-watch(() => gs.setting, (n) => {
+watch(() => roomStore.options, (n) => {
   form.value.width = n.width
   form.value.height = n.height
-  form.value.is_multiple = n.is_multiple
+  form.value.is_multiplayer = n.is_multiplayer
 })
 </script>
 
@@ -47,14 +54,14 @@ watch(() => gs.setting, (n) => {
       <button
         type="button"
         class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
-        :class="{'bg-indigo-600': form.is_multiple, 'bg-gray-200': !form.is_multiple}"
+        :class="{'bg-indigo-600': form.is_multiplayer, 'bg-gray-200': !form.is_multiplayer}"
         role="switch" aria-checked="false" aria-labelledby="Multiplayer"
-        @click="form.is_multiple = !form.is_multiple"
+        @click="form.is_multiplayer = !form.is_multiplayer"
       >
         <span
           aria-hidden="true"
           class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-          :class="{'translate-x-5': form.is_multiple, 'translate-x-0': !form.is_multiple}"
+          :class="{'translate-x-5': form.is_multiplayer, 'translate-x-0': !form.is_multiplayer}"
         />
       </button>
     </div>

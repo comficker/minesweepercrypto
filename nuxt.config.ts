@@ -9,11 +9,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
   ],
-  experimental: {
-    payloadExtraction: false,
-    reactivityTransform: true,
-    inlineSSRStyles: false,
-  },
   css: [
     '~/assets/font.css',
     '@unocss/reset/tailwind.css',
@@ -39,7 +34,7 @@ export default defineNuxtConfig({
       meta: [
         {name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes'},
         {name: 'description', content: appDescription},
-        // {name: 'apple-mobile-web-app-status-bar-style', content: 'default'},
+        {name: 'apple-mobile-web-app-status-bar-style', content: 'default'},
       ],
       script: [
         {
@@ -50,7 +45,6 @@ export default defineNuxtConfig({
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-55P679J');`,
-          body: true
         },
       ],
       htmlAttrs: {

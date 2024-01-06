@@ -1,4 +1,4 @@
-import {IStep, IUserGame} from "~/interface";
+import {IStep, IUserGame, type User} from "~/interface";
 
 const calculateDistance = (start: number, end: number) => {
   const distance = end - start
@@ -29,7 +29,7 @@ export const countDownTimer = (start: number, end: number) => {
   return cd
 }
 
-export const timeSince = (d: string) => {
+export const timeSince = (d: string | number) => {
   const {days, hours, minutes} = calculateDistance(new Date(d).getTime(), new Date().getTime())
   if (!days && !hours && !minutes) {
     return 'a few seconds'
@@ -39,8 +39,10 @@ export const timeSince = (d: string) => {
   if (minutes) return `${minutes} minutes`
 }
 
-export const getNeighbors = (x: number, y: number) => {
-  return [[x, y - 1], [x, y + 1], [x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]];
+export const getNeighbors = (x: number, y: number, width: number, height: number) => {
+  return [[x, y - 1], [x, y + 1], [x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]].filter(([x, y])=> {
+    return x < width && x >= 0 && y >= 0 && y < height
+  })
 }
 
 export const getSteps = (resPlayers: IUserGame[]) => {
@@ -52,4 +54,13 @@ export const getSteps = (resPlayers: IUserGame[]) => {
     ...x,
     time: Math.round(x.time * 1000)
   })).sort((a, b) => a.time - b.time)
+}
+
+export function fullName(user: User) {
+  if (user.username.length === 42) {
+    return `${user.username.substring(0, 5)}...${user.username.substring(37, 41)}`
+  } else if (user.first_name || user.last_name) {
+    return `${user.first_name} ${user.last_name}`
+  }
+  return user.username
 }

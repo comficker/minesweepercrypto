@@ -55,7 +55,7 @@ export interface ILottery {
 }
 
 export interface Setting {
-  is_multiple: boolean
+  is_multiplayer: boolean
   width: number
   height: number
 }

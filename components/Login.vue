@@ -40,7 +40,11 @@
     <div class="flex gap-4 uppercase text-xs font-bold">
       <div class="underline cursor-pointer" @click="swap">{{ mode === 'login' ? 'Register' : 'Login' }}</div>
       <div v-if="false" class="underline">Reset Password</div>
-      <div class="underline cursor-pointer" @click="$connectWeb3">Connect wallet</div>
+    </div>
+  </div>
+  <div class="mt-4">
+    <div class="border p-4 rounded cursor-pointer" @click="$connectWeb3">
+      <img src="/connect-wallet.svg" alt="">
     </div>
   </div>
 </template>

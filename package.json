@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "build": "nuxi build",
-    "dev": "nuxi dev",
+    "dev": "nuxi dev --host 0.0.0.0",
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
     "start": "node .output/server/index.mjs",
     "lint": "eslint .",
@@ -32,7 +32,6 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@feedback-fish/vue": "^1.0.1",
     "@kolirt/vue-web3-auth": "^2.0.1",
     "@nuxt/types": "^2.16.3",
     "@wagmi/core": "^1.4.13",

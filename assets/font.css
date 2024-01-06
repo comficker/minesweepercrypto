@@ -1,3 +1,9 @@
+html, body , #__nuxt{
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   @apply md:overflow-overlay;
   font-family: 'Inter', Helvetica, Arial, sans-serif;

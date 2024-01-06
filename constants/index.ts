@@ -1,3 +1,5 @@
+import type {Room} from "~/interface/gms";
+
 export const appName = 'Minesweeper Battle'
 export const appDescription = 'Join minesweeper battle on minesweeperbattle.com'
 
@@ -94,3 +96,21 @@ export const ABI = [
   }
 ];
 export const CONTRACT_ADDRESS = "0x23f6bA2b5cc0adA9C1e6e227452940Dc0A37FF48"
+
+
+export const SAMPLE_ROOM: Room = {
+  id: 0,
+  width: 0,
+  height: 0,
+  is_multiplayer: false,
+  ticket: 0,
+  num_bomb: 0,
+  prize: 0,
+  status: "waiting",
+  start_at: 0,
+  end_at: 0,
+  turns: [],
+  gms_members: [],
+  maps: {},
+  results: {}
+}

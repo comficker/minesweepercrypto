@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type {IUserGame, ResponseUserGames} from "~/interface";
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {computed, ref} from "vue";
 import {useUserStore} from "~/stores/user";
 import {useGameStore} from "~/stores/game";
 import {countDownTimer, timeSince} from "~/helpers";
+import type {ResponseRoom, Room} from "~/interface/gms";
+import {useGlobalStore} from "~/stores/global";
 
 const userStore = useUserStore()
+const globalStore = useGlobalStore()
 const gs = useGameStore()
 const logged = computed(() => {
   return userStore.logged
@@ -31,17 +33,17 @@ const params = computed(() => {
   return params
 })
 
-const {data: response} = await useAuthFetch<ResponseUserGames>('/minesweeper/user-games/', {
+const {data: response} = await useAuthFetch<ResponseRoom>('/gms/rooms/', {
   params: params,
   watch: [params],
   immediate: true
 })
 
-const items = computed<IUserGame[]>(() => {
-  return response.value && response.value.results ? response.value.results.map((x: IUserGame) => {
+const items = computed<Room[]>(() => {
+  return response.value && response.value.results ? response.value.results.map((x: Room) => {
     return {
       ...x,
-      level: `${x.game.width}x${x.game.height}`,
+      level: `${x.width}x${x.height}`,
       time: x.end_at ? countDownTimer((new Date(x.start_at)).getTime(), (new Date(x.end_at)).getTime()) : '_',
       since: timeSince(x.start_at)
     }
@@ -95,19 +97,19 @@ const items = computed<IUserGame[]>(() => {
               </thead>
               <tbody class="whitespace-nowrap font-bold">
               <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right border-t-4 border-white">
-                <td class="px-2 py-1 text-left">{{ item.user.username }}</td>
+                <td class="px-2 py-1 text-left">{{ item.gms_members }}</td>
                 <td :class="[item.status === 'win' ? 'text-blue-500': 'text-red-500', 'px-2 py-2']">{{ item.time }}</td>
                 <td class="px-2 py-1">{{ item.level }}</td>
                 <td class="px-2 py-1 text-xs">
-                  <nuxt-link :to="`/game/${item.game.id}`">{{ item.since }}</nuxt-link>
+                  <nuxt-link :to="`/game/${item.id}`">{{ item.since }}</nuxt-link>
                 </td>
               </tr>
               </tbody>
             </table>
             <div v-else-if="!userStore.isLogged" class="pt-4 h-full flex flex-col justify-center items-center">
               <div class="font-bold uppercase">Member's feature!</div>
-              <p>You must <span class="underline cursor-pointer" @click="userStore.setModal('login')">login</span> or
-                <span class="underline cursor-pointer" @click="userStore.setModal('register')">register</span> to view
+              <p>You must <span class="underline cursor-pointer" @click="globalStore.setModal('login')">login</span> or
+                <span class="underline cursor-pointer" @click="globalStore.setModal('register')">register</span> to view
                 your game history</p>
             </div>
           </div>

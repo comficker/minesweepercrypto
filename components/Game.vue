@@ -25,7 +25,33 @@
     </div>
     <game-header/>
     <game-body/>
-    <game-result/>
+    <div v-if="roomStore.data.id" class="flex justify-between">
+      <div class="flex gap-2">
+        <h1 class="text-2xl font-extrabold uppercase">Game #{{ roomStore.data.id }}</h1>
+        <div
+          v-if="roomStore.data.status === 'playing'"
+          class="flex items-center gap-2 px-4 py-1 rounded bg-red-400 text-white"
+        >
+          <span>Live</span>
+          <div class="relative flex h-3 w-3">
+            <div class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></div>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+          </div>
+        </div>
+        <div
+          v-else
+          class="font-semibold px-4 py-1 rounded capitalize"
+          :class="roomStore.data.status === 'won' ? 'bg-green-500 text-white': 'bg-gray-100'"
+        >{{ roomStore.data.status }}
+        </div>
+      </div>
+      <div
+        class="font-semibold px-4 py-1 rounded capitalize"
+        :class="roomStore.joinStatus === 'join' ? 'bg-blue-500 text-white cursor-pointer': 'bg-gray-200'"
+        @click="joinGame"
+      >{{roomStore.joinStatus}}
+      </div>
+    </div>
     <game-activity/>
   </div>
 </template>
@@ -33,13 +59,16 @@
 <script lang="ts" setup>
 import GameHeader from "~/components/GameHeader.vue";
 import GameBody from "~/components/GameBody.vue";
-import GameResult from "~/components/GameResult.vue";
 import {useCookie} from "#app";
-import {useGameStore} from "~/stores/game";
+import {useRoomStore} from "~/stores/room";
+import {useUserStore} from "~/stores/user";
+import {useGlobalStore} from "~/stores/global";
 
 const cookieFormSize = useCookie('form.size')
 const route = useRoute()
-const gs = useGameStore()
+const roomStore = useRoomStore()
+const userStore = useUserStore()
+const globalStore = useGlobalStore()
 const modes = ref([
   {w: 8, h: 8, name: 'Beginner', stars: [1, 0, 0]},
   {w: 16, h: 16, name: 'Intermediate', stars: [1, 1, 0]},
@@ -48,10 +77,28 @@ const modes = ref([
 
 const setSize = (mode: any) => {
   cookieFormSize.value = `${mode.w}_${mode.h}`
-  gs.saveSetting({
+  roomStore.setting({
+    ...roomStore.options,
     width: mode.w,
-    height: mode.h,
-    is_multiple: gs.is_multiple
+    height: mode.h
   })
+  roomStore.makeGame(true)
+}
+
+const joinGame = () => {
+  console.log(roomStore.joinStatus);
+  if (roomStore.joinStatus === 'join') {
+    if (userStore.isLogged) {
+      useAuthFetch('/gms/join', {
+        method: "POST",
+        body: {
+          id: roomStore.data.id
+        },
+        immediate: true
+      })
+    } else {
+      globalStore.setModal('login')
+    }
+  }
 }
 </script>

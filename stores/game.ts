@@ -75,21 +75,21 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function localDrawMap(ignoreCord: string): any {
-    while (Object.keys(maps.value).length < total_bomb.value) {
+    const maps: {[key: string]: number} = {}
+    while (Object.keys(maps).length < total_bomb.value) {
       randomCord(ignoreCord)
     }
-    Object.keys(maps.value).forEach((key: string) => {
+    Object.keys(maps).forEach((key: string) => {
       const cord = key.split("_")
-      const neighbors = getNeighbors(Number.parseInt(cord[0]), Number.parseInt(cord[1]))
+      const neighbors = getNeighbors(Number.parseInt(cord[0]), Number.parseInt(cord[1]), 0, 0)
       neighbors.forEach((nb: number[]) => {
         if (nb[0] >= 0 && nb[1] >= 0) {
           const nbKey = `${nb[0]}_${nb[1]}`
-          if (maps.value[nbKey] !== -1 && maps.value[nbKey] !== null) {
-            if (typeof maps.value[nbKey] === "undefined") {
-              maps.value[nbKey] = 0
+          if (maps[nbKey] !== -1 && maps[nbKey] !== null) {
+            if (typeof maps[nbKey] === "undefined") {
+              maps[nbKey] = 0
             }
-            // @ts-ignore
-            maps.value[nbKey]++
+            maps[nbKey]++
           }
         }
       })
@@ -125,17 +125,17 @@ export const useGameStore = defineStore('game', () => {
     const checked = maps.value[cord]
     results.value[cord] = checked
     if (checked === -1) {
+      status.value = 'dead'
       playStatus.value = 'dead'
       results.value = maps.value
       ending.value = true
       return;
     }
-
     if (typeof maps.value[cord] === "undefined") {
       clicked.push(cord)
       results.value[cord] = 0
       const nbCord = cord.split("_")
-      const neighbors = getNeighbors(Number.parseInt(nbCord[0]), Number.parseInt(nbCord[1]))
+      const neighbors = getNeighbors(Number.parseInt(nbCord[0]), Number.parseInt(nbCord[1]), 0, 0)
       neighbors.forEach((nb: number[]) => {
         const key = `${nb[0]}_${nb[1]}`
         if (
@@ -156,14 +156,14 @@ export const useGameStore = defineStore('game', () => {
 
   async function playServer(e: Event | null, x: number, y: number, isPurchased = false) {
     if (e) e.preventDefault()
-    await useAuthFetch(`/minesweeper/play`, {
+    await useAuthFetch(`/gms/play`, {
       method: 'POST',
       body: {
         id: id.value,
         x,
         y,
         is_purchased: isPurchased,
-        is_flag: is_flagging.value || !!e,
+        is_flagging: is_flagging.value || !!e,
       },
       server: false
     })
@@ -232,17 +232,13 @@ export const useGameStore = defineStore('game', () => {
       clearTimeout(to)
     })
     if (userStore.isLogged) {
-      const {data: res} = await useAuthFetch(`/minesweeper/my-game`, {
+      const {data: res} = await useAuthFetch<IGame>(`/gms/room`, {
         method: 'POST',
-        body: {
-          force: is_force,
-          ...setting.value
-        },
-        server: false
+        body: setting.value,
+        immediate: true
       })
-      const value = res.value as any
-      if (value) {
-        transformData(value)
+      if (res.value) {
+        transformData(res.value)
       }
     } else {
       width.value = setting.value.width
@@ -298,9 +294,9 @@ export const useGameStore = defineStore('game', () => {
   }
 
   const onPlayReceived = (message: ITurnMessage) => {
+    console.log("onPlayReceived", message);
     if (message.game === id.value) {
-      if (!start_at.value)
-        start_at.value = message.step.time * 1000
+      if (!start_at.value) start_at.value = message.step.time * 1000
       results.value = message.results
       maps.value = message.maps || {}
       status.value = message.status
@@ -310,14 +306,15 @@ export const useGameStore = defineStore('game', () => {
       }
       if (message.step && message.step.status != null) {
         playStatus.value = message.step.status
-        if (['dead', 'win'].includes(playStatus.value))
+        if (['dead', 'win'].includes(playStatus.value)) {
           ending.value = true
+        }
       }
     }
   }
 
   const onTurnReceived = (message: MessageTurn) => {
-    console.log(message);
+    console.log("onTurnReceived", message);
     if (message.game == id.value) {
       if (message.playing) {
 
@@ -328,8 +325,8 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  const onRequestReceived = (message: ITurnMessage) => {
-    console.log(message);
+  const onJoinReceived = (message: ITurnMessage) => {
+    console.log("onJoinReceived", message);
   }
 
   const connectSocket = (n: number, o: number | undefined = 0) => {
@@ -347,7 +344,7 @@ export const useGameStore = defineStore('game', () => {
     window.socket.removeAllListeners(`mb_${n}_join`);
     window.socket.on(`mb_${n}_play`, onPlayReceived);
     window.socket.on(`mb_${n}_turn`, onTurnReceived);
-    window.socket.on(`mb_${n}_join`, onRequestReceived);
+    window.socket.on(`mb_${n}_join`, onJoinReceived);
   }
 
   watch(id, (n, o) => {

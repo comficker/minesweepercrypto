@@ -5,23 +5,19 @@
 </template>
 
 <script lang="ts" setup>
-import type {IGame} from "~/interface";
-import {useAuthFetch} from "~/composables/useAuthFetch";
 import {useRoute} from "#app";
-import {useGameStore} from "~/stores/game";
 import Game from "~/components/Game.vue";
 import {useSeoMeta} from "nuxt/app";
+import {useRoomStore} from "~/stores/room";
 
-const gs = useGameStore()
+const route = useRoute()
 
-const res = await useAuthFetch<IGame>(`/minesweeper/games/${useRoute().params.id}/`)
+const roomStore = useRoomStore()
+await roomStore.makeGame(false, route.params.id?.toString())
 
-if (res.data.value) {
-  gs.init(res.data.value)
-}
+const title = `Game #${route.params.id} | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com`
+const desc = `Join and watch playing Minesweeper online: Game #${route.params.id}`
 
-const title = `Game #${gs.id} | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com`
-const desc = `Join and watch playing Minesweeper online: Game #${gs.id}`
 useSeoMeta({
   applicationName: 'Minesweeper Battle',
   title: title,

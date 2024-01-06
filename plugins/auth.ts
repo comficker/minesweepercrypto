@@ -2,9 +2,7 @@ import {useUserStore} from "~/stores/user";
 import {User} from "~/interface";
 import {ofetch} from "ofetch";
 import useStatefulCookie from "~/composables/useStatefulCookie";
-import { Chains, createWeb3Auth } from '@kolirt/vue-web3-auth'
-import { connect } from '@kolirt/vue-web3-auth'
-import { Chain } from '@kolirt/vue-web3-auth'
+import {createWeb3Auth, connect, Chain, account, signMessage} from '@kolirt/vue-web3-auth'
 
 const oxa: Chain = {
   id: 20241,
@@ -149,6 +147,25 @@ export default defineNuxtPlugin(async (NuxtApp) => {
   async function connectWeb3() {
     await connect()
   }
+
+  watch(() => account.connected, async () => {
+    if (account.connected && !userStore.isLogged) {
+      const signature = await signMessage('Hello Minesweeper')
+      const {data: response} = await useAuthFetch<{ access: string, refresh: string } | null>('/auth/login-wallet', {
+        method: "POST",
+        body: {
+          signature,
+          address: account.address
+        }
+      })
+      if (response.value) {
+        cookieTokenRefresh.value = response.value.refresh
+        cookieToken.value = response.value.access
+        userStore.setLogged(await fetchUser() || {} as User)
+        await useRouter().push('/')
+      }
+    }
+  })
 
   return {
     provide: {
