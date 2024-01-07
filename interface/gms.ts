@@ -6,6 +6,7 @@ export interface Member {
   status: string
   score: number
   order: number
+  timer: number
 }
 
 export interface Turn {
@@ -14,6 +15,7 @@ export interface Turn {
   "cord": string
   "time": number
   "score": number
+  timer: number
 }
 
 export interface Room {

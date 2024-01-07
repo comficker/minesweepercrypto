@@ -1,7 +1,6 @@
 import {IStep, IUserGame, type User} from "~/interface";
 
-const calculateDistance = (start: number, end: number) => {
-  const distance = end - start
+const calculateDistance = (distance: number) => {
   const days = Math.floor(distance / (1000 * 60 * 60 * 24));
   const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -11,12 +10,12 @@ const calculateDistance = (start: number, end: number) => {
   }
 }
 
-export const countDownTimer = (start: number, end: number) => {
+export const countDownTimer = (start: number, end: number, distance: number | undefined = undefined) => {
   const fm = function (num: number) {
     if (num >= 10) return num;
     return `0${num}`
   }
-  let {days, hours, minutes, seconds} = calculateDistance(start, end)
+  let {days, hours, minutes, seconds} = calculateDistance(distance ? distance : end - start)
   if (minutes < 0) minutes = 0;
   if (seconds < 0) seconds = 0;
   let cd = `${fm(minutes)}:${fm(seconds)}`
@@ -30,7 +29,8 @@ export const countDownTimer = (start: number, end: number) => {
 }
 
 export const timeSince = (d: string | number) => {
-  const {days, hours, minutes} = calculateDistance(new Date(d).getTime(), new Date().getTime())
+  if (!d) return '_'
+  const {days, hours, minutes} = calculateDistance(new Date().getTime() - new Date(d).getTime())
   if (!days && !hours && !minutes) {
     return 'a few seconds'
   }

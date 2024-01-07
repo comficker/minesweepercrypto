@@ -106,6 +106,7 @@ export const useRoomStore = defineStore('room', () => {
     const index = data.value.gms_members.map(x => x.id).indexOf(message.data.id)
     data.value.gms_members[index].status = message.data.status
     data.value.gms_members[index].score = message.data.score
+    data.value.gms_members[index].timer = message.data.timer
     data.value.status = message.status
     if (message.start_at) {
       data.value.start_at = message.start_at

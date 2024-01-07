@@ -44,7 +44,7 @@ const items = computed<Room[]>(() => {
     return {
       ...x,
       level: `${x.width}x${x.height}`,
-      time: x.end_at ? countDownTimer((new Date(x.start_at)).getTime(), (new Date(x.end_at)).getTime()) : '_',
+      time: x.end_at && x.start_at ? countDownTimer((new Date(x.start_at)).getTime(), (new Date(x.end_at)).getTime()) : '_',
       since: timeSince(x.start_at)
     }
   }) : []
@@ -97,11 +97,32 @@ const items = computed<Room[]>(() => {
               </thead>
               <tbody class="whitespace-nowrap font-bold">
               <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right border-t-4 border-white">
-                <td class="px-2 py-1 text-left">{{ item.gms_members }}</td>
-                <td :class="[item.status === 'win' ? 'text-blue-500': 'text-red-500', 'px-2 py-2']">{{ item.time }}</td>
+                <td class="px-2 py-1 text-left ">
+                  <div class="flex -space-x-3 mt-1">
+                    <div class="w-8 h-8 rounded bg-white p-1 border border-gray-200">
+                      <img src="/avatar.png" alt="">
+                    </div>
+                  </div>
+                </td>
+                <td :class="{
+                  'text-green-500': item.status === 'won',
+                  'text-red-500': item.status === 'dead',
+                  'text-blue-500': item.status === 'waiting',
+                }" class="px-2 py-2">
+                  <div class="flex gap-2 items-center justify-end">
+                    <span>{{ item.time }}</span>
+                    <div v-if="item.status == 'dead'" class="i-icons-dead w-4 h-4"/>
+                    <div v-else-if="item.status == 'won'" class="i-icons-smile w-4 h-4"/>
+                    <div v-else-if="item.status == 'ended'" class="i-icons-neutral w-4 h-4"/>
+                    <div v-else-if="item.status == 'waiting'" class="i-icons-alarm w-4 h-4"/>
+                    <div v-else class="i-icons-eye w-4 h-4"/>
+                  </div>
+                </td>
                 <td class="px-2 py-1">{{ item.level }}</td>
                 <td class="px-2 py-1 text-xs">
-                  <nuxt-link :to="`/game/${item.id}`">{{ item.since }}</nuxt-link>
+                  <nuxt-link :to="`/game/${item.id}`" class="underline flex justify-end items-center">
+                    <span>{{ item.since }}</span>
+                  </nuxt-link>
                 </td>
               </tr>
               </tbody>
