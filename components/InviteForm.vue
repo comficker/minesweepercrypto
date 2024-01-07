@@ -52,8 +52,11 @@
 import {appDescription} from "~/constants";
 import {computed} from "vue";
 import {useUserStore} from "~/stores/user";
+import {useRoomStore} from "~/stores/room";
 
 const {showHistory} = defineProps<{ showHistory: boolean }>()
+const route = useRoute()
+const roomStore = useRoomStore()
 const userStore = useUserStore()
 const networkColors = {
   facebook: '#1877f2',
@@ -63,11 +66,11 @@ const networkColors = {
 }
 const supportedNetworks = ['telegram', 'twitter', 'pinterest', 'facebook']
 const referUri = computed(() => {
-  return `https://minesweeperbattle.com?ref=${userStore.logged.username}`
+  return `https://minesweeperbattle.com${roomStore.data.id ? `/room/${roomStore.data.id}` : '/'}?ref=${userStore.logged.username}`
 })
 
 const data = computed(() => ({
-  title: 'You got an invite for play game on minesweeperbattle.com',
+  title: 'You got an invite for play room on minesweeperbattle.com',
   description: appDescription,
   url: referUri.value,
   hashtags: 'minesweeper,minesweeperonline,minesweeperbattle'

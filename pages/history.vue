@@ -120,7 +120,7 @@ const items = computed<Room[]>(() => {
                 </td>
                 <td class="px-2 py-1">{{ item.level }}</td>
                 <td class="px-2 py-1 text-xs">
-                  <nuxt-link :to="`/game/${item.id}`" class="underline flex justify-end items-center">
+                  <nuxt-link :to="`/room/${item.id}`" class="underline flex justify-end items-center">
                     <span>{{ item.since }}</span>
                   </nuxt-link>
                 </td>

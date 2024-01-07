@@ -68,7 +68,7 @@ export const useRoomStore = defineStore('room', () => {
       x,
       y,
       is_purchased: isPurchased,
-      is_flagging: e ? true: options.value.is_flagging
+      is_flagging: e ? true : options.value.is_flagging
     }
     if (userStore.isLogged) {
       await useAuthFetch(`/gms/play`, {
@@ -150,6 +150,10 @@ export const useRoomStore = defineStore('room', () => {
 
   watch(() => data.value.id, (n, o) => {
     connectSocket(n, o)
+  })
+
+  watch(() => userStore.logged.id, async () => {
+    if (userStore.logged.id) await makeGame()
   })
 
   return {

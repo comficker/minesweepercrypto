@@ -4,7 +4,7 @@ import Game from "~/components/Game.vue";
 import {useRoomStore} from "~/stores/room";
 
 const title = "Minesweeper Battle | Minesweeper Online | MinesweeperCrypto | minesweeperbattle.com"
-const desc = 'Minesweeper is a classic strategy game where players must uncover hidden mines on a grid without detonating them.'
+const desc = 'Minesweeper is a classic strategy room where players must uncover hidden mines on a grid without detonating them.'
 const roomStore = useRoomStore()
 roomStore.makeGame()
 
