@@ -5,11 +5,15 @@ import type {Room, Options, PlayMessage, Member, MemberRequestMessage} from "~/i
 import * as minesweeper from "~/helpers/minesweeper"
 import {SAMPLE_ROOM} from "~/constants";
 import {io} from "socket.io-client";
+import {useRouter} from "#app";
+import {SymbolKind} from "vscode-languageserver-types";
+import Number = SymbolKind.Number;
 
 
 export const useRoomStore = defineStore('room', () => {
   const config = useRuntimeConfig()
   const userStore = useUserStore()
+  const router = useRouter()
   const data = ref<Room>(SAMPLE_ROOM)
   const options = ref<Options>({
     width: 9, height: 9, is_flagging: false, is_multiplayer: false, ticket: 0,
@@ -25,6 +29,10 @@ export const useRoomStore = defineStore('room', () => {
 
   const currentPlayer = computed<Member>(() => {
     return data.value.gms_members[currentPlayerIndex.value]
+  })
+
+  const bombOpened = computed(() => {
+    return Object.values(data.value.results || {}).filter(x => [-1, null].includes(x)).length
   })
 
   const isEnded = computed(() => ['won', 'dead', 'ended'].includes(data.value.status))
@@ -54,7 +62,12 @@ export const useRoomStore = defineStore('room', () => {
         immediate: true,
         lazy: false
       })
-      if (res.value) onNewRoom(res.value)
+      if (res.value) {
+        if (force_create) {
+          await router.push(`/room/${res.value.id}`)
+        }
+        onNewRoom(res.value)
+      }
     } else {
       onNewRoom(minesweeper.createRoom(options.value))
     }
@@ -103,16 +116,22 @@ export const useRoomStore = defineStore('room', () => {
     console.log("onPlayMessage:", message);
     data.value.results = message.results
     data.value.turns.unshift(message.current)
+
     const index = data.value.gms_members.map(x => x.id).indexOf(message.current.id)
-    data.value.gms_members[index].status = message.current.status
-    data.value.gms_members[index].score = message.current.score
-    data.value.gms_members[index].timer = message.current.timer
-    data.value.status = message.status
-    if (message.next.id) {
-      const index = data.value.gms_members.map(x => x.id).indexOf(message.next.id)
-      data.value.gms_members[index].status = message.next.status
-      data.value.gms_members[index].mark_time = message.next.mark_time
+    if (index >= 0) {
+      data.value.gms_members[index].status = message.current.status
+      data.value.gms_members[index].score = message.current.score
+      data.value.gms_members[index].timer = message.current.timer
+
     }
+
+    const indexN = data.value.gms_members.map(x => x.id).indexOf(message.next.id)
+    if (indexN >= 0) {
+      data.value.gms_members[indexN].status = message.next.status
+      data.value.gms_members[indexN].mark_time = message.next.mark_time
+    }
+
+    data.value.status = message.status
     if (["won", "dead", "ended"].includes(data.value.status)) {
       data.value.gms_members.forEach(member => {
         if (['waiting', 'playing'].includes(member.status) || member.status.startsWith("hold")) {
@@ -169,7 +188,7 @@ export const useRoomStore = defineStore('room', () => {
   })
 
   return {
-    data, makeGame, play, setting, options, currentPlayer, isEnded, purchase, changeStatus, joinStatus, isCreator
+    data, makeGame, play, setting, options, currentPlayer, isEnded, purchase, changeStatus, joinStatus, isCreator, bombOpened
   }
 })
 

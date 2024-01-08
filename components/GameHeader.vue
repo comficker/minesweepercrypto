@@ -81,7 +81,7 @@ const toggleFlag = () => {
       <template v-else>
         <div class="shadow-inner p-2 rounded flex gap-2 items-center">
           <div class="i-icons-bomb w-5 h-5"/>
-          <div>{{ room.num_bomb }}</div>
+          <div>{{ room.num_bomb - roomStore.bombOpened }}</div>
         </div>
       </template>
       <div

@@ -87,10 +87,14 @@ const submit = () => {
       $forgot(form.value.email)
       break
     case "login":
-      $login(form.value.username, form.value.password)
+      $login(form.value.username, form.value.password).then(() => {
+        globalStore.setModal('')
+      })
       break
     case "register":
-      $register(form.value.username, form.value.password, form.value.email, form.value.ref)
+      $register(form.value.username, form.value.password, form.value.email, form.value.ref).then(() => {
+        swap()
+      })
       break
   }
 }
