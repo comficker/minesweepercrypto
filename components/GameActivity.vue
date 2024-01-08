@@ -54,7 +54,7 @@ const approve = (id: number, status: string) => {
             </div>
             <div v-else>{{item.status}}</div>
           </td>
-          <td class="px-2 py-2" :class="item.status === 'won' ? 'text-blue-500': 'text-red-500'">{{countDownTimer(0, 0, item.timer * 1000)}}</td>
+          <td class="px-2 py-2" :class="item.status === 'won' ? 'text-blue-500': 'text-red-500'">{{countDownTimer(0, 0, item.timer)}}</td>
           <td class="px-2 py-2">{{ item.score || 0 }}</td>
         </tr>
         </tbody>

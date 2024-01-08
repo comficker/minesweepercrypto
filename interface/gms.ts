@@ -7,15 +7,15 @@ export interface Member {
   score: number
   order: number
   timer: number
+  mark_time: number
 }
 
 export interface Turn {
-  "id": number
-  "status": string
-  "cord": string
-  "time": number
-  "score": number
+  id: number
+  status: string
   timer: number
+  cord: string
+  score: number
 }
 
 export interface Room {
@@ -41,8 +41,12 @@ export interface Room {
 export interface PlayMessage {
   "room": number
   "results": { [key: string]: number | null }
-  "data": Turn
-  "next": number
+  "current": Turn
+  "next": {
+    id: number
+    mark_time: number
+    status: string
+  }
   "status": string
   "start_at": number
   'end_at': number
