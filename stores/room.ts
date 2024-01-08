@@ -114,7 +114,11 @@ export const useRoomStore = defineStore('room', () => {
       data.value.gms_members[index].mark_time = message.next.mark_time
     }
     if (["won", "dead", "ended"].includes(data.value.status)) {
-
+      data.value.gms_members.forEach(member => {
+        if (['waiting', 'playing'].includes(member.status) || member.status.startsWith("hold")) {
+          member.status = data.value.status
+        }
+      })
     }
     if (message.start_at) {
       data.value.start_at = message.start_at

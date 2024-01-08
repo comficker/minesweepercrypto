@@ -3,14 +3,16 @@ import {computed} from "vue";
 import {useRoute} from "#app";
 import {onMounted} from "@vue/runtime-core";
 import {useGlobalStore} from "~/stores/global";
+import {useUserStore} from "~/stores/user";
 const route = useRoute()
 const globalStore = useGlobalStore()
+const userStore = useUserStore()
 const modalOpening = computed(() => {
   return globalStore.modal
 })
 
 onMounted(() => {
-  if (route.query.ref) {
+  if (route.query.ref && !userStore.isLogged) {
     globalStore.setModal('login')
   }
 })
