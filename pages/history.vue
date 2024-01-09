@@ -34,7 +34,8 @@ const params = computed(() => {
 const {data: response} = await useAuthFetch<ResponseRoom>('/gms/rooms/', {
   params: params,
   watch: [params],
-  immediate: true
+  immediate: true,
+  key: "history"
 })
 
 const items = computed<Room[]>(() => {
@@ -84,13 +85,13 @@ const items = computed<Room[]>(() => {
       <div class="flow-root text-sm w-full">
         <div class="overflow-x-auto">
           <div class="inline-block min-w-full space-y-3">
-            <table v-if="items.length" class="min-w-full table-fixed overflow-auto">
+            <table v-if="items.length" class="min-w-full table-fixed overflow-auto text-left">
               <thead>
               <tr role="rowheader" class="font-semibold text-gray-500">
                 <th role="columnheader" class="w-32 px-2 py-1.5">Size</th>
-                <th role="columnheader" class="w-32 px-2 py-1.5">Time</th>
-                <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
-                <th role="columnheader" class="w-32 px-2 py-1.5">Date</th>
+                <th role="columnheader" class="w-32 px-2 py-1.5 text-right">Time</th>
+                <th role="columnheader" class="px-2 pl-2 pl-2 text-left">User</th>
+                <th role="columnheader" class="w-32 px-2 py-1.5 text-right">Date</th>
               </tr>
               </thead>
               <tbody class="whitespace-nowrap font-bold">

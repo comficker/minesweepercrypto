@@ -17,7 +17,7 @@ const user = computed(() => {
 </script>
 
 <template>
-  <div class="w-full max-w-3xl mx-auto relative">
+  <div class="w-full max-w-lg mx-auto relative">
     <div class="pt-4 flex justify-between gap-4 items-center">
       <div class="flex flex-wrap text-xs uppercase items-center font-bold">
         <nuxt-link to="/" class="flex items-center text-base">
@@ -53,7 +53,7 @@ const user = computed(() => {
       leave-active-class="animated animated-faster animated-fade-out-up"
     >
       <div v-if="modalOpening" class="absolute z-10 top-0 left-0 right-0">
-        <div class="p-4 md:p-8 bg-white shadow rounded-bl-lg rounded-br-lg relative z-10">
+        <div class="max-w-lg mx-auto p-4 md:p-8 bg-white shadow rounded-bl-lg rounded-br-lg relative z-10">
           <div class="mx-auto md:w-2/3 ">
             <Login v-if="['login', 'register'].includes(modalOpening)"/>
             <Setting v-if="modalOpening === 'setting'"/>

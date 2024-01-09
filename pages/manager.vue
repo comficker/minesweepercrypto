@@ -8,7 +8,6 @@
           <b>{{ user.meta?.minesweeper?.balance || 0 }}</b>
         </div>
       </div>
-      <invite-form :show-history="false"/>
     </div>
   </div>
 </template>

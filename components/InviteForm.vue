@@ -4,7 +4,7 @@
     <div class="uppercase space-y-2">
       <div class="flex bg-yellow-50 p-2 gap-2">
         <input
-          type="text" disabled class="flex-1 w-full outline-none text-lg font-semibold"
+          type="text" disabled class="flex-1 w-full outline-none text-lg font-semibold font-mono"
           :value="referUri"
         >
         <div class="w-4 h-4 i-icons-copy cursor-pointer" @click="copy"/>
@@ -21,7 +21,7 @@
         >
           <div class="flex p-2 gap-1 text-white rounded-sm font-semibold text-xs uppercase flex-wrap" :style="{backgroundColor: networkColors[n]}">
             <div :class="`w-4 h-4 i-icons-${n}`"></div>
-            <span class="hidden md:block">{{n}}</span>
+            <span>{{n}}</span>
           </div>
         </ShareNetwork>
       </div>

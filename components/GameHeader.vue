@@ -57,7 +57,7 @@ const toggleFlag = () => {
     </div>
     <div class="flex items-center gap-3">
       <div class="shadow-inner p-2 rounded hidden md:flex gap-2 items-center">
-        <div>{{ room.width }}x{{ room.height }}</div>
+        <div class="h-5 leading-5">{{ room.width }}x{{ room.height }}</div>
       </div>
       <div
         v-if="roomStore.isEnded"

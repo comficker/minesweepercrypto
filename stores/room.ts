@@ -166,10 +166,15 @@ export const useRoomStore = defineStore('room', () => {
   }
 
   const onRoomUpdate = (message: Room) => {
+    console.log("onRoomUpdate:", message)
     const index = rooms.value.map(x => x.id).indexOf(message.id)
     if (index >= 0) {
-      rooms.value[index] = message
-    } else {
+      if (!['waiting', 'playing'].includes(message.status)) {
+        rooms.value.splice(index, 1)
+      } else {
+        rooms.value[index] = message
+      }
+    } else if (['waiting', 'playing'].includes(message.status)) {
       rooms.value.unshift(message)
     }
   }
