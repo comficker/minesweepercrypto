@@ -23,7 +23,7 @@ const params = computed(() => {
     ordering: '-id',
     page: page.value
   }
-  if (mode.value === 'History' && logged.value && logged.value.id) {
+  if (mode.value !== 'History' && logged.value && logged.value.id) {
     params['user__id'] = logged.value.id
   }
   if (mode.value === 'Leaderboard') {

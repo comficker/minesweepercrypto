@@ -90,7 +90,7 @@ export const useRoomStore = defineStore('room', () => {
         immediate: true
       })
     } else if (data.value.id === 0) {
-      onPlayMessage(minesweeper.play(data.value, options.value, x, y))
+      onPlayMessage(minesweeper.play(data.value, options.value, x, y, [], e ? true : options.value.is_flagging))
     }
   }
 

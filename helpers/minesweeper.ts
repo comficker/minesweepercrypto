@@ -6,7 +6,7 @@ interface MapResult {
   [key: string]: number
 }
 
-export function play(room: Room, options: Options, x: number, y: number, clicked: string[] = []): PlayMessage {
+export function play(room: Room, options: Options, x: number, y: number, clicked: string[] = [], is_flagging = false): PlayMessage {
   let totalBomb = Object.keys(room.maps).length
   if (totalBomb === 0) {
     if (room.num_bomb === 0) room.num_bomb = Math.floor(room.height * room.width * 0.2)
@@ -38,7 +38,7 @@ export function play(room: Room, options: Options, x: number, y: number, clicked
   const results = room.results ? room.results : {}
   const cord = `${x}_${y}`
   let status = 'playing'
-  if (options.is_flagging && typeof results[cord] !== "number") {
+  if (is_flagging && typeof results[cord] !== "number") {
     if (typeof results[cord] == 'undefined') {
       results[cord] = null
     } else {
@@ -63,18 +63,26 @@ export function play(room: Room, options: Options, x: number, y: number, clicked
     }
   }
 
+  const opened = Object.values(results).filter(x => x !== null).length
+  if (room.width * room.height - opened === room.num_bomb) {
+    status = 'won'
+  }
   return {
     start_at: 0,
     room: 0,
     results,
-    data: {
+    current: {
       id: 0,
       status: status,
       cord: cord,
-      time: new Date().getTime() / 1000,
+      timer: 0,
       score: 0
     },
-    next: 0,
+    next: {
+      id: 0,
+      mark_time: 0,
+      status: status
+    },
     status: status,
     end_at: ['dead', 'won'].includes(status) ? new Date().getTime() : 0
   }
@@ -82,6 +90,7 @@ export function play(room: Room, options: Options, x: number, y: number, clicked
 
 export function createRoom(options: Options): Room {
   return {
+    user: 0,
     id: 0,
     width: options.width,
     height: options.height,
@@ -95,9 +104,18 @@ export function createRoom(options: Options): Room {
     turns: [],
     gms_members: [{
       id: 0,
-      user: null,
+      user: {
+        id: 0,
+        username: "guess",
+        first_name: "guess",
+        last_name: "",
+        meta: null
+      },
       status: "waiting",
-      score: 0
+      score: 0,
+      order: 1,
+      timer: 0,
+      mark_time: 0
     }],
     maps: {},
     results: {}
