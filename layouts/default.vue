@@ -30,7 +30,7 @@ onMounted(() => {
     <Header class="z-20"/>
     <div v-if="!!modalOpening" class="fixed inset-0 z-10"/>
     <div class="flex-1 flex flex-col" :class="{'blur-sm': !!modalOpening}">
-      <div class="max-w-3xl mx-auto md:flex gap-4 w-full">
+      <div class="max-w-3xl mx-auto flex md:flex-row flex-col gap-4 w-full">
         <div class="flex-1 space-y-4">
           <slot/>
           <client-only>
@@ -42,7 +42,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="min-w-3xl mx-auto text-xs font-bold uppercase underline my-4 flex gap-2">
+    <div class="max-w-3xl mx-auto text-xs font-bold uppercase underline my-4 flex gap-2">
       <a target="_blank" href="/history">
         <span>History</span>
       </a>
