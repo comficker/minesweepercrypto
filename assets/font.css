@@ -73,3 +73,7 @@ tr.rounded td:first-child:before {
 input:-internal-autofill-selected {
   background-color: white !important;
 }
+
+.text-2xs {
+  font-size: 8px;
+}

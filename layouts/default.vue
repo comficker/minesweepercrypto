@@ -4,6 +4,8 @@ import {useRoute} from "#app";
 import {onMounted} from "@vue/runtime-core";
 import {useGlobalStore} from "~/stores/global";
 import {useUserStore} from "~/stores/user";
+import InviteForm from "~/components/InviteForm.vue";
+import Lobby from "~/components/Lobby.vue";
 const route = useRoute()
 const globalStore = useGlobalStore()
 const userStore = useUserStore()
@@ -28,11 +30,19 @@ onMounted(() => {
     <Header class="z-20"/>
     <div v-if="!!modalOpening" class="fixed inset-0 z-10"/>
     <div class="flex-1 flex flex-col" :class="{'blur-sm': !!modalOpening}">
-      <div class="w-full">
-        <slot/>
+      <div class="max-w-3xl mx-auto md:flex gap-4 w-full">
+        <div class="flex-1 space-y-4">
+          <slot/>
+          <client-only>
+            <invite-form v-if="userStore.isLogged" :show-history="false"/>
+          </client-only>
+        </div>
+        <div class="md:w-1/3 space-y-4">
+          <lobby/>
+        </div>
       </div>
     </div>
-    <div class="text-center text-xs font-bold uppercase underline my-4 flex gap-2 justify-center">
+    <div class="min-w-3xl mx-auto text-xs font-bold uppercase underline my-4 flex gap-2">
       <a target="_blank" href="/history">
         <span>History</span>
       </a>

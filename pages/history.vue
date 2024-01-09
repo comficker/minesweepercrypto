@@ -2,14 +2,12 @@
 import {useAuthFetch} from "~/composables/useAuthFetch";
 import {computed, ref} from "vue";
 import {useUserStore} from "~/stores/user";
-import {useGameStore} from "~/stores/game";
 import {countDownTimer, timeSince} from "~/helpers";
 import type {ResponseRoom, Room} from "~/interface/gms";
 import {useGlobalStore} from "~/stores/global";
 
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
-const gs = useGameStore()
 const logged = computed(() => {
   return userStore.logged
 })
@@ -44,7 +42,7 @@ const items = computed<Room[]>(() => {
     return {
       ...x,
       level: `${x.width}x${x.height}`,
-      time: x.end_at && x.start_at ? countDownTimer((new Date(x.start_at)).getTime(), (new Date(x.end_at)).getTime()) : '_',
+      time: x.end_at && x.start_at ? countDownTimer((new Date(x.start_at)).getTime(), (new Date(x.end_at)).getTime()) : 'Live',
       since: timeSince(x.start_at)
     }
   }) : []
@@ -88,22 +86,16 @@ const items = computed<Room[]>(() => {
           <div class="inline-block min-w-full space-y-3">
             <table v-if="items.length" class="min-w-full table-fixed overflow-auto">
               <thead>
-              <tr role="rowheader" class="font-semibold text-right text-gray-500">
-                <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
-                <th role="columnheader" class="w-32 px-2 py-1.5">Time</th>
+              <tr role="rowheader" class="font-semibold text-gray-500">
                 <th role="columnheader" class="w-32 px-2 py-1.5">Size</th>
+                <th role="columnheader" class="w-32 px-2 py-1.5">Time</th>
+                <th role="columnheader" class="px-2 pl-2 pr-2 sm:pl-0 text-left">User</th>
                 <th role="columnheader" class="w-32 px-2 py-1.5">Date</th>
               </tr>
               </thead>
               <tbody class="whitespace-nowrap font-bold">
-              <tr role="row" v-for="(item, i) in items" :key="i" class="rounded text-right border-t-4 border-white">
-                <td class="px-2 py-1 text-left ">
-                  <div class="flex -space-x-3 mt-1">
-                    <div class="w-8 h-8 rounded bg-white p-1 border border-gray-200">
-                      <img src="/avatar.png" alt="">
-                    </div>
-                  </div>
-                </td>
+              <tr role="row" v-for="(item, i) in items" :key="i" class="rounded border-t-4 border-white">
+                <td class="px-2 py-1">{{ item.level }}</td>
                 <td :class="{
                   'text-green-500': item.status === 'won',
                   'text-red-500': item.status === 'dead',
@@ -118,7 +110,13 @@ const items = computed<Room[]>(() => {
                     <div v-else class="i-icons-eye w-4 h-4"/>
                   </div>
                 </td>
-                <td class="px-2 py-1">{{ item.level }}</td>
+                <td class="px-2 py-1 text-left">
+                  <div class="flex -space-x-3 mt-1">
+                    <div class="w-8 h-8 rounded bg-white p-1 border border-gray-200">
+                      <img src="/avatar.png" alt="">
+                    </div>
+                  </div>
+                </td>
                 <td class="px-2 py-1 text-xs">
                   <nuxt-link :to="`/room/${item.id}`" class="underline flex justify-end items-center">
                     <span>{{ item.since }}</span>

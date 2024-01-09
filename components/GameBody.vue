@@ -50,9 +50,13 @@
                 ></div>
                 <div
                   v-else-if="room.results[`${x - 1}_${y - 1}`] === null"
-                  class="i-icons-flag w-4 h-4"
+                  class="i-icons-flag"
+                  :class="{'w-2 h-2': room.width >= 16, 'w-4 h-4': room.width < 16}"
                 ></div>
-                <span v-else-if="room.results[`${x - 1}_${y - 1}`]">{{ room.results[`${x - 1}_${y - 1}`] }}</span>
+                <span
+                  v-else-if="room.results[`${x - 1}_${y - 1}`]"
+                  :class="{'text-2xs': room.width >= 16}"
+                >{{ room.results[`${x - 1}_${y - 1}`] }}</span>
               </div>
             </div>
           </div>
@@ -65,7 +69,7 @@
     >
       <div v-if="roomStore.currentPlayer?.status.startsWith('hold_')" class="absolute inset-0 p-6">
         <div
-          class="md:max-w-2/3 mx-auto w-full bg-white p-4 rounded shadow h-full max-h-[512px] flex flex-col space-y-3">
+          class="md:max-w-4/5 mx-auto w-full bg-white p-4 rounded shadow h-full max-h-[512px] flex flex-col space-y-3">
           <div class="flex items-center gap-3">
             <div class="w-5 h-5 i-icons-bomb"/>
             <div class="font-bold uppercase">Boom</div>
@@ -76,9 +80,9 @@
             <div class="flex-1 space-y-3 text-center flex flex-col justify-center">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/536/536050.png" alt=""
-                class="hidden md:block w-16 md:w-32 mx-auto"
+                class="hidden md:block w-16 md:w-24 mx-auto"
               >
-              <div class="text-3xl md:text-5xl font-extrabold flex gap-2 items-center justify-center">
+              <div class="text-2xl md:text-4xl font-extrabold flex gap-2 items-center justify-center">
                 <span>{{ lottery?.prize?.toLocaleString() }}</span>
               </div>
               <span class="text-xs uppercase font-bold">In prize!</span>

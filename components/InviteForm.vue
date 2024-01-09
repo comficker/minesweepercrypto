@@ -1,22 +1,15 @@
 <template>
   <div class="border rounded p-4 space-y-2 bg-white">
-    <div class="uppercase font-bold text-gray-400 text-xs">More fun with friends</div>
-    <div class="text-2xl font-bold flex items-center gap-1">
-      <span>Earn </span>
-      <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
-      <span class="underline">1</span>
-      <span>For each</span>
-    </div>
+    <div class="uppercase font-bold text-xs">More fun with friends</div>
     <div class="uppercase space-y-2">
-      <div class="text-xs font-semibold">Your referral code</div>
       <div class="flex bg-yellow-50 p-2 gap-2">
         <input
-          type="text" disabled class="flex-1 w-full outline-none text-sm font-semibold"
+          type="text" disabled class="flex-1 w-full outline-none text-lg font-semibold"
           :value="referUri"
         >
         <div class="w-4 h-4 i-icons-copy cursor-pointer" @click="copy"/>
       </div>
-      <div class="flex gap-2 text-xs">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 flex-col text-xs">
         <ShareNetwork
           v-for="n in supportedNetworks"
           :network="n"
@@ -26,12 +19,18 @@
           :quote="data.quote"
           :hashtags="data.hashtags"
         >
-          <div class="flex p-1 gap-1 text-white rounded-sm font-semibold text-xs uppercase flex-wrap" :style="{backgroundColor: networkColors[n]}">
+          <div class="flex p-2 gap-1 text-white rounded-sm font-semibold text-xs uppercase flex-wrap" :style="{backgroundColor: networkColors[n]}">
             <div :class="`w-4 h-4 i-icons-${n}`"></div>
             <span class="hidden md:block">{{n}}</span>
           </div>
         </ShareNetwork>
       </div>
+    </div>
+    <div class="font-bold flex items-center gap-1">
+      <span>Earn </span>
+      <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
+      <span class="underline">1</span>
+      <span>For each</span>
     </div>
     <div v-if="showHistory" class="space-y-1">
       <div class="text-xs font-semibold uppercase">Your friends</div>

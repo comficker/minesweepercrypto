@@ -61,5 +61,4 @@ const approve = (id: number, status: string) => {
       </table>
     </client-only>
   </div>
-  <invite-form v-if="userStore.isLogged" :show-history="false"/>
 </template>

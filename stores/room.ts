@@ -15,6 +15,7 @@ export const useRoomStore = defineStore('room', () => {
   const userStore = useUserStore()
   const router = useRouter()
   const data = ref<Room>(SAMPLE_ROOM)
+  const rooms = ref<Room[]>([])
   const options = ref<Options>({
     width: 9, height: 9, is_flagging: false, is_multiplayer: false, ticket: 0,
     num_bomb: Math.floor(9 * 9 * 0.2)
@@ -40,7 +41,7 @@ export const useRoomStore = defineStore('room', () => {
   const joinStatus = computed(() => {
     if (isEnded.value) return 'ended'
     if (data.value.status !== 'waiting' || !data.value.is_multiplayer) return 'watching'
-    if (currentPlayerIndex.value >= 0 && userStore.isLogged) {
+    if (currentPlayerIndex.value >= 0 && currentPlayer.value.status != 'quit') {
       if (currentPlayer.value.status === 'pending') return 'requested'
       return 'joined'
     } else {
@@ -147,6 +148,10 @@ export const useRoomStore = defineStore('room', () => {
     }
   }
 
+  const setRooms = (roomsVal: Room[]) => {
+    rooms.value = roomsVal
+  }
+
   const onMemberRequestMessage = (message: MemberRequestMessage) => {
     console.log("onMemberRequestMessage:", message);
     if (message.room == data.value.id) {
@@ -160,6 +165,15 @@ export const useRoomStore = defineStore('room', () => {
     }
   }
 
+  const onRoomUpdate = (message: Room) => {
+    const index = rooms.value.map(x => x.id).indexOf(message.id)
+    if (index >= 0) {
+      rooms.value[index] = message
+    } else {
+      rooms.value.unshift(message)
+    }
+  }
+
   const changeStatus = (status: string) => {
     data.value.status = status
   }
@@ -168,13 +182,12 @@ export const useRoomStore = defineStore('room', () => {
     if (!window.socket) {
       window.socket = io(config.public.socket);
       window.socket.connect()
+      window.socket.on(`gms_update_room`, onRoomUpdate);
     }
     if (o) {
       window.socket.removeAllListeners(`gms_${o}_play`);
       window.socket.removeAllListeners(`gms_${o}_member`);
     }
-    window.socket.removeAllListeners(`gms_${n}_play`);
-    window.socket.removeAllListeners(`gms_${n}_member`);
     window.socket.on(`gms_${n}_play`, onPlayMessage);
     window.socket.on(`gms_${n}_member`, onMemberRequestMessage);
   }
@@ -188,7 +201,20 @@ export const useRoomStore = defineStore('room', () => {
   })
 
   return {
-    data, makeGame, play, setting, options, currentPlayer, isEnded, purchase, changeStatus, joinStatus, isCreator, bombOpened
+    data,
+    makeGame,
+    play,
+    setting,
+    options,
+    currentPlayer,
+    isEnded,
+    purchase,
+    changeStatus,
+    joinStatus,
+    isCreator,
+    bombOpened,
+    rooms,
+    setRooms
   }
 })
 

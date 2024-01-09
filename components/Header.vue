@@ -17,7 +17,7 @@ const user = computed(() => {
 </script>
 
 <template>
-  <div class="w-full max-w-lg mx-auto relative">
+  <div class="w-full max-w-3xl mx-auto relative">
     <div class="pt-4 flex justify-between gap-4 items-center">
       <div class="flex flex-wrap text-xs uppercase items-center font-bold">
         <nuxt-link to="/" class="flex items-center text-base">

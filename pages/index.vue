@@ -19,7 +19,7 @@ useSeoMeta({
 })
 </script>
 <template>
-  <div class="w-full max-w-lg mx-auto space-y-4">
+  <div class="space-y-4">
     <Game/>
   </div>
 </template>
