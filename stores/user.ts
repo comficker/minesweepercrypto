@@ -17,7 +17,7 @@ export const useUserStore = defineStore('user', () => {
   const balance = computed(() => logged.value?.meta?.game_minesweeper?.GMS || 0)
   const fetchBalance = async () => {
     const {data: res} = await useAuthFetch('/gms/balance')
-    if (res.value) {
+    if (res.value != null) {
       logged.value.meta = {'game_minesweeper': {'GMS': res.value}}
     }
   }

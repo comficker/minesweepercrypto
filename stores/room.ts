@@ -115,6 +115,10 @@ export const useRoomStore = defineStore('room', () => {
 
   const onPlayMessage = function (message: PlayMessage) {
     console.log("onPlayMessage:", message);
+    if (currentPlayer.value.user.id === userStore.logged.id && currentPlayer.value.status.startsWith("hold")) {
+      userStore.fetchBalance().then(console.log)
+    }
+
     data.value.results = message.results
     data.value.turns.unshift(message.current)
 
@@ -123,7 +127,6 @@ export const useRoomStore = defineStore('room', () => {
       data.value.gms_members[index].status = message.current.status
       data.value.gms_members[index].score = message.current.score
       data.value.gms_members[index].timer = message.current.timer
-
     }
 
     const indexN = data.value.gms_members.map(x => x.id).indexOf(message.next.id)
