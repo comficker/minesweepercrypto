@@ -177,7 +177,8 @@ const room = computed(() => roomStore.data)
 const userStore = useUserStore()
 const [{data: lottery}, {data: potentialEarn}] = await Promise.all([
   useAuthFetch<ILottery>('/gms/lottery', {
-    watch: [() => roomStore.currentPlayer.status]
+    watch: [() => roomStore.currentPlayer.status],
+    server: false
   }),
   useAuthFetch('/gms/potential-earn', {
     params: {
@@ -185,6 +186,7 @@ const [{data: lottery}, {data: potentialEarn}] = await Promise.all([
       height: roomStore.data.height,
       num_bomb: roomStore.data.num_bomb
     },
+    server: false
   })
 ])
 

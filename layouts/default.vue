@@ -42,7 +42,9 @@ onMounted(() => {
         <div v-if="!modalOpening" class="md:w-72 xl:w-80 md:fixed right-0 top-0 bottom-0 bg-white flex flex-col md:divide-y md:border-l z-30">
           <div class="flex-1 relative">
             <div class="md:absolute inset-0 overflow-auto">
-              <lobby class="md:p-3"/>
+              <client-only>
+                <lobby class="md:p-3"/>
+              </client-only>
             </div>
           </div>
           <div class="md:w-full md:mx-auto text-xs font-bold uppercase underline bg-gray-50 flex gap-2 p-3 -mx-3">
