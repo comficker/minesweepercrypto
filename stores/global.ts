@@ -9,6 +9,10 @@ export const useGlobalStore = defineStore('global', () => {
   const setModal = (value: string) => {
     modal.value  = value
   }
+
+  watch(() => route.fullPath, () => {
+    setModal('')
+  })
   return {
     isTelegram,
     modal,

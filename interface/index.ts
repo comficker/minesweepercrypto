@@ -59,6 +59,7 @@ export interface Setting {
   width: number
   height: number
   num_bomb: number
+  ticket: 0
 }
 
 export interface IStep {

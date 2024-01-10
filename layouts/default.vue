@@ -6,6 +6,8 @@ import {useGlobalStore} from "~/stores/global";
 import {useUserStore} from "~/stores/user";
 import InviteForm from "~/components/InviteForm.vue";
 import Lobby from "~/components/Lobby.vue";
+import {useNuxtApp} from "#imports";
+const {$logout} = useNuxtApp()
 const route = useRoute()
 const globalStore = useGlobalStore()
 const userStore = useUserStore()
@@ -37,7 +39,7 @@ onMounted(() => {
             <invite-form v-if="userStore.isLogged" :show-history="false"/>
           </client-only>
         </div>
-        <div class="md:w-72 xl:w-80 md:fixed right-0 top-0 bottom-0 bg-white flex flex-col md:divide-y md:border-l z-30">
+        <div v-if="!modalOpening" class="md:w-72 xl:w-80 md:fixed right-0 top-0 bottom-0 bg-white flex flex-col md:divide-y md:border-l z-30">
           <div class="flex-1 relative">
             <div class="md:absolute inset-0 overflow-auto">
               <lobby class="md:p-3"/>
@@ -48,8 +50,9 @@ onMounted(() => {
               <span>History</span>
             </nuxt-link>
             <a target="_blank" href="/how-to-play">
-              <span>How to play minesweeper?</span>
+              <span>How to play?</span>
             </a>
+            <div class="cursor-pointer ml-auto" @click="$logout">Logout</div>
           </div>
         </div>
       </div>

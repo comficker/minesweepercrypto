@@ -48,7 +48,11 @@ const getCreatorName = (room: Room) => {
 
 <template>
   <div class="space-y-2">
-    <div class="font-bold leading-none pb-2">Lobby</div>
+    <div class="flex text-sm uppercase">
+      <div class="font-bold leading-none">
+        <img class="h-6" src="/lobby.png" alt="">
+      </div>
+    </div>
     <nuxt-link
       v-for="(item, i) in items" :key="i"
       :to="`/room/${item.id}`"

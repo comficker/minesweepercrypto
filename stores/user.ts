@@ -14,10 +14,13 @@ export const useUserStore = defineStore('user', () => {
     logged.value = user
   }
 
+  const balance = computed(() => logged.value?.meta?.game_minesweeper?.GMS || 0)
+
   return {
     logged,
     setLogged,
     isLogged,
+    balance
   }
 })
 

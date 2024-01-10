@@ -31,7 +31,7 @@ const user = computed(() => {
           class="flex gap-2 items-center p-1.5 text-orange-500 cursor-pointer"
         >
           <img src="/coin.png" class="w-5 h-5" alt="Coin"/>
-          <b>{{ user.meta?.minesweeper?.balance || 0 }}</b>
+          <b>{{ userStore.balance }}</b>
         </nuxt-link>
         <div
           v-else class="rounded p-2.5 shadow cursor-pointer bg-neutral-800 text-orange-500 cursor-pointer flex gap-2"

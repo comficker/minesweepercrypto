@@ -37,6 +37,7 @@ export default defineNuxtPlugin(async (NuxtApp) => {
       chains: [oxa]
     }))
   }
+  const webConnected = useStatefulCookie('auth.web3')
   const cookieToken = useStatefulCookie('auth.token')
   const cookieTokenRefresh = useStatefulCookie('auth.token_refresh')
   const userStore = useUserStore()
@@ -142,16 +143,19 @@ export default defineNuxtPlugin(async (NuxtApp) => {
     })
     cookieToken.value = ''
     cookieTokenRefresh.value = ''
+    webConnected.value = ''
     userStore.setLogged({} as User)
-    await useRouter().push('/hello#bye')
+    await useRouter().push('/')
   }
 
   async function connectWeb3() {
-    await connect()
+    await connect().then(() => {
+      webConnected.value = 'true'
+    })
   }
 
   watch(() => account.connected, async () => {
-    if (account.connected && !userStore.isLogged) {
+    if (account.connected && !userStore.isLogged && webConnected.value) {
       const signature = await signMessage('Hello Minesweeper').catch(() => null)
       if (!signature) return
       const {data: response} = await useAuthFetch<{ access: string, refresh: string } | null>('/auth/login-wallet', {
