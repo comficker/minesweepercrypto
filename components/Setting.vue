@@ -5,11 +5,14 @@ import {useCookie} from "#app";
 import {useUserStore} from "~/stores/user";
 import {useRoomStore} from "~/stores/room";
 import {useGlobalStore} from "~/stores/global";
+import * as pkg from "lodash";
 
+const {debounce} = pkg
 const cookieFormSize = useCookie('form.size')
 const roomStore = useRoomStore()
 const globalStore = useGlobalStore()
 const userStore = useUserStore()
+
 const form = ref<Setting>({
   width: roomStore.options.width,
   height: roomStore.options.height,
@@ -18,12 +21,9 @@ const form = ref<Setting>({
   ticket: 0
 })
 
-const user = computed(() => userStore.logged)
+const potential = ref<number>(0)
 
-const {data: res} = await useAuthFetch('/gms/potential-earn', {
-  params: form,
-  watch: [form]
-})
+const user = computed(() => userStore.logged)
 
 const submit = () => {
   if (errors.value.length > 0) return;
@@ -56,6 +56,24 @@ watch(() => roomStore.options, (n) => {
 watch(() => [form.value.width, form.value.height], () => {
   form.value.num_bomb = Math.floor(form.value.width * form.value.height * 0.2)
 })
+
+watch(() => [form.value.width, form.value.height, form.value.num_bomb], () => {
+  fetchPotential()
+})
+
+const fetchPotential = debounce(async () => {
+  const {data: res} = await useAuthFetch<number>('/gms/potential-earn', {
+    params: form,
+    watch: false
+  })
+  console.log(res.value);
+  if (res.value != null) {
+    potential.value = res.value
+  }
+
+}, 800)
+
+fetchPotential()
 </script>
 
 <template>
@@ -138,7 +156,7 @@ watch(() => [form.value.width, form.value.height], () => {
           </nuxt-link>
           <div class="flex gap-1 text-sm text-blue-500">
             <span>Potential earn:</span>
-            <b>{{form.is_multiplayer ? `${form.ticket}+` : res || 0}}</b>
+            <b>{{ form.is_multiplayer ? `${form.ticket}+` : potential || 0 }}</b>
           </div>
         </div>
       </div>
@@ -148,6 +166,8 @@ watch(() => [form.value.width, form.value.height], () => {
         </div>
       </div>
     </div>
-    <div class="cursor-pointer bg-emerald-900 font-bold px-4 text-center text-white rounded py-2" @click="submit">Save game</div>
+    <div class="cursor-pointer bg-emerald-900 font-bold px-4 text-center text-white rounded py-2" @click="submit">Save
+      game
+    </div>
   </div>
 </template>
