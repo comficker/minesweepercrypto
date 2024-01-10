@@ -177,6 +177,9 @@ export const useRoomStore = defineStore('room', () => {
     } else if (['waiting', 'playing'].includes(message.status)) {
       rooms.value.unshift(message)
     }
+    if (userStore.isLogged && message.gms_members.map(x => x.user.id).includes(userStore.logged.id)) {
+      userStore.fetchBalance().then(console.log)
+    }
   }
 
   const changeStatus = (status: string) => {

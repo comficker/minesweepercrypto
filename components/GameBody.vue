@@ -83,20 +83,32 @@
                 class="hidden md:block w-16 md:w-24 mx-auto"
               >
               <div class="text-2xl md:text-4xl font-extrabold flex gap-2 items-center justify-center">
-                <span>{{ lottery?.prize?.toLocaleString() }}</span>
+                <span>{{ (lottery || 0).toLocaleString() }}</span>
               </div>
               <span class="text-xs uppercase font-bold">In prize!</span>
             </div>
           </div>
           <div class="text-center font-bold">
             <div
-              class="mx-auto text-center p-4 py-2 shadow-lg rounded justify-center inline-flex gap-2 items-center bg-neutral-800 text-orange-500 cursor-pointer"
+              class="mx-auto text-center p-3 py-1.5 shadow-lg rounded justify-center inline-flex gap-2 items-center cursor-pointer"
+              :class="{
+                'text-gray-100 bg-gray-300 cursor-not-allowed	': userStore.balance < respawnCost,
+                'bg-neutral-800 text-orange-500': userStore.balance >= respawnCost
+              }"
               @click="roomStore.purchase(true)"
             >
               <span>Continue</span>
-              <span>10</span>
               <img class="w-5 h-5" src="/coin.png" alt="Coin"/>
+              <span>{{ respawnCost}}</span>
             </div>
+            <a
+              v-if="userStore.balance < respawnCost"
+              href="/manager"
+              target="_blank"
+              class="mt-2 flex gap-1 text-sm text-orange-500 cursor-pointer justify-center"
+            >
+              <b>Balance not enough!</b>
+            </a>
             <div
               class="text-center cursor-pointer p-4 py-2 text-sm underline"
               @click="roomStore.purchase(false)"
@@ -122,7 +134,7 @@
             <img class="mx-auto w-32 h-32" src="/nuclear.png" alt="">
           </div>
           <div class="text-3xl font-extrabold text-white uppercase">
-            <span>{{roomStore.data.status}}!</span>
+            <span>{{ roomStore.data.status }}!</span>
           </div>
         </div>
         <div class="flex justify-center gap-3">
@@ -157,14 +169,25 @@
 import type {ILottery} from "~/interface";
 import {useRoomStore} from "~/stores/room";
 import {useGlobalStore} from "~/stores/global";
+import {useUserStore} from "~/stores/user";
 
 const roomStore = useRoomStore()
 const globalStore = useGlobalStore()
 const room = computed(() => roomStore.data)
+const userStore = useUserStore()
+const [{data: lottery}, {data: potentialEarn}] = await Promise.all([
+  useAuthFetch<ILottery>('/gms/lottery', {
+    watch: [() => roomStore.currentPlayer.status]
+  }),
+  useAuthFetch('/gms/potential-earn', {
+    params: {
+      width: roomStore.data.width,
+      height: roomStore.data.height,
+      num_bomb: roomStore.data.num_bomb
+    },
+  })
+])
 
-const {data: lottery} = await useAuthFetch<ILottery>('/minesweeper/lottery', {
-  immediate: true,
-  // watch: [() => gs.playStatus]
-})
+const respawnCost = computed(() => roomStore.data.is_multiplayer ? roomStore.data.ticket : potentialEarn.value || 0)
 </script>
 
