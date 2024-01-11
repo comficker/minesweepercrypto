@@ -66,7 +66,6 @@ const fetchPotential = debounce(async () => {
     params: form,
     watch: false
   })
-  console.log(res.value);
   if (res.value != null) {
     potential.value = res.value
   }

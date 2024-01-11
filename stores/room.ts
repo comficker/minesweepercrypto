@@ -115,7 +115,7 @@ export const useRoomStore = defineStore('room', () => {
 
   const onPlayMessage = function (message: PlayMessage) {
     console.log("onPlayMessage:", message);
-    if (currentPlayer.value.user.id === userStore.logged.id && currentPlayer.value.status.startsWith("hold")) {
+    if (currentPlayer.value && currentPlayer.value.user.id === userStore.logged.id && currentPlayer.value.status.startsWith("hold")) {
       userStore.fetchBalance().then(console.log)
     }
 
