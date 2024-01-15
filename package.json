@@ -44,7 +44,6 @@
     "shadcn-nuxt": "^0.8.7",
     "socket.io-client": "^4.6.1",
     "tailwind-merge": "^2.2.0",
-    "unocss": "0.57.0",
     "viem": "^2.0.0",
     "vue-social-sharing": "^4.0.0-alpha4"
   }
