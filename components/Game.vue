@@ -1,7 +1,4 @@
 <template>
-  <client-only>
-    <invite-form v-if="userStore.isLogged" :show-history="false"/>
-  </client-only>
   <div v-if="route.path === '/'" class="grid grid-cols-3 gap-3 uppercase font-bold text-xs">
     <div
       v-for="item in modes" :key="item.name"
@@ -27,6 +24,9 @@
   </div>
   <game-header/>
   <game-body/>
+  <client-only>
+    <invite-form v-if="userStore.isLogged" :show-history="false"/>
+  </client-only>
   <div v-if="roomStore.data.id" class="flex justify-between">
     <div class="flex gap-2">
       <h1 class="text-2xl font-extrabold uppercase">Game #{{ roomStore.data.id }}</h1>
