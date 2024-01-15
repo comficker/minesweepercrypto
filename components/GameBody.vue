@@ -163,6 +163,11 @@
       </div>
     </Transition>
   </div>
+  <div class="flex justify-center">
+    <a class="p-1 text-xs uppercase font-bold shadow px-3 rounded bg-amber-2" target="_blank" href="/how-to-play">
+      <span>How to play?</span>
+    </a>
+  </div>
 </template>
 
 <script lang="ts" setup>

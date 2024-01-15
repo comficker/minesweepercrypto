@@ -48,9 +48,9 @@ onMounted(() => {
             <nuxt-link to="/history">
               <span>History</span>
             </nuxt-link>
-            <a target="_blank" href="/how-to-play">
-              <span>How to play?</span>
-            </a>
+            <nuxt-link to="/leaderboard">
+              <span>History</span>
+            </nuxt-link>
             <div class="cursor-pointer ml-auto" @click="$logout">Logout</div>
           </div>
         </div>
