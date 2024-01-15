@@ -23,7 +23,8 @@ const approve = (id: number, status: string) => {
 <template>
   <div v-if="!userStore.isLogged" class="h-full flex flex-col justify-center items-center p-3 border rounded">
     <div class="font-bold uppercase">Join!</div>
-    <p><span class="underline cursor-pointer" @click="globalStore.setModal('login')">Login</span> or
+    <p>
+      <span class="underline cursor-pointer" @click="globalStore.setModal('login')">Login</span> or
       <span class="underline cursor-pointer" @click="globalStore.setModal('register')">register</span> to play with your friend</p>
   </div>
   <div v-else-if="roomStore.data.gms_members.length" class="md:rounded md:border overflow-hidden w-full bg-white md:px-3 pt-2 pb-2 text-sm">

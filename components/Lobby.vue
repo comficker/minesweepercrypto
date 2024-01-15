@@ -32,9 +32,7 @@ const {data: response} = await useAuthFetch<ResponseRoom>('/gms/rooms/', {
   watch: [params],
   immediate: true
 })
-if (response.value) {
-  roomStore.setRooms(response.value.results)
-}
+
 const items = computed<Room[]>(() => roomStore.rooms)
 
 const getCreatorName = (room: Room) => {
@@ -44,6 +42,12 @@ const getCreatorName = (room: Room) => {
   }
   return 'Unknown'
 }
+
+watch(response, () => {
+  if (response.value) {
+    roomStore.setRooms(response.value.results)
+  }
+})
 </script>
 
 <template>

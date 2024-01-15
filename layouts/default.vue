@@ -35,9 +35,6 @@ onMounted(() => {
       <div class="max-w-lg mx-auto w-full" :class="{'blur-sm': !!modalOpening}">
         <div class="space-y-4 pb-4">
           <slot/>
-          <client-only>
-            <invite-form v-if="userStore.isLogged" :show-history="false"/>
-          </client-only>
         </div>
         <div v-if="!modalOpening" class="md:w-72 xl:w-80 md:fixed right-0 top-0 bottom-0 bg-white flex flex-col md:divide-y md:border-l z-30">
           <div class="flex-1 relative">

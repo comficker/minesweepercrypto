@@ -1,4 +1,7 @@
 <template>
+  <client-only>
+    <invite-form v-if="userStore.isLogged" :show-history="false"/>
+  </client-only>
   <div v-if="route.path === '/'" class="grid grid-cols-3 gap-3 uppercase font-bold text-xs">
     <div
       v-for="item in modes" :key="item.name"
