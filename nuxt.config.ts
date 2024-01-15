@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt', 'shadcn-nuxt'
+    '@vite-pwa/nuxt'
   ],
   css: [
     '~/assets/font.css',

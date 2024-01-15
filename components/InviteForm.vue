@@ -52,11 +52,9 @@ import {appDescription} from "~/constants";
 import {computed} from "vue";
 import {useUserStore} from "~/stores/user";
 import {useRoomStore} from "~/stores/room";
-import { useToast } from '@/components/ui/toast/use-toast'
 
-const { toast } = useToast()
+
 const {showHistory} = defineProps<{ showHistory: boolean }>()
-const route = useRoute()
 const roomStore = useRoomStore()
 const userStore = useUserStore()
 const networkColors = {
@@ -79,14 +77,7 @@ const data = computed(() => ({
 const copy = async () => {
   try {
     await navigator.clipboard.writeText(referUri.value);
-    toast({
-      description: 'Copied',
-    });
   } catch (err) {
-    toast({
-      description: 'Failed to copy!',
-      variant: 'destructive',
-    });
   }
 }
 </script>

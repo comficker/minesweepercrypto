@@ -10,28 +10,11 @@
           </div>
         </div>
         <div class="flex justify-center gap-6">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button variant="destructive" size="lg">Withdraw</Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Coming soon</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button variant="secondary" size="lg">Deposit</Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Coming soon</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <div class="bg-blue-500 cursor-pointer rounded p-2 px-6 text-white">Deposit</div>
+          <div class="cursor-pointer rounded p-2 px-6">Withdraw</div>
         </div>
       </div>
+      <invite-form v-if="userStore.isLogged" :show-history="false"/>
     </client-only>
   </div>
 </template>
@@ -39,7 +22,8 @@
 <script lang="ts" setup>
 import {computed} from "vue"
 import {useUserStore} from "~/stores/user";
-import {Button} from "~/components/ui/button";
+import InviteForm from "~/components/InviteForm.vue";
+
 const userStore = useUserStore()
 
 const user = computed(() => {
