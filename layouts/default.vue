@@ -51,7 +51,7 @@ onMounted(() => {
             <a target="_blank" href="/how-to-play">
               <span>How to play?</span>
             </a>
-            <div v-if="userStore.isLogged" class="cursor-pointer ml-auto" @click="$logout">Logout</div>
+            <div class="cursor-pointer ml-auto" @click="$logout">Logout</div>
           </div>
         </div>
       </div>
