@@ -116,7 +116,8 @@ export default defineNuxtPlugin(async (NuxtApp) => {
         username,
         password,
         email,
-        ref
+        ref,
+        source: 'game_minesweeper'
       }
     }).catch(() => null)
   }
