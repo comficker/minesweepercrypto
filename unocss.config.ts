@@ -10,7 +10,6 @@ import {
 } from 'unocss'
 import {FileSystemIconLoader} from '@iconify/utils/lib/loader/node-loaders'
 import {animatedUno} from 'animated-unocss'
-import {presetShadcn} from './preset.shadcn'
 
 export default defineConfig({
   shortcuts: {},
@@ -33,8 +32,7 @@ export default defineConfig({
         sans: 'Inter:300,400,600,700'
       }
     }),
-    animatedUno(),
-    presetShadcn()
+    animatedUno()
   ],
   transformers: [
     transformerDirectives(),
