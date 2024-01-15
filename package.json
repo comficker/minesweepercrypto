@@ -1,9 +1,9 @@
 {
-  "name": "gm_tictactoe",
+  "name": "gm_minesweeper",
   "author": {
     "name": "LH",
     "email": "comficker@gmail.com",
-    "url": "https://tiktaktoe.com"
+    "url": "https://minesweeperbattle.com"
   },
   "private": true,
   "scripts": {

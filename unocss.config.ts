@@ -125,14 +125,14 @@ export default defineConfig({
       },
       card: {
         DEFAULT: 'hsl(var(--card))',
-        foreground: 'hsl(var(--card-foreground))',
-      },
+        foreground: 'hsl(var(--card-foreground))'
+      }
     },
     borderRadius: {
       lg: `var(--radius)`,
       md: `calc(var(--radius) - 2px)`,
-      sm: 'calc(var(--radius) - 4px)',
-    },
+      sm: 'calc(var(--radius) - 4px)'
+    }
   },
   safelist: ['i-icons-facebook', 'i-icons-telegram', 'i-icons-twitter', 'i-icons-discord', 'i-icons-pinterest'],
   include: [/\.ts/, /\.vue$/, /\.vue\?vue/]
