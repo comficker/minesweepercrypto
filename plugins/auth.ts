@@ -119,9 +119,6 @@ export default defineNuxtPlugin(async (NuxtApp) => {
         ref
       }
     }).catch(() => null)
-    if (response) {
-
-    }
   }
 
   async function forgot(email: string) {
