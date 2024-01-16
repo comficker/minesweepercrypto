@@ -49,7 +49,7 @@ onMounted(() => {
               <span>History</span>
             </nuxt-link>
             <nuxt-link to="/leaderboard">
-              <span>History</span>
+              <span>Leaderboard</span>
             </nuxt-link>
             <div class="cursor-pointer ml-auto" @click="$logout">Logout</div>
           </div>

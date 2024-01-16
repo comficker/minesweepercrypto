@@ -75,3 +75,12 @@ export interface ResponseRoom {
   "results": Room[]
 }
 
+
+export interface ResponseUser {
+  "links": Links
+  "count": number
+  "page_size": number
+  "num_pages": number
+  "results": User[]
+}
+
