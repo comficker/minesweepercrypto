@@ -54,6 +54,9 @@ onMounted(() => {
             <div class="cursor-pointer ml-auto" @click="$logout">Logout</div>
           </div>
         </div>
+        <div class="text-center text-sm py-4">
+          <p>© 2023 <a class="underline" href="https://twitter.com/msbattle_web3">Inno Games Studio</a> . All rights reserved Developed on <a class="underline" href="https://oxoa.games">OXOA Network</a>.</p>
+        </div>
       </div>
     </div>
   </main>
