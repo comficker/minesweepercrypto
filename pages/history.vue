@@ -51,7 +51,7 @@ const items = computed<Room[]>(() => {
 </script>
 
 <template>
-  <div class="space-y-2 p-3 border rounded mx-auto max-w-lg">
+  <div class="space-y-2 mx-auto max-w-lg">
     <div class="flex justify-between">
       <div class="flex items-center gap-3 text-sm font-bold">
         <div

@@ -28,7 +28,7 @@ const computeWinRate = (user: User) => {
 </script>
 
 <template>
-  <div class="space-y-2 p-3 border rounded mx-auto max-w-lg">
+  <div class="space-y-2 mx-auto max-w-lg">
     <div class="overflow-hidden w-full bg-white flex" :class="{'items-center': response.length === 0}">
       <div class="flow-root text-sm w-full">
         <div class="overflow-x-auto">
