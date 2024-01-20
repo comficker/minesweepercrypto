@@ -15,6 +15,16 @@ const logged = computed(() => {
 const {data: response} = await useAuthFetch<User[]>('/gms/leaderboard', {
   key: "leaderboard"
 })
+
+const computeWinRate = (user: User) => {
+  const meta = user.meta.game_minesweeper || {}
+  const won = meta['won'] || 0
+  const dead = meta['dead'] || 0
+  if (won + dead > 0) {
+    return `${(100 * won / (won + dead)).toFixed(2)}%`
+  }
+  return '0%'
+}
 </script>
 
 <template>
@@ -25,9 +35,11 @@ const {data: response} = await useAuthFetch<User[]>('/gms/leaderboard', {
           <div class="inline-block min-w-full space-y-3">
             <table v-if="response.length" class="min-w-full table-fixed overflow-auto text-left">
               <thead>
-              <tr role="rowheader" class="font-semibold text-gray-500">
+              <tr role="rowheader" class="font-semibold text-xs uppercase text-gray-500">
                 <th role="columnheader" class="px-2 pl-2 pl-2 text-left w-10"></th>
                 <th role="columnheader" class="px-2 pl-2 pl-2 text-left">User</th>
+                <th role="columnheader" class="w-32 px-2 py-1.5 text-right">Win rate</th>
+                <th role="columnheader" class="w-32 px-2 py-1.5 text-right">Score</th>
                 <th role="columnheader" class="w-32 px-2 py-1.5 text-right">Token</th>
               </tr>
               </thead>
@@ -37,7 +49,9 @@ const {data: response} = await useAuthFetch<User[]>('/gms/leaderboard', {
                 <td class="px-2 py-1">
                   <nuxt-link :to="`/user/${item.username}`">{{ fullName(item) }}</nuxt-link>
                 </td>
-                <td class="px-2 py-1 text-xs text-right">{{ item.meta?.game_minesweeper?.GMS }}</td>
+                <td class="px-2 py-1 text-xs text-right">{{ computeWinRate(item) }}</td>
+                <td class="px-2 py-1 text-xs text-right">{{ item.meta?.game_minesweeper?.score || 0 }}</td>
+                <td class="px-2 py-1 text-xs text-right">{{ item.meta?.game_minesweeper?.GMS || 0 }}</td>
               </tr>
               </tbody>
             </table>
