@@ -18,7 +18,7 @@ const page = ref(1)
 
 const params = computed(() => {
   const params: any = {
-    page_size: 20,
+    page_size: 10,
     ordering: '-id',
     page: page.value,
     gms_members__user__username: route.params.username

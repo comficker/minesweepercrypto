@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {computed} from "vue";
 import {useUserStore} from "~/stores/user";
-import InviteForm from "~/components/InviteForm.vue";
 import {useRoomStore} from "~/stores/room";
 import {useGlobalStore} from "~/stores/global";
 import {countDownTimer, fullName} from "~/helpers";

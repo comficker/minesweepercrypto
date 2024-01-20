@@ -75,8 +75,11 @@ watch(response, () => {
       <div>
         <div>
           <div
-            class="flex justify-end items-center gap-2"
-            :class="{'text-blue-500': item.status === 'playing'}"
+            class="flex justify-end items-center gap-2 rounded"
+            :class="{
+              'text-blue-500': item.status === 'playing',
+              'bg-blue text-white px-2 py-1': item.status === 'waiting' && item.is_multiplayer
+            }"
           >
             <div v-if="item.status === 'waiting' && item.is_multiplayer">Join</div>
             <div v-else-if="item.status === 'playing'">Live</div>
@@ -88,7 +91,7 @@ watch(response, () => {
                 class="relative inline-flex rounded-full h-3 w-3"
                 :class="{
                   'bg-blue-500': item.status === 'playing',
-                   'bg-green-500': item.status === 'waiting',
+                   'bg-green-400': item.status === 'waiting',
                 }"
               />
             </div>
