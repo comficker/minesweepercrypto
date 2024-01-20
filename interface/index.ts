@@ -99,3 +99,25 @@ export interface MessageTurn {
   game: number
   playing: PlayingTurn
 }
+
+export interface Transaction {
+  id: number
+  meta: any
+  updated: string
+  created: string
+  db_status: number
+  status: string
+  amount: number
+  note: string
+  from_user: number
+  to_user: number
+  token: number
+}
+
+export interface APIResponse<T> {
+  "links": Links
+  "count": number
+  "page_size": number
+  "num_pages": number
+  "results": T[]
+}

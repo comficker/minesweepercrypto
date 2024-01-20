@@ -33,7 +33,7 @@ const computeWinRate = (user: User) => {
       <div class="flow-root text-sm w-full">
         <div class="overflow-x-auto">
           <div class="inline-block min-w-full space-y-3">
-            <table v-if="response.length" class="min-w-full table-fixed overflow-auto text-left">
+            <table v-if="response.length" class="min-w-full table-fixed overflow-auto text-left text-xs">
               <thead>
               <tr role="rowheader" class="font-semibold text-xs uppercase text-gray-500">
                 <th role="columnheader" class="px-2 pl-2 pl-2 text-left w-10"></th>
@@ -49,9 +49,9 @@ const computeWinRate = (user: User) => {
                 <td class="px-2 py-1">
                   <nuxt-link :to="`/user/${item.username}`">{{ fullName(item) }}</nuxt-link>
                 </td>
-                <td class="px-2 py-1 text-xs text-right">{{ computeWinRate(item) }}</td>
-                <td class="px-2 py-1 text-xs text-right">{{ item.meta?.game_minesweeper?.score || 0 }}</td>
-                <td class="px-2 py-1 text-xs text-right">{{ item.meta?.game_minesweeper?.GMS || 0 }}</td>
+                <td class="px-2 py-1 text-right">{{ computeWinRate(item) }}</td>
+                <td class="px-2 py-1 text-right">{{ item.meta?.game_minesweeper?.score || 0 }}</td>
+                <td class="px-2 py-1 text-right">{{ item.meta?.game_minesweeper?.GMS || 0 }}</td>
               </tr>
               </tbody>
             </table>

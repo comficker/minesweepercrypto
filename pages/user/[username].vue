@@ -148,8 +148,8 @@ const meta = computed(() => {
                     </div>
                   </td>
                   <td :class="{
-                  'text-green-500': item.status === 'won',
-                  'text-red-500': item.status === 'dead',
+                   'text-green-500': item.status === 'won',
+                  'text-red-700': item.status === 'dead',
                   'text-blue-500': item.status === 'waiting',
                 }" class="px-2 py-2">
                     <div class="flex gap-2 items-center justify-end">
@@ -169,14 +169,6 @@ const meta = computed(() => {
                 </tr>
                 </tbody>
               </table>
-              <div v-else-if="!userStore.isLogged" class="pt-4 h-full flex flex-col justify-center items-center">
-                <div class="font-bold uppercase">Member's feature!</div>
-                <p>You must <span class="underline cursor-pointer" @click="globalStore.setModal('login')">login</span>
-                  or
-                  <span class="underline cursor-pointer" @click="globalStore.setModal('register')">register</span> to
-                  view
-                  your game history</p>
-              </div>
             </div>
           </div>
         </div>

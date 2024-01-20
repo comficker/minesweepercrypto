@@ -85,7 +85,7 @@ const items = computed<Room[]>(() => {
       <div class="flow-root text-sm w-full">
         <div class="overflow-x-auto">
           <div class="inline-block min-w-full space-y-3">
-            <table v-if="items.length" class="min-w-full table-fixed overflow-auto text-left">
+            <table v-if="items.length" class="min-w-full table-fixed overflow-auto text-left text-xs">
               <thead>
               <tr role="rowheader" class="font-semibold text-gray-500">
                 <th role="columnheader" class="px-2 pl-2 pl-2 text-left">User</th>
@@ -108,7 +108,7 @@ const items = computed<Room[]>(() => {
                 <td class="px-2 py-1">{{ item.level }}</td>
                 <td :class="{
                   'text-green-500': item.status === 'won',
-                  'text-red-500': item.status === 'dead',
+                  'text-red-700': item.status === 'dead',
                   'text-blue-500': item.status === 'waiting',
                 }" class="px-2 py-2">
                   <div class="flex gap-2 items-center justify-end">
@@ -121,7 +121,7 @@ const items = computed<Room[]>(() => {
                   </div>
                 </td>
 
-                <td class="px-2 py-1 text-xs">
+                <td class="px-2 py-1">
                   <nuxt-link :to="`/room/${item.id}`" class="underline flex justify-end items-center">
                     <span>{{ item.since }}</span>
                   </nuxt-link>
