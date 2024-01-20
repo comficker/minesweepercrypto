@@ -6,6 +6,7 @@ import {countDownTimer, timeSince} from "~/helpers";
 import type {ResponseRoom, Room} from "~/interface/gms";
 import {useGlobalStore} from "~/stores/global";
 
+const route = useRoute()
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
 const logged = computed(() => {
@@ -19,14 +20,8 @@ const params = computed(() => {
   const params: any = {
     page_size: 20,
     ordering: '-id',
-    page: page.value
-  }
-  if (mode.value !== 'History' && logged.value && logged.value.id) {
-    params['user__id'] = logged.value.id
-  }
-  if (mode.value === 'Leaderboard') {
-    params['ordering'] = '-score'
-    params['status'] = 'win'
+    page: page.value,
+    gms_members__user__username: route.params.username
   }
   return params
 })
@@ -54,14 +49,9 @@ const items = computed<Room[]>(() => {
   <div class="space-y-2 p-3 border rounded mx-auto max-w-lg">
     <div class="flex justify-between">
       <div class="flex items-center gap-3 text-sm font-bold">
-        <div
-          v-for="item in ['History', 'Mine']"
-          class="cursor-pointer p-2 rounded flex gap-2 items-center"
-          :class="mode !== item ? 'bg-white text-neutral-80 shadow hover:shadow-lg duration-200': 'shadow-inner'"
-          @click="mode = item"
-        >
+        <div class="cursor-pointer p-2 rounded flex gap-2 items-center">
           <div class="i-icons-history w-4 h-4"/>
-          <div>{{ item }}</div>
+          <div>History</div>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -105,7 +95,13 @@ const items = computed<Room[]>(() => {
                     </div>
                   </div>
                 </td>
-                <td class="px-2 py-1">{{ item.level }}</td>
+                <td class="px-2 py-1">
+                  <div class="flex gap-2 items-center">
+                    <div>{{ item.level }}</div>
+                    <div class="i-icons-bomb w-4 h-4"/>
+                    <div>{{item.num_bomb}}</div>
+                  </div>
+                </td>
                 <td :class="{
                   'text-green-500': item.status === 'won',
                   'text-red-500': item.status === 'dead',
@@ -120,7 +116,6 @@ const items = computed<Room[]>(() => {
                     <div v-else class="i-icons-eye w-4 h-4"/>
                   </div>
                 </td>
-
                 <td class="px-2 py-1 text-xs">
                   <nuxt-link :to="`/room/${item.id}`" class="underline flex justify-end items-center">
                     <span>{{ item.since }}</span>

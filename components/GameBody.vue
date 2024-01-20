@@ -185,7 +185,7 @@ const [{data: lottery}, {data: potentialEarn}] = await Promise.all([
     watch: [() => roomStore.data.status],
     server: false
   }),
-  useAuthFetch('/gms/potential-earn', {
+  useAuthFetch<number>('/gms/potential-earn', {
     params: {
       width: roomStore.data.width,
       height: roomStore.data.height,
@@ -195,6 +195,8 @@ const [{data: lottery}, {data: potentialEarn}] = await Promise.all([
   })
 ])
 
-const respawnCost = computed(() => roomStore.data.is_multiplayer ? roomStore.data.ticket : potentialEarn.value || 0)
+const respawnCost = computed(() => {
+  return (roomStore.data.is_multiplayer ? roomStore.data.ticket : potentialEarn.value || 0) / 2
+})
 </script>
 

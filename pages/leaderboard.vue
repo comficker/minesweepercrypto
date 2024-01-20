@@ -34,7 +34,9 @@ const {data: response} = await useAuthFetch<User[]>('/gms/leaderboard', {
               <tbody class="whitespace-nowrap font-bold">
               <tr role="row" v-for="(item, i) in response" :key="i" class="rounded border-t-4 border-white">
                 <td class="px-2 py-1">{{ i + 1 }}</td>
-                <td class="px-2 py-1">{{ fullName(item) }}</td>
+                <td class="px-2 py-1">
+                  <nuxt-link :to="`/user/${item.username}`">{{ fullName(item) }}</nuxt-link>
+                </td>
                 <td class="px-2 py-1 text-xs text-right">{{ item.meta?.game_minesweeper?.GMS }}</td>
               </tr>
               </tbody>

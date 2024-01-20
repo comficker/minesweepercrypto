@@ -43,7 +43,9 @@ const approve = (id: number, status: string) => {
           v-for="(item, i) in members" :key="i"
           role="row" class="rounded text-right"
         >
-          <td class="px-2 py-2 text-left">{{ fullName(item.user) }}</td>
+          <td class="px-2 py-2 text-left">
+            <nuxt-link :to="`/user/${item.user.username}`">{{ fullName(item.user) }}</nuxt-link>
+          </td>
           <td class="px-2 py-2">
             <div
               v-if="roomStore.data.status =='waiting' && item.status === 'pending' && userStore.isLogged && (roomStore.isCreator || item.user.id === userStore.logged.id)"
