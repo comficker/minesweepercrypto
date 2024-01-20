@@ -24,9 +24,6 @@
   </div>
   <game-header/>
   <game-body/>
-  <client-only>
-    <invite-form v-if="userStore.isLogged" :show-history="false"/>
-  </client-only>
   <div v-if="roomStore.data.id" class="flex justify-between">
     <div class="flex gap-2">
       <h1 class="text-2xl font-extrabold uppercase">Game #{{ roomStore.data.id }}</h1>
@@ -55,6 +52,9 @@
     </div>
   </div>
   <game-activity/>
+  <client-only>
+    <invite-form v-if="userStore.isLogged" :show-history="false"/>
+  </client-only>
 </template>
 
 <script lang="ts" setup>
