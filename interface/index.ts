@@ -4,6 +4,7 @@ export interface User {
   last_name: string
   username: string
   meta: any
+  score?: number
 }
 
 export interface Links {
