@@ -58,7 +58,7 @@ export const getSteps = (resPlayers: IUserGame[]) => {
 
 export function fullName(user: User) {
   if (user.username.length === 42) {
-    return `${user.username.substring(0, 5)}...${user.username.substring(37, 41)}`
+    return `${user.username.substring(0, 5)}...${user.username.substring(37, 42)}`
   } else if (user.first_name || user.last_name) {
     return `${user.first_name} ${user.last_name}`
   }
