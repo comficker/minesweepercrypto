@@ -46,7 +46,7 @@ const timeRange = computed(() => {
     now.setDate(now.getDate() + w * 7)
     const monday = getMonday(now)
     from = Math.floor(monday.getTime() / 1000)
-    monday.setDate(now.getDate() + 7)
+    monday.setDate(monday.getDate() + 7)
     to = Math.floor(monday.getTime() / 1000)
   }
   return {
