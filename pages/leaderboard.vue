@@ -38,16 +38,16 @@ const timeRange = computed(() => {
   if (selectRange.value.startsWith("d")) {
     const d = Number.parseInt(selectRange.value.replace("d_", ""))
     now.setDate(now.getDate() + d)
-    from = now.getTime() / 1000
+    from = Math.floor(now.getTime() / 1000)
     now.setDate(now.getDate() + 1)
-    to = now.getTime() / 1000
+    to = Math.floor(now.getTime() / 1000)
   } else if (selectRange.value.startsWith("w")) {
     const w = Number.parseInt(selectRange.value.replace("w_", ""))
     now.setDate(now.getDate() + w * 7)
     const monday = getMonday(now)
-    from = monday.getTime() / 1000
+    from = Math.floor(monday.getTime() / 1000)
     monday.setDate(now.getDate() + 7)
-    to = monday.getTime() / 1000
+    to = Math.floor(monday.getTime() / 1000)
   }
   return {
     from, to
@@ -105,7 +105,7 @@ const computeWinRate = (user: User) => {
                 </td>
                 <td class="px-2 py-1 text-right">{{ computeWinRate(item) }}</td>
                 <td class="px-2 py-1 text-right">{{ item.meta?.game_minesweeper?.score || 0 }}</td>
-                <td class="px-2 py-1 text-right">{{ item.meta?.game_minesweeper?.GMS || 0 }}</td>
+                <td class="px-2 py-1 text-right">{{ item.score }}</td>
               </tr>
               </tbody>
             </table>
