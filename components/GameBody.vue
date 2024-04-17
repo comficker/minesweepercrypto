@@ -109,10 +109,13 @@
             >
               <b>Balance not enough!</b>
             </a>
-            <div
-              class="text-center cursor-pointer p-4 py-2 text-sm underline"
-              @click="roomStore.purchase(false)"
-            >End Game
+            <div class="flex justify-center text-center mt-4">
+              <div class="cursor-pointer p-4 py-2 text-sm underline" @click="globalStore.setModal('deposit')">
+                Deposit
+              </div>
+              <div class="cursor-pointer p-4 py-2 text-sm underline" @click="roomStore.purchase(false)">
+                End Game
+              </div>
             </div>
           </div>
         </div>

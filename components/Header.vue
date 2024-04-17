@@ -4,6 +4,7 @@ import {useUserStore} from "~/stores/user";
 import Login from "~/components/Login.vue";
 import Setting from "~/components/Setting.vue";
 import {useGlobalStore} from "~/stores/global";
+import Deposit from "~/components/Deposit.vue";
 
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
@@ -57,6 +58,7 @@ const user = computed(() => {
           <div class="mx-auto md:w-2/3 ">
             <Login v-if="['login', 'register'].includes(modalOpening)"/>
             <Setting v-if="modalOpening === 'setting'"/>
+            <Deposit v-if="modalOpening === 'deposit'"/>
           </div>
         </div>
         <div class="absolute cursor-pointer -bottom-5 right-0 left-0" @click="globalStore.setModal('')">

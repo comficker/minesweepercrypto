@@ -2,8 +2,9 @@ import {useUserStore} from "~/stores/user";
 import {User} from "~/interface";
 import {ofetch} from "ofetch";
 import useStatefulCookie from "~/composables/useStatefulCookie";
-import {createWeb3Auth, connect, Chain, account, signMessage} from '@kolirt/vue-web3-auth'
+import {createWeb3Auth, connect, Chain, account, signMessage, sendTransaction} from '@kolirt/vue-web3-auth'
 import {useGlobalStore} from "~/stores/global";
+import {waitForTransaction} from "@wagmi/core";
 
 const oxa: Chain = {
   id: 20241,
@@ -152,6 +153,20 @@ export default defineNuxtPlugin(async (NuxtApp) => {
     })
   }
 
+  async function makeTransaction(amount: bigint) {
+    const txn = await sendTransaction({
+      to: '0x1388093d76b2965585dbd44fee4a6f3db3f9618f',
+      value: amount
+    })
+    if (txn) {
+      await waitForTransaction({
+        hash: txn.transactionHash,
+      })
+      return txn.transactionHash
+    }
+    return null
+  }
+
   watch(() => account.connected, async () => {
     if (account.connected && !userStore.isLogged && webConnected.value) {
       const signature = await signMessage('Hello Minesweeper').catch(() => null)
@@ -180,7 +195,8 @@ export default defineNuxtPlugin(async (NuxtApp) => {
       register,
       forgot,
       logout,
-      connectWeb3
+      connectWeb3,
+      makeTransaction
     }
   }
 })

@@ -4,7 +4,6 @@ import {useRoute} from "#app";
 import {onMounted} from "@vue/runtime-core";
 import {useGlobalStore} from "~/stores/global";
 import {useUserStore} from "~/stores/user";
-import InviteForm from "~/components/InviteForm.vue";
 import Lobby from "~/components/Lobby.vue";
 import {useNuxtApp} from "#imports";
 const {$logout} = useNuxtApp()
